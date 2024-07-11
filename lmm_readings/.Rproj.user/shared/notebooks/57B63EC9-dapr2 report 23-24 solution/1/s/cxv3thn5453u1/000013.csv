@@ -1,0 +1,7 @@
+"0",""
+"0","##basic plot"
+"0","p1 <- ggplot(data = sampdf, aes(x = condition, y = dcortisol, color = character)) +"
+"0","  geom_boxplot() +"
+"0","  labs(x = 'Player Condition', y = 'Game-Induced Stress') + "
+"0","    theme_classic()"
+"0","p1"
