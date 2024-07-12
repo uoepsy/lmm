@@ -1,9 +1,9 @@
 {
     "id": "DDE93B35",
-    "path": "C:/Users/jking34/Desktop/uoepsy_courses/lmm/lmm_readings/06_ranef.qmd",
-    "project_path": "06_ranef.qmd",
+    "path": "C:/Users/jking34/Desktop/uoepsy_courses/lmm/lmm_readings/07_ranef.qmd",
+    "project_path": "07_ranef.qmd",
     "type": "quarto_markdown",
-    "hash": "3448165045",
+    "hash": "983451479",
     "contents": "",
     "dirty": false,
     "created": 1720701437646.0,
@@ -13,15 +13,16 @@
         "chunk_output_type": "console",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "1,10",
-        "scrollLine": "0"
+        "cursorPosition": "1,9",
+        "scrollLine": "0",
+        "docOutlineVisible": "1"
     },
     "folds": "",
-    "lastKnownWriteTime": 1720701463,
+    "lastKnownWriteTime": 1720709357,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1720701463245,
+    "last_content_update": 1720709357176,
     "read_only": false,
     "read_only_alternatives": []
 }

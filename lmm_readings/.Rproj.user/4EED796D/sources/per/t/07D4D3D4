@@ -1,9 +1,9 @@
 {
     "id": "07D4D3D4",
-    "path": "C:/Users/jking34/Desktop/uoepsy_courses/lmm/lmm_readings/08_writing.qmd",
-    "project_path": "08_writing.qmd",
+    "path": "C:/Users/jking34/Desktop/uoepsy_courses/lmm/lmm_readings/10_writing.qmd",
+    "project_path": "10_writing.qmd",
     "type": "quarto_markdown",
-    "hash": "4238325491",
+    "hash": "1299557894",
     "contents": "",
     "dirty": false,
     "created": 1720701439780.0,
@@ -17,11 +17,11 @@
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1720701475,
+    "lastKnownWriteTime": 1720709368,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1720701475699,
+    "last_content_update": 1720709368823,
     "read_only": false,
     "read_only_alternatives": []
 }

@@ -16,11 +16,13 @@ website:
       - 01_clustered.qmd
       - 02_lmm.qmd
       - 03_inference.qmd
-      - 04_loglong.qmd
-      - 05_poly.qmd
-      - 06_ranef.qmd
-      - 07_assump.qmd
-      - 08_writing.qmd
+      - 04_log.qmd
+      - 05_long.qmd
+      - 06_poly.qmd
+      - 07_ranef.qmd
+      - 08_centering.qmd
+      - 09_assump.qmd
+      - 10_writing.qmd
       - section: "Additional Docs"
         contents:
           - 00_lm_assumpt.qmd

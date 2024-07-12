@@ -150,50 +150,62 @@ if(f.classList.contains('jk-circle-right')) {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01a_clustered.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1 - Clustered Data</span></a>
+  <a href="./01_clustered.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1: Clustered Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01b_lmm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2 - The Multi-level/Mixed Effect Model</span></a>
+  <a href="./02_lmm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2: The Multi-level/Mixed Effect Model</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02a_inference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3 - Inference for MLM</span></a>
+  <a href="./03_inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3: Inference for MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02b_loglong.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4 - Logistic MLM | Longitudinal MLM</span></a>
+  <a href="./04_log.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4: Logistic MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03a_poly.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4 - Polynomial Growth in MLM</span></a>
+  <a href="./05_long.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5: Longitudinal MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04a_ranef.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5 - Random Effect Structures</span></a>
+  <a href="./06_poly.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6: Polynomial Growth in MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05a_assump.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6 - MLM Assumptions</span></a>
+  <a href="./07_ranef.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7: Random Effect Structures</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05b_writing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">7 - Reporting on analyses with MLM</span></a>
+  <a href="./08_centering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8: Centering</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_assump.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9: MLM Assumptions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_writing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10: Reporting on analyses with MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -288,14 +300,14 @@ if(f.classList.contains('jk-circle-right')) {
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>, <span class="at">prob =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<pre><code>[1] 5</code></pre>
 </div>
 </div>
 <p>and another 8:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>, <span class="at">prob =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
+<pre><code>[1] 3</code></pre>
 </div>
 </div>
 <p>We see that they tend to be around our intuition expected number of 4 heads. We can change <code>n = 1</code> to ask <code>rbinom()</code> to not just do 1 set of 8 coin flips, but to do 1000 sets of 8 flips:</p>
@@ -303,8 +315,8 @@ if(f.classList.contains('jk-circle-right')) {
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">size =</span> <span class="dv">8</span>, <span class="at">prob =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-  0   1   2   3   4   5   6   7   8 
-  1  29 122 235 287 194 101  30   1 </code></pre>
+  0   1   2   3   4   5   6   7 
+  3  34 106 223 254 230 113  37 </code></pre>
 </div>
 </div>
 </section>
@@ -324,23 +336,23 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 
-<div id="ldjxfybhlc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ldjxfybhlc table {
+<div id="pctywdfhly" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#pctywdfhly table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ldjxfybhlc thead, #ldjxfybhlc tbody, #ldjxfybhlc tfoot, #ldjxfybhlc tr, #ldjxfybhlc td, #ldjxfybhlc th {
+#pctywdfhly thead, #pctywdfhly tbody, #pctywdfhly tfoot, #pctywdfhly tr, #pctywdfhly td, #pctywdfhly th {
   border-style: none;
 }
 
-#ldjxfybhlc p {
+#pctywdfhly p {
   margin: 0;
   padding: 0;
 }
 
-#ldjxfybhlc .gt_table {
+#pctywdfhly .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -366,12 +378,12 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   border-left-color: #D3D3D3;
 }
 
-#ldjxfybhlc .gt_caption {
+#pctywdfhly .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ldjxfybhlc .gt_title {
+#pctywdfhly .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -383,7 +395,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   border-bottom-width: 0;
 }
 
-#ldjxfybhlc .gt_subtitle {
+#pctywdfhly .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -395,7 +407,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   border-top-width: 0;
 }
 
-#ldjxfybhlc .gt_heading {
+#pctywdfhly .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -407,13 +419,13 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   border-right-color: #D3D3D3;
 }
 
-#ldjxfybhlc .gt_bottom_border {
+#pctywdfhly .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ldjxfybhlc .gt_col_headings {
+#pctywdfhly .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -428,7 +440,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   border-right-color: #D3D3D3;
 }
 
-#ldjxfybhlc .gt_col_heading {
+#pctywdfhly .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -448,7 +460,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   overflow-x: hidden;
 }
 
-#ldjxfybhlc .gt_column_spanner_outer {
+#pctywdfhly .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -460,15 +472,15 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   padding-right: 4px;
 }
 
-#ldjxfybhlc .gt_column_spanner_outer:first-child {
+#pctywdfhly .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ldjxfybhlc .gt_column_spanner_outer:last-child {
+#pctywdfhly .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ldjxfybhlc .gt_column_spanner {
+#pctywdfhly .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -480,11 +492,11 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   width: 100%;
 }
 
-#ldjxfybhlc .gt_spanner_row {
+#pctywdfhly .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ldjxfybhlc .gt_group_heading {
+#pctywdfhly .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -510,7 +522,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   text-align: left;
 }
 
-#ldjxfybhlc .gt_empty_group_heading {
+#pctywdfhly .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -525,15 +537,15 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   vertical-align: middle;
 }
 
-#ldjxfybhlc .gt_from_md > :first-child {
+#pctywdfhly .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ldjxfybhlc .gt_from_md > :last-child {
+#pctywdfhly .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ldjxfybhlc .gt_row {
+#pctywdfhly .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -552,7 +564,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   overflow-x: hidden;
 }
 
-#ldjxfybhlc .gt_stub {
+#pctywdfhly .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -565,7 +577,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   padding-right: 5px;
 }
 
-#ldjxfybhlc .gt_stub_row_group {
+#pctywdfhly .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -579,15 +591,15 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   vertical-align: top;
 }
 
-#ldjxfybhlc .gt_row_group_first td {
+#pctywdfhly .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ldjxfybhlc .gt_row_group_first th {
+#pctywdfhly .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ldjxfybhlc .gt_summary_row {
+#pctywdfhly .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -597,16 +609,16 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   padding-right: 5px;
 }
 
-#ldjxfybhlc .gt_first_summary_row {
+#pctywdfhly .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ldjxfybhlc .gt_first_summary_row.thick {
+#pctywdfhly .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ldjxfybhlc .gt_last_summary_row {
+#pctywdfhly .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -616,7 +628,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   border-bottom-color: #D3D3D3;
 }
 
-#ldjxfybhlc .gt_grand_summary_row {
+#pctywdfhly .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -626,7 +638,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   padding-right: 5px;
 }
 
-#ldjxfybhlc .gt_first_grand_summary_row {
+#pctywdfhly .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -636,7 +648,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   border-top-color: #D3D3D3;
 }
 
-#ldjxfybhlc .gt_last_grand_summary_row_top {
+#pctywdfhly .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -646,11 +658,11 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   border-bottom-color: #D3D3D3;
 }
 
-#ldjxfybhlc .gt_striped {
+#pctywdfhly .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ldjxfybhlc .gt_table_body {
+#pctywdfhly .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -659,7 +671,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   border-bottom-color: #D3D3D3;
 }
 
-#ldjxfybhlc .gt_footnotes {
+#pctywdfhly .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -673,7 +685,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   border-right-color: #D3D3D3;
 }
 
-#ldjxfybhlc .gt_footnote {
+#pctywdfhly .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -682,7 +694,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   padding-right: 5px;
 }
 
-#ldjxfybhlc .gt_sourcenotes {
+#pctywdfhly .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -696,7 +708,7 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   border-right-color: #D3D3D3;
 }
 
-#ldjxfybhlc .gt_sourcenote {
+#pctywdfhly .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -704,63 +716,63 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
   padding-right: 5px;
 }
 
-#ldjxfybhlc .gt_left {
+#pctywdfhly .gt_left {
   text-align: left;
 }
 
-#ldjxfybhlc .gt_center {
+#pctywdfhly .gt_center {
   text-align: center;
 }
 
-#ldjxfybhlc .gt_right {
+#pctywdfhly .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ldjxfybhlc .gt_font_normal {
+#pctywdfhly .gt_font_normal {
   font-weight: normal;
 }
 
-#ldjxfybhlc .gt_font_bold {
+#pctywdfhly .gt_font_bold {
   font-weight: bold;
 }
 
-#ldjxfybhlc .gt_font_italic {
+#pctywdfhly .gt_font_italic {
   font-style: italic;
 }
 
-#ldjxfybhlc .gt_super {
+#pctywdfhly .gt_super {
   font-size: 65%;
 }
 
-#ldjxfybhlc .gt_footnote_marks {
+#pctywdfhly .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ldjxfybhlc .gt_asterisk {
+#pctywdfhly .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ldjxfybhlc .gt_indent_1 {
+#pctywdfhly .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ldjxfybhlc .gt_indent_2 {
+#pctywdfhly .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ldjxfybhlc .gt_indent_3 {
+#pctywdfhly .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ldjxfybhlc .gt_indent_4 {
+#pctywdfhly .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ldjxfybhlc .gt_indent_5 {
+#pctywdfhly .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -771,14 +783,14 @@ So the probability of observing 2 heads in 2 flips is <span class="math inline">
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">THTHTTTT</td></tr>
-    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">THHTTTTT</td></tr>
-    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">THTTTTTH</td></tr>
-    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">HTTTTHTT</td></tr>
-    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">TTTHTTHT</td></tr>
-    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">HTHTTTTT</td></tr>
-    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">TTTHHTTT</td></tr>
-    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">TTTTHHTT</td></tr>
+    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">TTTTTHHT</td></tr>
+    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">HHTTTTTT</td></tr>
+    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">TTHTTTHT</td></tr>
+    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">TTHTTTTH</td></tr>
+    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">HTTTHTTT</td></tr>
+    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">TTTTTHTH</td></tr>
+    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">TTTHTHTT</td></tr>
+    <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">THTTTTHT</td></tr>
     <tr><td headers="Ways to get 2 heads in 8 flips" class="gt_row gt_left">...</td></tr>
   </tbody>
   

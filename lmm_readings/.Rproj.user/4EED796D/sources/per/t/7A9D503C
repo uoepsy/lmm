@@ -1,9 +1,9 @@
 {
     "id": "7A9D503C",
-    "path": "C:/Users/jking34/Desktop/uoepsy_courses/lmm/lmm_readings/04_loglong.qmd",
-    "project_path": "04_loglong.qmd",
+    "path": "C:/Users/jking34/Desktop/uoepsy_courses/lmm/lmm_readings/04_log.qmd",
+    "project_path": "04_log.qmd",
     "type": "quarto_markdown",
-    "hash": "3107162233",
+    "hash": "3649113689",
     "contents": "",
     "dirty": false,
     "created": 1720701435287.0,
@@ -13,15 +13,16 @@
         "chunk_output_type": "console",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "1,10",
-        "scrollLine": "0"
+        "cursorPosition": "1,23",
+        "scrollLine": "0",
+        "docOutlineVisible": "1"
     },
     "folds": "",
-    "lastKnownWriteTime": 1720701454,
+    "lastKnownWriteTime": 1720709334,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1720701454786,
+    "last_content_update": 1720709334260,
     "read_only": false,
     "read_only_alternatives": []
 }

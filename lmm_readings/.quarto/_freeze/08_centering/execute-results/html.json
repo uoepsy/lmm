@@ -1,0 +1,18 @@
+{
+  "hash": "9cfca204397877e0227192366075695f",
+  "result": {
+    "markdown": "---\ntitle: \"8: Centering\"\nparams: \n    SHOW_SOLS: FALSE\n    TOGGLE: TRUE\neditor_options: \n  chunk_output_type: console\n---\n\n\n\n\n\n:::lo\nThis reading:  \n\n**FORTHCOMING**\n\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"site_libs/panelset-0.2.6/panelset.css\" rel=\"stylesheet\" />\r\n<script src=\"site_libs/panelset-0.2.6/panelset.js\"></script>\r\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
