@@ -108,8 +108,8 @@ if(f.classList.contains('jk-circle-right')) {
 </script>
 
 <!---<script src="https://kit.fontawesome.com/120b08a6f5.js" crossorigin="anonymous"></script>-->
-<link href="site_libs/panelset-0.2.6/panelset.css" rel="stylesheet">
-<script src="site_libs/panelset-0.2.6/panelset.js"></script>
+<link href="site_libs/panelset-0.3.0/panelset.css" rel="stylesheet">
+<script src="site_libs/panelset-0.3.0/panelset.js"></script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -171,13 +171,13 @@ if(f.classList.contains('jk-circle-right')) {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04_log.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4: Logistic MLM</span></a>
+ <span class="menu-text">4: Example: Logistic MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05_long.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5: Longitudinal MLM</span></a>
+ <span class="menu-text">5: Example: Longitudinal MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -194,20 +194,26 @@ if(f.classList.contains('jk-circle-right')) {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08_centering.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8: Centering</span></a>
+  <a href="./08_modelbuilding.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8: Model Building</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09_assump.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">9: MLM Assumptions</span></a>
+  <a href="./09_centering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9: Centering</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10_writing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">10: Reporting on analyses with MLM</span></a>
+  <a href="./10_assump.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10: MLM Assumptions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_writing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11: Reporting on analyses with MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -258,7 +264,6 @@ if(f.classList.contains('jk-circle-right')) {
   <li><a href="#example-2-three-level-nested" id="toc-example-2-three-level-nested" class="nav-link" data-scroll-target="#example-2-three-level-nested">Example 2: Three level Nested</a></li>
   <li><a href="#example-3-crossed" id="toc-example-3-crossed" class="nav-link" data-scroll-target="#example-3-crossed">Example 3: Crossed</a></li>
   </ul></li>
-  <li><a href="#model-building" id="toc-model-building" class="nav-link" data-scroll-target="#model-building">Model building</a></li>
   </ul>
 </nav>
     </div>
@@ -855,116 +860,9 @@ Number of obs: 1000, groups:  pid, 20; measure, 10
 </div>
 </div>
 </div>
-<div class="divider div-transparent div-dot">
 
-</div>
+
 </section>
-</section>
-<section id="model-building" class="level1">
-<h1>Model building</h1>
-<p>Random effect structures can get pretty complicated quite quickly. Very often it is not the random effects part that is of specific interest to us, but we wish to estimate random effects in order to more accurately partition up the variance in our outcome variable and provide better estimates of fixed effects.<br>
-It is a fine balance between fitting the most sophisticated model structure that we possibly can, and fitting a model that converges without too much simplification. Typically for many research designs, the following steps will keep you mostly on track to finding the maximal model:</p>
-<p><code>lmer(outcome ~ fixed effects + (random effects | grouping structure))</code></p>
-<ol type="1">
-<li><p>Specify the <code>outcome ~ fixed effects</code> bit first.</p>
-<ul>
-<li>The outcome variable should be clear: it is the variable we are wishing to explain/predict.</li>
-<li>The fixed effects are the things we want to use to explain/predict variation in the outcome variable. These will often be the things that are of specific inferential interest, and other covariates. Just like the simple linear model.</li>
-</ul></li>
-<li><p>If there is a grouping structure to your data, and those groups (preferably n&gt;7 or 8) are perceived as a random sample of a wider population (the specific groups aren’t interesting to you), then consider including random intercepts (and possibly random slopes of predictors) for those groups <code>(1 | grouping)</code>.</p></li>
-<li><p>If there are multiple different grouping structures, is one nested within another? (If so, we can specify this as <code>(1 | high_level_grouping ) + (1 |  high_level_grouping:low_level_grouping)</code>. If the grouping structures are not nested, we specify them as crossed: <code>(1 | grouping1) + (1 | grouping2)</code>.</p></li>
-<li><p>If any of the things in the fixed effects vary within the groups, it might be possible to also include them as random effects.</p>
-<ul>
-<li>as a general rule, don’t specify random effects that are not also specified as fixed effects (an exception could be specifically for model comparison, to isolate the contribution of the fixed effect).<br>
-</li>
-<li>For things that do not vary within the groups, it rarely makes sense to include them as random effects. For instance if we had a model with <code>lmer(score ~ genetic_status + (1 + genetic_status | patient))</code> then we would be trying to model a process where “the effect of genetic_status on scores is different for each patient”. But if you consider an individual patient, their genetic status never changes. For patient <span class="math inline">\(i\)</span>, what is “the effect of genetic status on score”? It’s undefined. This is because genetic status only varies <em>between</em> patients.</li>
-<li>Sometimes, things will vary within one grouping, but not within another. E.g. with patients nested within hospitals <code>(1 | hospital) + (1 | hospital:patient)</code>, genetic_status varies <em>between</em> patients, but <em>within</em> hospitals. Therefore we could theoretically fit a random effect of <code>genetic_status | hospital</code>, but <strong>not</strong> one for <code>genetic_status | patient</code>.</li>
-</ul></li>
-<li><p>A common approach to fitting multilevel models is to fit the most complex model <em>that the study design allows</em>. This means including random effects for everything that makes <em>theoretical</em> sense to be included. Because this “maximal model” will often not converge, we then simplify our random effect structure to obtain a convergent model.</p></li>
-</ol>
-<p>There is no <em>right</em> way to simplify random effect structures - it’s about what kind of simplifications we are willing to make (a subjective decision).</p>
-<p>Some general pointers:</p>
-<ul>
-<li>If we want to make inferences about a (within-group) fixed effect, we should ideally include it as a corresponding random effect, else we might get false positives.<br>
-</li>
-<li>Complex terms like interactions (e.g.&nbsp;<code>(1 + x1 * x2 | group)</code> are often causes of non-convergence as they require more data to estimate group-level variability. This could be simplified to <code>(1 + x1 + x2 | group)</code>).<br>
-</li>
-<li>Looking at at the random effects of a non-converging model can help point towards problematic terms. Look for random effects with little variance, or with near perfect correlation (we can alternatively remove just the correlation).</li>
-<li>Random effects of categorical variables often result in the model attempting to estimate <em>a lot</em> of variances and covariances. You could consider moving this to the right hand side <code>(1 + catX | group)</code> becoming <code>(1 | group) + (1 | group:catX)</code></li>
-</ul>
-<ol start="6" type="1">
-<li>Obtain final model, and proceed to checking assumptions, checking influence, plotting, and eventually writing up.</li>
-</ol>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-model convergence
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Issues of non-convergence can be caused by many things. If your model doesn’t converge, it does <em>not necessarily</em> mean the fit is incorrect, however it is <strong>is cause for concern</strong>, and should be addressed before using the model, else you may end up reporting inferences which do not hold.</p>
-<p>There are lots of different things which you could do which <em>might</em> help your model to converge. A select few are detailed below:</p>
-<ul>
-<li><p>double-check the model specification and the data</p></li>
-<li><p>adjust stopping (convergence) tolerances for the nonlinear optimizer, using the optCtrl argument to [g]lmerControl. (see <code>?convergence</code> for convergence controls).</p>
-<ul>
-<li>What is “tolerance”? Remember that our optimizer is the the method by which the computer finds the best fitting model, by iteratively assessing and trying to maximise the likelihood (or minimise the loss).</li>
-</ul></li>
-</ul>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-tolerance" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/tolerance.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;10: An optimizer will stop after a certain number of iterations, or when it meets a tolerance threshold</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<ul>
-<li><p>center and scale continuous predictor variables (e.g.&nbsp;with <code>scale</code>)</p></li>
-<li><p>Change the optimization method (for example, here we change it to <code>bobyqa</code>): <code>lmer(..., control = lmerControl(optimizer="bobyqa"))</code><br>
-<code>glmer(..., control = glmerControl(optimizer="bobyqa"))</code></p></li>
-<li><p>Increase the number of optimization steps: <code>lmer(..., control = lmerControl(optimizer="bobyqa", optCtrl=list(maxfun=50000))</code><br>
-<code>glmer(..., control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=50000))</code></p></li>
-<li><p>Use <code>allFit()</code> to try the fit with all available optimizers. This will of course be slow, but is considered ‘the gold standard’; <em>“if all optimizers converge to values that are practically equivalent, then we would consider the convergence warnings to be false positives.”</em></p></li>
-<li><p>Consider simplifying your model, for example by removing random effects with the smallest variance (but be careful to not simplify more than necessary, and ensure that your write up details these changes)</p></li>
-</ul>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-singular fits
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>You may have noticed that some of our models over the last few weeks have been giving a warning: <code>boundary (singular) fit: see ?isSingular</code>.<br>
-Up to now, we’ve been largely ignoring these warnings. However, this week we’re going to look at how to deal with this issue.</p>
-<p style="color:red">
-boundary (singular) fit: see ?isSingular
-</p>
-<p>The warning is telling us that our model has resulted in a ‘singular fit’. Singular fits often indicate that the model is ‘overfitted’ - that is, the random effects structure which we have specified is too complex to be supported by the data.</p>
-<p>Perhaps the most intuitive advice would be remove the most complex part of the random effects structure (i.e.&nbsp;random slopes). This leads to a simpler model that is not over-fitted. In other words, start simplifying from the top (where the most complexity is) to the bottom (where the lowest complexity is). Additionally, when variance estimates are very low for a specific random effect term, this indicates that the model is not estimating this parameter to differ much between the levels of your grouping variable. It might, in some experimental designs, be perfectly acceptable to remove this or simply include it as a fixed effect.</p>
-<p>A key point here is that when fitting a mixed model, we should think about how the data are generated. Asking yourself questions such as “do we have good reason to assume subjects might vary over time, or to assume that they will have different starting points (i.e., different intercepts)?” can help you in specifying your random effect structure</p>
-<p>You can read in depth about what this means by reading the help documentation for <code>?isSingular</code>. For our purposes, a relevant section is copied below:</p>
-<p><em>… intercept-only models, or 2-dimensional random effects such as intercept + slope models, singularity is relatively easy to detect because it leads to random-effect variance estimates of (nearly) zero, or estimates of correlations that are (almost) exactly -1 or 1.</em></p>
-</div>
-</div>
-</div>
-
-
 </section>
 
 </main> <!-- /main -->

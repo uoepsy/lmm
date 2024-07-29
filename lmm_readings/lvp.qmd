@@ -130,13 +130,14 @@ You can visualise this below:
 
 ```{r}
 #| echo: false
+#| label: fig-dcurve
+#| fig-cap: "Likelihood curve (probability of observed data across possible parameters)"
 curve(
   dbinom(2,8,x), xlim = c(0,1),
   ylab="Likelihood",
   xlab=expression(paste("Binomial ", rho)),
 )
 ```
-
 
 ## A slightly more formal approach
 
@@ -146,6 +147,27 @@ When talking about "probability" we are talking about $P(d | \theta)$ for a give
 E.g. above we were talking about $P(\text{2 heads in 8 flips}\vert \text{fair coin})$.  
 
 In reality, we don't actually know what $\theta$ is, but we do observe some data $d$.  
-Given that we know that _if we have a specific value for $\theta$_, then $P(d \vert \theta)$ will give us the probability of observing $d$, we can ask "what value of $\theta)$ will maximise the probability of observing $d$?".  
+Given that we know that _if we have a specific value for $\theta$_, then $P(d \vert \theta)$ will give us the probability of observing $d$, we can ask "what value of $\theta$ will maximise the probability of observing $d$?".  
 This will sometimes get written as $\mathcal{L}(\theta \vert d)$ as the "likelihood function" of our unknown parameters $\theta$, conditioned upon our observed data $d$.  
 
+
+## Maximum Likelihood Estimation
+
+@fig-dcurve shows the probability of our observed data (2 heads in 8 coin flips) for various "models" of the coin's behaviour. In this simple case, the candidate "models" of the coin's behaviour are simply different values for "the probability of getting heads". 
+
+However, the idea of "probability of data given some model" can scale up to more complex statistical models like regression models. The important difference is that such models consist of more than just one parameter. For instance, a simple regression model of `lm(y ~ 1 + x, data)` involves three things: the intercept, the slope of x, and the standard deviation of the error.  
+
+Maximum likelihood estimation is the process of optimising the set of parameters that result in the greatest probability of the observed data. In our coin-flip example in @fig-dcurve, this is essentially asking "where is the top of the curve?", but as soon as we add more parameters we have more dimensions, and the curve becomes a surface.  
+
+
+```{r}
+#| include: false
+ourdata <- c("H","H","T","T","T","T","T","T")
+
+fr <- function(p){
+  -2*log(dbinom(2,8,prob=p))
+}
+
+optim(par=0.5,fr)
+
+```

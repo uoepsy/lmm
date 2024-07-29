@@ -108,8 +108,8 @@ if(f.classList.contains('jk-circle-right')) {
 </script>
 
 <!---<script src="https://kit.fontawesome.com/120b08a6f5.js" crossorigin="anonymous"></script>-->
-<link href="site_libs/panelset-0.2.6/panelset.css" rel="stylesheet">
-<script src="site_libs/panelset-0.2.6/panelset.js"></script>
+<link href="site_libs/panelset-0.3.0/panelset.css" rel="stylesheet">
+<script src="site_libs/panelset-0.3.0/panelset.js"></script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -171,13 +171,13 @@ if(f.classList.contains('jk-circle-right')) {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04_log.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4: Logistic MLM</span></a>
+ <span class="menu-text">4: Example: Logistic MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05_long.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5: Longitudinal MLM</span></a>
+ <span class="menu-text">5: Example: Longitudinal MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -194,20 +194,26 @@ if(f.classList.contains('jk-circle-right')) {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08_centering.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8: Centering</span></a>
+  <a href="./08_modelbuilding.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8: Model Building</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09_assump.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">9: MLM Assumptions</span></a>
+  <a href="./09_centering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9: Centering</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10_writing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">10: Reporting on analyses with MLM</span></a>
+  <a href="./10_assump.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10: MLM Assumptions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_writing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11: Reporting on analyses with MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -299,7 +305,7 @@ This reading briefly explains why getting p-values from <code>lmer()</code> is n
 <p>But we are now working with multilevel data, and in the scenario where we have, e.g.&nbsp;<span class="math inline">\(n_p\)</span> pupils clustered into <span class="math inline">\(n_s\)</span> schools, how many independent bits of information do we have to begin with? Is it <span class="math inline">\(n_p\)</span>? Or <span class="math inline">\(n_s\)</span>? Or somewhere in between? Our random effects are not “free to vary” in the sense that they are estimated under certain constraints (such as following a normal distribution).</p>
 <p>In very specific situations that correspond to classical experimental designs (in which, e.g., we have perfectly balanced numbers across experimental factors and equal sizes within groups) it is possible to conduct similar <span class="math inline">\(F\)</span> tests (and hence <span class="math inline">\(t\)</span>-tests too) with a known degrees of freedom. Unfortunately, transferring this to more general scenarios is problematic (e.g., any missing data, unbalanced designs, more complex random effect structures). Partly because defining the necessarily follow an <span class="math inline">\(F\)</span> distribution with <em>any</em> degrees of freedom. It is for these reasons that the author of the <strong>lme4</strong> removed p-values from the output.</p>
 <p>However, there are various strategies that we can use to conduct inferences that either attempt to approximate the degrees of freedom, or use an alternative method based on, e.g., likelihoods or bootstrapping.</p>
-<p>Below, we’ll go through each method in R, applying it to the following model (recall this is the model we ended with in reading <a href="01b_lmm.html#a-more-complex-model" target="_blank">1B</a>).</p>
+<p>Below, we’ll go through each method in R, applying it to the following model (recall this is the model we ended with in <a href="02_lmm.html#a-more-complex-model" target="_blank">Chapter 2</a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>

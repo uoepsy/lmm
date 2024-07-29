@@ -1,0 +1,7 @@
+df=neststress |> 
+  mutate(x=day,b=CBD,g1=dept,g2=pid)
+
+mnest <- lmer(stress ~ 1 + x * b + 
+                (1 + x*b| g1) +
+                (1 + x | g2:g1), data = df)
+VarCorr(mnest)

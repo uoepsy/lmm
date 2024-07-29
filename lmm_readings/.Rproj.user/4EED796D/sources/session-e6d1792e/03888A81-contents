@@ -1,0 +1,43 @@
+library(lme4)
+df=readr::read_csv("C:/Documents and Settings/jking34/Downloads/sing.csv")
+
+m0 = lmer(y ~ A * B * C + (A * B * C  | group), data = df)
+VarCorr(m0)
+# 4 components captures everything
+summary(rePCA(m0))
+m1 <- lmer(y ~ A * B * C + (A * B * C || group), data = df)
+# little to no variance in interactions
+VarCorr(m1)
+m2 <- lmer(y ~ A * B * C + (A + B + C | group), data = df)
+
+library(buildmer)
+
+df$rr = rnorm(nrow(df))
+
+m1 = buildmer(y ~ A * B * C  + rr + (1 + A * B * C + rr | group), data = df,
+         buildmerControl=buildmerControl(direction="backward"))
+m2 = buildmer(y ~ A * B * C + rr + (1 + A * B * C + rr| group), data = df,
+         buildmerControl=buildmerControl(direction="order"))
+
+formula(m1)
+formula(m2)
+
+
+
+
+library(tidyverse)
+bnt = read_csv("https://uoepsy.github.io/data/bntmono.csv")
+bnt <- bnt %>% mutate(across(c(mlhome, school_id, child_id), factor))
+
+bntm0 <- lmer(BNT60 ~ schoolyear * mlhome + (1 | school_id) + (1 | school_id:child_id), data = bnt)
+bntm0
+
+# wrong
+# bntm0 <- lmer(BNT60 ~ schoolyear * mlhome + (1 + mlhome| school_id) + (1 | school_id:child_id), data = bnt)
+# bntm0
+
+m = buildmer(
+  BNT60 ~ schoolyear * mlhome + (1 + schoolyear*mlhome| school_id) + (1 +schoolyear| school_id:child_id), 
+  data = bnt,
+  buildmerControl=buildmerControl(direction="order"))
+formula(m)

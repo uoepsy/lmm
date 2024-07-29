@@ -108,8 +108,8 @@ if(f.classList.contains('jk-circle-right')) {
 </script>
 
 <!---<script src="https://kit.fontawesome.com/120b08a6f5.js" crossorigin="anonymous"></script>-->
-<link href="site_libs/panelset-0.2.6/panelset.css" rel="stylesheet">
-<script src="site_libs/panelset-0.2.6/panelset.js"></script>
+<link href="site_libs/panelset-0.3.0/panelset.css" rel="stylesheet">
+<script src="site_libs/panelset-0.3.0/panelset.js"></script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -171,13 +171,13 @@ if(f.classList.contains('jk-circle-right')) {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04_log.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4: Logistic MLM</span></a>
+ <span class="menu-text">4: Example: Logistic MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05_long.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5: Longitudinal MLM</span></a>
+ <span class="menu-text">5: Example: Longitudinal MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -194,20 +194,26 @@ if(f.classList.contains('jk-circle-right')) {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08_centering.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8: Centering</span></a>
+  <a href="./08_modelbuilding.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8: Model Building</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09_assump.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">9: MLM Assumptions</span></a>
+  <a href="./09_centering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9: Centering</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10_writing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">10: Reporting on analyses with MLM</span></a>
+  <a href="./10_assump.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10: MLM Assumptions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_writing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11: Reporting on analyses with MLM</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -360,7 +366,7 @@ motiv          1.815      0.344   5.275 1.66e-07 ***
 &amp;\text{grade}_i = b_0 + b_1 \cdot \text{motiv}_i + \epsilon_i
 \end{align}
 \]</span> i.e.&nbsp;For any child <span class="math inline">\(i\)</span> that we choose, that child’s grade (<span class="math inline">\(\text{grade}_i\)</span>) is some fixed number (<span class="math inline">\(b_0\)</span>) plus some fixed amount (<span class="math inline">\(b_1\)</span>) times that child’s motivation (<span class="math inline">\(\text{motiv}_i\)</span>).</p>
-<p>The issue, as we saw in <a href="01a_clustered.html#clustered-data">1A #clustered-data</a>, is that the children in our study are actually related to one another in that they can be grouped into the schools that we sampled them from. It’s entirely possible (and likely) that there are school-level differences might actually account for quite a lot of the variation in grades. In the previous reading we actually estimated this to account for approximately 22% grade variation (<a href="01a_clustered.html#icc---quantifying-clustering-in-an-outcome-variable">1A #ICC</a>).</p>
+<p>The issue, as we saw in <a href="01_clustered.html#clustered-data">Chapter 1</a>, is that the children in our study are actually related to one another in that they can be grouped into the schools that we sampled them from. It’s entirely possible (and likely) that there are school-level differences might actually account for quite a lot of the variation in grades. In the previous reading we actually estimated this to account for approximately 22% grade variation (<a href="01_clustered.html#icc---quantifying-clustering-in-an-outcome-variable">Chapter 1-#ICC</a>).</p>
 <p>One option we have hinted at is that we could consider adding in the <code>schoolid</code> as a predictor to our linear model to estimate all these school-level differences (<code>lm(grade ~ schoolid + motiv)</code>). This is a good start, and may oftentimes be perfectly acceptable if our clustering is simply a nuisance thing that we want to account for - adding in the clustering as another predictor will completely account for <em>all</em> cluster-level variability in our outcome variable.</p>
 <p>However, more frequently these clusters are themselves additional units of observation that have features of interest to us. For instance, we may be interested in how the funding that a school receives moderates the association between childrens motivation and grades - i.e.&nbsp;we’re interested in things that happen both at the child-level (motivation, grades), <em>and</em> at the school-level (funding). For these scenarios, we really need a multilevel model.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -512,7 +518,7 @@ b_{0i} &amp;= \gamma_{00} + \zeta_{0i} \\
 <div id="fig-ri_param" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="02_lmm_files/figure-html/fig-ri_param-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;4: grade predicted by motivation, with a by-school random intercept. The school-level intercepts are modelled as a normal distribution. Parameters estimated by the model are shown in purple (fixed effects) and orange (variance components).</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;4: grade predicted by motivation, with a by-school random intercept. The school-level intercepts are modelled as a normal distribution. Parameters estimated by the model are shown in purple (fixed effects) and orange (variance of school-level deviations).</figcaption>
 </figure>
 </div>
 </div>
@@ -536,13 +542,13 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 \left(
     \begin{bmatrix} 0 \\ 0 \end{bmatrix},
     \begin{bmatrix}
-        \sigma_0 &amp; \rho \sigma_0 \sigma_1 \\
-        \rho \sigma_0 \sigma_1 &amp; \sigma_1
+        \sigma_0 &amp; \rho_{01} \\
+        \rho_{01} &amp; \sigma_1
     \end{bmatrix}
 \right)
 \end{align}
 \]</span></p>
-<p>When we have random intercepts <em>and</em> random slopes, our assumption is that both of intercepts and slopes are normally distributed. However, we also typically allow these to be correlated, so the complicated looking bit at the bottom of the equation above is really just saying “random intercepts and slopes are normally distributed with mean of 0 and standard deviations of <span class="math inline">\(\sigma_0\)</span> and <span class="math inline">\(\sigma_1\)</span> respectively, and with a correlation of <span class="math inline">\(\rho \sigma_0 \sigma_1\)</span>”. We’ll see more on this in future weeks, so don’t worry too much right now.</p>
+<p>When we have random intercepts <em>and</em> random slopes, our assumption is that both of intercepts and slopes are normally distributed. However, we also typically allow these to be correlated, so the complicated looking bit at the bottom of the equation above is really just saying “random intercepts and slopes are normally distributed with mean of 0 and standard deviations of <span class="math inline">\(\sigma_0\)</span> and <span class="math inline">\(\sigma_1\)</span> respectively, and with a correlation of <span class="math inline">\(\rho_{01}\)</span>”. We’ll see more on this in future weeks, so don’t worry too much right now.</p>
 <p>In <a href="#fig-rslope">Figure&nbsp;5</a>, we can see now that both the intercept <em>and</em> the slope of grades across motivation are varying by-school.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -576,7 +582,7 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 <div id="fig-rslopes2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="02_lmm_files/figure-html/fig-rslopes2-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;7: grade predicted by motivation, with by-school random intercepts and by-school random slopes of motivation. Parameters estimated by the model are shown in purple (fixed effects) and orange (variance components)</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;7: grade predicted by motivation, with by-school random intercepts and by-school random slopes of motivation. Parameters estimated by the model are shown in purple (fixed effects) and orange (variance of school-level deviations)</figcaption>
 </figure>
 </div>
 </div>
@@ -597,7 +603,7 @@ optional: joint distribution of intercept and slopes
 <ul>
 <li><span class="math inline">\(\sigma_0\)</span> to represent the standard deviation of intercept deviations</li>
 <li><span class="math inline">\(\sigma_1\)</span> to represent the standard deviation of slope deviations</li>
-<li><span class="math inline">\(\rho \sigma_0 \sigma_1\)</span> to represent the correlation between intercept deviations and slope deviations</li>
+<li><span class="math inline">\(\rho_{01}\)</span> to represent the correlation between intercept deviations and slope deviations</li>
 </ul>
 <p><span class="math display">\[
 \begin{bmatrix} \zeta_{0i} \\ \zeta_{1i} \end{bmatrix}
@@ -605,8 +611,8 @@ optional: joint distribution of intercept and slopes
 \left(
     \begin{bmatrix} 0 \\ 0 \end{bmatrix},
     \begin{bmatrix}
-        \sigma_0 &amp; \rho \sigma_0 \sigma_1 \\
-        \rho \sigma_0 \sigma_1 &amp; \sigma_1
+        \sigma_0 &amp; \rho_{01} \\
+        \rho_{01} &amp; \sigma_1
     \end{bmatrix}
 \right)
 \]</span> For a visual intuition about this, see <a href="#fig-randcor">Figure&nbsp;8</a>, in which the x-axis is the intercept deviations, and the y-axis is the slope deviations. We can see that these are each distributed normally, but are negatively related (schools with higher intercepts tend to have slightly lower slopes).</p>
@@ -823,7 +829,7 @@ mapping summary output to parts of the equation
 </div>
 <div class="rtip">
 <p><strong>random effect variances</strong></p>
-<p>The random effect variances represent the estimated spread with which clusters vary around the fixed effects</p>
+<p>The random effect variances (sometimes referred to as the “variance components”) represent the estimated spread with which clusters vary around the fixed effects.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">VarCorr</span>(smod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1041,7 +1047,7 @@ mtv:fndngst  0.639 -0.817 -0.773</code></pre>
 <p>We actually saw this previously when fitting logistic regressions. The process is iterative in that it involves testing the fit of a set of candidate parameters (i.e.&nbsp;giving some initial values for our coefficients) and working out what direction we need to change them in order to get a better fit. We then change them accordingly, evalute the fit, change them, evaluate fit, … and so on until we reach a point where we don’t think we can get any better.</p>
 <p>In maximum likelihood estimation, the “fit” of the model is assessed through the <em>likelihood</em> (the probability of seeing our data, given some hypothesis, see <a href="lvp.html" target="_blank">here</a> for an explanation).</p>
 <p>If we were estimating just one single parameter (e.g.&nbsp;a mean), then we can imagine the process of maximum likelihood estimation in a one-dimensional world - simply finding the top of the curve (<a href="#fig-mle">Figure&nbsp;13</a>, LH panel).</p>
-<p>However, our typical models estimate a whole bunch of parameters, and with lots of parameters being estimated and all interacting to influence the likelihood, our nice curved line becomes a complex surface (<a href="#fig-mle">Figure&nbsp;13</a> RH panel shows it in 3D). What MLE does is try to find the maximum (the top the mountain), but avoid local maxima (false summits) and impossible values (e.g., variances <span class="math inline">\(\leq 0\)</span>), without getting stuck (in plateaus).</p>
+<p>However, our typical models estimate a whole bunch of parameters, and with lots of parameters being estimated and all interacting to influence the likelihood, our nice curved line becomes a complex surface (<a href="#fig-mle">Figure&nbsp;13</a> RH panel shows it in 3D). What MLE does is try to find the maximum (the top of the mountain), but avoid local maxima (false summits) and impossible values (e.g., variances <span class="math inline">\(\leq 0\)</span>), without getting stuck (in plateaus).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-mle" class="quarto-figure quarto-figure-center anchored">
