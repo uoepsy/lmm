@@ -674,7 +674,6 @@ optional: attempted visual explanation
 </div>
 </div>
 </div>
-<p>TODO</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -687,7 +686,7 @@ optional: PCA on the random effect variance-covariance matrix
 </div>
 <div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>We’re probably yet to hear about “PCA” (principal component analysis), but the very high-level view is that it aims to simplify a set of variables by identifying the most important patterns or “components” (allowing us drop less important ways in which people vary). For instance, if a survey asked 10 questions, 5 of which were about physical health, and 5 which were about mental health, then the 5 physical health questions would likely be correlated with one another, and the 5 mental health questions would likely be correlated with one another. PCA might tell us something like “given this set of correlations, 2 ‘dimensions’ can explain most of the variability that we see”.</p>
+<p>We’re probably yet to hear about “PCA” (principal component analysis), but the very high-level view is that it aims to simplify a set of variables by identifying the most important patterns or “components” (allowing us drop less important ways in which people vary). For instance, if a survey asked 10 questions, 5 of which were about physical health, and 5 which were about mental health, then the 5 physical health questions would likely be correlated with one another more than with other questions, and similarly the 5 mental health questions would likely be correlated with one another. PCA might tell us something like “given this set of correlations, 2 ‘dimensions’ can explain most of the variability that we see”.</p>
 <p>The benefit for us in this context is that we have a correlation matrix in our random effects from a maximal model, and we can use PCA to ask “how many ‘dimensions’ capture most of this variation?”</p>
 <p>In the <strong>lme4</strong> package the <code>rePCA()</code> function can do this when we give it an <code>lmer()</code> model.</p>
 <p>TODO example</p>
@@ -711,7 +710,13 @@ optional: data-driven approaches
 </div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>library(buildmer) buildmer(formula,buildmerControl=buildmerControl(direction=c(“order”,“backward”), crit=“LRT”))</p>
+<p>Some approaches to model building are more data-driven. The relatively new package <strong>buildmer</strong> will sequentially remove (or add, depending on direction) random effect terms to obtain the most complex model that can converge, and then can be used to sequentially remove predictors based on some criteria such as a likelihood ratio test.</p>
+<p>For example, if we start with a maximal model which doesn’t converge:</p>
+<p>Using buildmer and setting the direction to “order”, we can request that it starts with an empty model and adds in each random effect in order of their contribution to a certain criterion (in this case, the change in log-likelihood).<br>
+It stops when adding in terms results in non-convergence:</p>
+<p>library(buildmer) buildmer(formula,buildmerControl=buildmerControl(direction=“order”, crit=“LRT”))</p>
+<p>We can then, using that model as a starting point, request that it sequentially eliminate terms according to that same criterion:</p>
+<p>buildmer(formula,buildmerControl=buildmerControl(direction=“backward”, crit=“LRT”))</p>
 </div>
 </div>
 </div>

@@ -1,1 +1,1 @@
-{"entries":[{"key":"fig-dcurve","caption":"Likelihood curve (probability of observed data across possible parameters)","order":{"section":[0,3,0,0,0,0,0],"number":1}}],"headings":["setup","probability","likelihood","a-slightly-more-formal-approach","maximum-likelihood-estimation"]}
+{"entries":[{"caption":"Likelihood curve (probability of observed data across possible parameters)","order":{"section":[0,3,0,0,0,0,0],"number":1},"key":"fig-dcurve"}],"headings":["setup","probability","likelihood","a-slightly-more-formal-approach","maximum-likelihood-estimation"]}
