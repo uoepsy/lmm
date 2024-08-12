@@ -200,14 +200,14 @@ if(f.classList.contains('jk-circle-right')) {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09_centering.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">9: Centering</span></a>
+  <a href="./09_assump.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9: MLM Assumptions</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10_assump.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">10: MLM Assumptions</span></a>
+  <a href="./10_centering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10: Centering</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -266,6 +266,7 @@ if(f.classList.contains('jk-circle-right')) {
   <ul class="collapse">
   <li><a href="#extracting-model-parameters" id="toc-extracting-model-parameters" class="nav-link" data-scroll-target="#extracting-model-parameters">Extracting model parameters</a></li>
   <li><a href="#making-model-predictions" id="toc-making-model-predictions" class="nav-link" data-scroll-target="#making-model-predictions">Making model predictions</a></li>
+  <li><a href="#r-squared-in-multilevel-models" id="toc-r-squared-in-multilevel-models" class="nav-link" data-scroll-target="#r-squared-in-multilevel-models">R squared in multilevel models</a></li>
   <li><a href="#a-more-complex-model" id="toc-a-more-complex-model" class="nav-link" data-scroll-target="#a-more-complex-model">A more complex model</a></li>
   </ul></li>
   <li><a href="#model-estimation" id="toc-model-estimation" class="nav-link" data-scroll-target="#model-estimation">Model Estimation</a>
@@ -545,7 +546,8 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
         \sigma_0 &amp; \rho_{01} \\
         \rho_{01} &amp; \sigma_1
     \end{bmatrix}
-\right)
+\right) \\
+&amp;\varepsilon_{ij} \sim N(0,\sigma_\varepsilon) \\
 \end{align}
 \]</span></p>
 <p>When we have random intercepts <em>and</em> random slopes, our assumption is that both of intercepts and slopes are normally distributed. However, we also typically allow these to be correlated, so the complicated looking bit at the bottom of the equation above is really just saying “random intercepts and slopes are normally distributed with mean of 0 and standard deviations of <span class="math inline">\(\sigma_0\)</span> and <span class="math inline">\(\sigma_1\)</span> respectively, and with a correlation of <span class="math inline">\(\rho_{01}\)</span>”. We’ll see more on this in future weeks, so don’t worry too much right now.</p>
@@ -894,6 +896,10 @@ fixef() + ranef() = coef()
 </center>
 </div>
 </div>
+</section>
+<section id="r-squared-in-multilevel-models" class="level2">
+<h2 class="anchored" data-anchor-id="r-squared-in-multilevel-models">R squared in multilevel models</h2>
+<p>TODO?</p>
 </section>
 <section id="a-more-complex-model" class="level2">
 <h2 class="anchored" data-anchor-id="a-more-complex-model">A more complex model</h2>

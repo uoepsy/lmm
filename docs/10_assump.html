@@ -376,6 +376,34 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+residuals vs fitted plots will trend upwards
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>As a result of partial pooling, the residuals vs fitted plots will often tend to go upwards.</p>
+<p>It’s quite confusing to get your head around, but it is because the groups that are more outlying (which tend to have the lowest and highest fitted values, so they’re on the left and right of the resid vs fitted plot) are the ones that get ‘shrunk’ more towards the center. So the fitted values will get pull towards the middle of the plot, but the residuals will get bigger (more negative for groups on below average, and more positive for groups above average). The result is that the entire plot tilts!</p>
+<p>You can see an animation of this in <a href="#fig-ppooltilt">Figure&nbsp;2</a>. The left hand plot shows the model fitted values for each group, with the residuals indicated by dashed lines. The right hand plots shows the residuals vs fitted plot. The animation moves between the ‘no pooling’ and ‘partial pooling’ approach, and as it does so, the plot on the right tilts!</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-ppooltilt" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/ppool_residfitted.gif" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: The effect of partial pooling on residuals vs fitted plots. The extent to which this tilting happens depends on the amount of shrinkage, so will be more evident when there are few observations in the groups</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="scale-location" class="level4 panel">
 <h4 class="anchored" data-anchor-id="scale-location">scale-location</h4>
@@ -388,7 +416,7 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -404,7 +432,7 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -416,7 +444,7 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -431,7 +459,7 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -441,7 +469,7 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -472,7 +500,7 @@ Business Studies                        -0.27858102  0.18008149
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -483,7 +511,7 @@ Business Studies                        -0.27858102  0.18008149
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -496,9 +524,16 @@ Business Studies                        -0.27858102  0.18008149
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(performance)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">check_predictions</span>(jsmod, <span class="at">iterations =</span> <span class="dv">200</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="10_assump_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+</div>
 </div>
 <div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -507,9 +542,9 @@ optional: doing it yourself
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Doing this ourself gives us a lot more scope to query differences between our observed vs model-predicted data.</p>
+<p>Doing this ourselves gives us a lot more scope to query differences between our observed vs model-predicted data.</p>
 <p>The <code>simulate()</code> function will simulate response variable values for us.<br>
 The <code>re.form = NULL</code> bit is saying to include the random effects when making simulations (i.e.&nbsp;use the information about the specific clusters we <em>have</em> in our data). If we said <code>re.form = NA</code> it would base simulations on a randomly generated set of clusters with the associated intercept and slope variances estimated by our model.</p>
 <div class="cell" data-layout-align="center">
@@ -535,7 +570,7 @@ The <code>re.form = NULL</code> bit is saying to include the random effects when
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -572,7 +607,7 @@ This gives us the IQR of each simulation:</p>
 <section id="influence" class="level1">
 <h1>Influence</h1>
 <p>Just like individual observations can exert influence on a single level linear model fitted with <code>lm()</code>, they can influence our multilevel models too. Just like our assumptions now apply at multiple levels, influence can happen at multiple levels too.</p>
-<p>An individual observation might influence our model (as in <a href="#fig-infl1">Figure&nbsp;2</a>), but so might an entire cluster (<a href="#fig-infl2">Figure&nbsp;3</a>).</p>
+<p>An individual observation might influence our model (as in <a href="#fig-infl1">Figure&nbsp;3</a>), but so might an entire cluster (<a href="#fig-infl2">Figure&nbsp;4</a>).</p>
 <div class="columns">
 <div class="column" style="width:47.5%;">
 <div class="cell" data-layout-align="center">
@@ -580,7 +615,7 @@ This gives us the IQR of each simulation:</p>
 <div id="fig-infl1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="10_assump_files/figure-html/fig-infl1-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Dashed lines show fixed effects from (black line) model with the highlighted red observation, and (red line) model without the highlighted red observation.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;3: Dashed lines show fixed effects from (black line) model with the highlighted red observation, and (red line) model without the highlighted red observation.</figcaption>
 </figure>
 </div>
 </div>
@@ -593,7 +628,7 @@ This gives us the IQR of each simulation:</p>
 <div id="fig-infl2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="10_assump_files/figure-html/fig-infl2-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Dashed lines show fixed effects from (black line) model with the highlighted group, and (red line) model without the highlighted group.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;4: Dashed lines show fixed effects from (black line) model with the highlighted group, and (red line) model without the highlighted group.</figcaption>
 </figure>
 </div>
 </div>
@@ -619,7 +654,7 @@ As with the measures of influence for <code>lm()</code>, such cutoffs are somewh
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -628,7 +663,7 @@ As with the measures of influence for <code>lm()</code>, such cutoffs are somewh
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-24-2.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-25-2.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -649,7 +684,7 @@ In this case, <code>obs = TRUE</code> means we are looking at the influence of i
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -657,7 +692,7 @@ In this case, <code>obs = TRUE</code> means we are looking at the influence of i
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-26-2.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-27-2.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -727,7 +762,7 @@ For instance, to refit our model without employees of the ‘Nursing Studies’ 
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -738,7 +773,7 @@ For instance, to refit our model without employees of the ‘Nursing Studies’ 
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -749,7 +784,7 @@ For instance, to refit our model without employees of the ‘Nursing Studies’ 
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_assump_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_assump_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>

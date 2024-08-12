@@ -29,7 +29,6 @@ library(lme4)
 ```
 
 
-
 # All the data!  
 
 Below are all the datasets that we have seen across the readings and exercises, as well as a few extra ones that should be new! For each one, there is a quick explanation of the study design which also details the research aims of the project.  
@@ -44,6 +43,19 @@ Pick one of the datasets and:
 6. Post some of your writing on Piazza and we can collectively discuss it!  
 
 If you like, work on this as a group - set up a google doc to collaboratively write together (it's much more fun that way!)
+
+
+# simple random effect structures
+
+
+
+# more complex groupings
+
+
+
+# non-linear change
+
+
 
 
 ## Readings 
