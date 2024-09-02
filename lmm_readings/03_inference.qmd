@@ -83,7 +83,7 @@ In very specific situations that correspond to classical experimental designs (i
 
 However, there are various strategies that we can use to conduct inferences that either attempt to approximate the degrees of freedom, or use an alternative method based on, e.g., likelihoods or bootstrapping.  
 
-Below, we'll go through each method in R, applying it to the following model (recall this is the model we ended with in [Chapter 2](02_lmm.html#a-more-complex-model){target="_blank"}).  
+Below, we'll go through each method in R, applying it to the following model (recall this is the model we ended with in [Chapter 2](02_lmm.html#a-multilevel-model-for-a-multilevel-question){target="_blank"}).  
 ```{r}
 library(tidyverse)
 library(lme4)
