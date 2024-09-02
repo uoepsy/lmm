@@ -118,13 +118,12 @@ The data are available at: [https://uoepsy.github.io/data/msmr_mindfuldecline.cs
 
 ```{r}
 #| echo: false
-# read_csv("https://uoepsy.github.io/data/dapr3_mindfuldecline.csv") |>
-#   transmute(ppt,condition,study_visit = visit, age, ACE, imp) |>
-#   write_csv(file="../../data/msmr_mindfuldecline.csv")
-mmd <- read_csv("../../data/msmr_mindfuldecline.csv")
+mmd <- read_csv("../../data/lmm_mindfuldecline.csv")
 tibble(
   variable=names(mmd),
-  description=c("Participant Identifier",
+  description=c(
+    "Name of the site where the study was conducted",
+    "Participant Identifier",
                 "Whether the participant engages in mindfulness or not (control/mindfulness)",
                 "Study Visit Number (1 - 10)",
                 "Age (in years) at study visit",
@@ -141,7 +140,7 @@ tibble(
 ```{r}
 library(tidyverse)
 library(lme4)
-mmd <- read_csv("https://uoepsy.github.io/data/msmr_mindfuldecline.csv")
+mmd <- read_csv("https://uoepsy.github.io/data/lmm_mindfuldecline.csv")
 head(mmd)
 ```
 

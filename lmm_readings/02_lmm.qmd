@@ -756,7 +756,7 @@ This means that there is less contribution from (and more shrinkage of estimates
 <div class="divider div-transparent div-dot"></div>
 
 
-# Fitting Multilevel Models in R
+# Multilevel Models in R
 
 While there is a big conceptual shift from the single level regression model to the multilevel model, the shift in R code is considerably less.  
 
@@ -798,7 +798,7 @@ Much like the simple `lm()` models, we can get a nice summary output:
 summary(smod2)
 ```
 
-The output contains two major components - the "fixed effects" and the "random effects". The fixed effects part contains the estimated intercept and slope(s) for the average school. The random effects part contains the estimated variance (and standard deviation^[remember, variance = standard deviation squared]) of school deviations around those fixed estimates.  
+The output contains two major components - the "fixed effects" and the "random effects". The fixed effects part contains the estimated average intercept and slope(s) across all our schools. The random effects part contains the estimated variance (and standard deviation^[remember, variance = standard deviation squared]) of school deviations around those fixed estimates.  
 
 So from our ouput we can build up a picture in our heads - we know from the fixed effects that in the average school, children with zero motivation have an estimated grade of `r round(fixef(smod2)[1])`, and for every 1 more motivated a child is, their grades are estimated to increase by `r round(fixef(smod2)[2],2)`.  
 
@@ -860,7 +860,7 @@ ggplot(schoolmot, aes(x=motiv,y=grade))+
 
 
 ::: {.callout-tip collapse="true"}
-#### mapping summary output to parts of the equation
+#### Mapping summary output to parts of the equation
 
 ```{r}
 #| echo: false
@@ -870,97 +870,8 @@ knitr::include_graphics("images/lmeroutput.png")
 
 :::
 
-## Extracting model parameters
 
-Alongside `summary()`, there are some useful functions in R that allow us to extract the parameters estimated by the model: 
-
-:::rtip
-__fixed effects__  
-
-The fixed effects represent the estimated average relationship within the entire sample of clusters.
-
-```{r}
-fixef(smod2)
-```
-
-:::
-
-
-:::rtip
-__random effect variances__  
-
-The random effect variances (sometimes referred to as the "variance components") represent the estimated spread with which clusters vary around the fixed effects. 
-
-```{r}
-VarCorr(smod2)
-```
-
-:::
-
-## Making model predictions  
-
-While they are not computed directly in the estimation of the model, the cluster-specific deviations from fixed effects can be extracted from our models   
-
-:::rtip
-__random effects__  
-
-Often referred to as the "random effects", the deviations for each cluster from the fixed effects can be obtained using `ranef()`.  
-Note that each row is a cluster (a school, in this example), and the columns show the distance from the fixed effects. We can see that "Anderson High School" has an estimated intercept that is 7.07 _higher_ than average, and an estimate slope of motivation that is 0.47 _lower_ than average.  
-
-```{r}
-#| eval: false
-ranef(smod2)
-```
-```
-$schoolid
-                                        (Intercept)       motiv
-Anderson High School                     7.07164826 -0.46505592
-Ardnamurchan High School                -7.26417838  0.70012536
-Balwearie High School                  -20.53626558  2.31397177
-Beeslack Community High School          18.63574795 -1.45057126
-...                                     ...          ...
-```
-
-We can also visualise all these using a handy function. This sort of visualisation is great for checking for peculiar clusters.  
-```{r}
-dotplot.ranef.mer(ranef(smod2))
-```
-
-:::
-
-:::rtip
-__cluster coefficients__  
-
-Rather than looking at _deviations_ from fixed effects, we can calculate the intercept and slope for each cluster.  
-For example, if we are estimating that "Anderson High School" has an intercept that is 7.07 higher than average, and the average is 29.23, then we know that this has an intercept of 29.23 + 7.07 = 36.3.  
-
-We can get these out using `coef()`
-```{r}
-#| eval: false
-coef(smod2)
-```
-```
-$schoolid
-                                    (Intercept)  motiv
-Anderson High School                36.304968    4.010661
-Ardnamurchan High School            21.969141    5.175842
-Balwearie High School                8.697054    6.789689
-Beeslack Community High School      47.869068    3.025146
-...                                 ...          ...
-```
-:::sticky
-<center>
-fixef() + ranef() = coef()
-</center>
-:::
-
-:::
-
-## R squared in multilevel models
-
-TODO?
-
-## A more complex model
+### A multilevel model for a multilevel question
 
 The models fitted in the reading thus far are fairly simple in that they only really have one predictor (a measure of a child's education motivation, `motiv`), and our observations (children) happen to be clustered into groups (schools). 
 
@@ -985,8 +896,6 @@ smod3 <- lmer(grade ~ motiv * funding + (1 + motiv | schoolid),
 ```
 
 Note, we _cannot_ include `funding` in the random effects part of our model, because "the effect of funding on school grades" is something we assess by comparing _between_ schools. We cannot think of that effect varying by-school because every school is _either_ "private" _or_ "state" funded. We never observe "Ardnamurchan High School" as anything other than "state" funded, so "the effect on grades of being state/private funded" does not exist for Ardnamurchan High School (and hence it is illogical to try and say that this effect varies between schools).  
-
-Our additions to the fixed effects part here simply add in a couple of fixed terms to our model (the `funding` coefficient and the `motiv:funding` interaction coefficient). This means that in terms of our model structure, it is simply moving from the single line we had in @fig-rslopes2, to having two lines (one for "private" schools and one for "state" schools). The random effects are, as before, the variance in deviations of individual schools around these fixed estimates.  
 
 
 ::: {.callout-tip collapse="true"}
@@ -1019,15 +928,15 @@ $$
 \end{align}
 $$
   
-::: {.callout-caution collapse="true"}
-#### optional: an attempted visual explanation
+:::
 
-@fig-crosslev1 shows an attempted visual intuition of how the different parts of the model work:  
+Our additions to the fixed effects part here simply add in a couple of fixed terms to our model (the `funding` coefficient and the `motiv:funding` interaction coefficient). This means that in terms of our model structure, it is simply moving from the single line we had in @fig-rslopes2, to having two lines (one for "private" schools and one for "state" schools) as in @fig-crosslev1. The random effects are, as before, the variance in deviations of individual schools around these fixed estimates.  
 
 ```{r}
 #| echo: false
 #| label: fig-crosslev1
-#| fig-cap: "visual explanation of a model with a cross-level interaction"
+#| out-width: "100%"
+#| fig-cap: "visual explanation of a model with a cross-level interaction. Blue line is private-funded schools, purple line is state-funded schools"
 pschools = c("Kilsyth Academy","St Andrew's Academy","Calderglen High School","St Ambrose High School", "Beeslack Community High School","The Mary Erskine School","Tarbert Academy","Stewarton Academy","St Columba's High School","Castlebrae Community High School","Penicuik High School")
 
 plotlabs = schoolmot |> count(schoolid,funding) |> select(-n) |>
@@ -1059,45 +968,45 @@ pf <-
   geom_abline(intercept=sum(fixef(smod3)[c(1,3)]),slope=sum(fixef(smod3)[c(2,4)]), 
               lwd=1,col="#a41ae4")+
   geom_point(x=0,y=fixef(smod3)[1],size=3,col="#00a8cc")+
- annotate("text",x=-.1,y=fixef(smod3)[1],
-         label=expression(gamma["00"]),size=5,
-         hjust=-.25,vjust=-.5,col="#00a8cc") +
- geom_segment(x=1,xend=2,
-              y=(fixef(smod3)[1:2]%*%c(1,1))[[1]],
-              yend=(fixef(smod3)[1:2]%*%c(1,1))[[1]])+
-  geom_segment(x=2,xend=2,
-              y=(fixef(smod3)[1:2]%*%c(1,1))[[1]],
-              yend=(fixef(smod3)[1:2]%*%c(1,2))[[1]],
-              col="#00a8cc",lwd=1)+
-  geom_segment(x=1,xend=2,
-              y=(fixef(smod3)%*%c(1,1,1,1))[[1]],
-              yend=(fixef(smod3)%*%c(1,1,1,1))[[1]])+
-  geom_segment(x=2,xend=2,
-              y=(fixef(smod3)%*%c(1,1,1,1))[[1]],
-              yend=(fixef(smod3)%*%c(1,2,1,2))[[1]],
-              col="#a41ae4",lwd=1)+
-  geom_segment(x=2,xend=2,
-              y=(fixef(smod3)%*%c(1,1,1,1))[[1]],
-              yend=(fixef(smod3)%*%c(1,2,1,1))[[1]],
-              col="#00a8cc",lwd=1)+
-  geom_segment(x=1,xend=2,
-              y=(fixef(smod3)%*%c(1,1,1,1))[[1]],
-              yend=(fixef(smod3)%*%c(1,2,1,1))[[1]],
-              col="#00a8cc") +
-  geom_segment(x=0.1,xend=0.1,
-              y=(fixef(smod3)%*%c(1,0,0,0))[[1]],
-              yend=(fixef(smod3)%*%c(1,0,1,0))[[1]],
-              col="green4",lwd=1) +
-  annotate("text",x=0.1,y=33,
-            label=expression(gamma["01"]),size=5,
-            hjust=-.3,col="green4") +
-  
-  annotate("text",x=2,y=(fixef(smod3)%*%c(1,1,0,0))[[1]],
-            label=expression(gamma["10"]),size=5,
-            hjust=-.2,col="#00a8cc") +
-  annotate("text",x=2,y=(fixef(smod3)%*%c(1.1,1,1,1))[[1]],
-            label=expression(gamma["11"]),size=5,
-            hjust=-.2,col="#a41ae4") +
+ # annotate("text",x=-.1,y=fixef(smod3)[1],
+ #         label=expression(gamma["00"]),size=5,
+ #         hjust=-.25,vjust=-.5,col="#00a8cc") +
+ # geom_segment(x=1,xend=2,
+ #              y=(fixef(smod3)[1:2]%*%c(1,1))[[1]],
+ #              yend=(fixef(smod3)[1:2]%*%c(1,1))[[1]])+
+ #  geom_segment(x=2,xend=2,
+ #              y=(fixef(smod3)[1:2]%*%c(1,1))[[1]],
+ #              yend=(fixef(smod3)[1:2]%*%c(1,2))[[1]],
+ #              col="#00a8cc",lwd=1)+
+ #  geom_segment(x=1,xend=2,
+ #              y=(fixef(smod3)%*%c(1,1,1,1))[[1]],
+ #              yend=(fixef(smod3)%*%c(1,1,1,1))[[1]])+
+ #  geom_segment(x=2,xend=2,
+ #              y=(fixef(smod3)%*%c(1,1,1,1))[[1]],
+ #              yend=(fixef(smod3)%*%c(1,2,1,2))[[1]],
+ #              col="#a41ae4",lwd=1)+
+ #  geom_segment(x=2,xend=2,
+ #              y=(fixef(smod3)%*%c(1,1,1,1))[[1]],
+ #              yend=(fixef(smod3)%*%c(1,2,1,1))[[1]],
+ #              col="#00a8cc",lwd=1)+
+ #  geom_segment(x=1,xend=2,
+ #              y=(fixef(smod3)%*%c(1,1,1,1))[[1]],
+ #              yend=(fixef(smod3)%*%c(1,2,1,1))[[1]],
+ #              col="#00a8cc") +
+ #  geom_segment(x=0.1,xend=0.1,
+ #              y=(fixef(smod3)%*%c(1,0,0,0))[[1]],
+ #              yend=(fixef(smod3)%*%c(1,0,1,0))[[1]],
+ #              col="green4",lwd=1) +
+ #  annotate("text",x=0.1,y=33,
+ #            label=expression(gamma["01"]),size=5,
+ #            hjust=-.3,col="green4") +
+ #  
+ #  annotate("text",x=2,y=(fixef(smod3)%*%c(1,1,0,0))[[1]],
+ #            label=expression(gamma["10"]),size=5,
+ #            hjust=-.2,col="#00a8cc") +
+ #  annotate("text",x=2,y=(fixef(smod3)%*%c(1.1,1,1,1))[[1]],
+ #            label=expression(gamma["11"]),size=5,
+ #            hjust=-.2,col="#a41ae4") +
  #  
  # geom_segment(x=-.2,xend=-.2,y=fixef(smod3)[1],
  #                yend=fixef(smod3)[1]+sqrt(VarCorr(smod3)[[1]][1]),
@@ -1154,41 +1063,171 @@ ps <- as.data.frame(ranef(smod3)$schoolid) |>
 (pf + (pi / ps)) + plot_layout(widths=c(2,1))
 ```
 
-
-:::
-
-:::
-
-
-
-
-::::panelset
-:::panel
-#### model summary
+Typically, the part of these models that we are interested in is the fixed effect estimates, which represent the association between motivation and grades, averaged across the schools, and the differences on average between state-funded vs private-funded schools:
 
 ```{r}
+#| eval: false
 summary(smod3)
 ```
 
-:::
-:::panel
-#### plot  
+```
+...
+Fixed effects:
+                   Estimate Std. Error t value
+(Intercept)         40.3143     4.6414   8.686
+motiv                2.6294     0.8652   3.039
+fundingstate       -17.2531     5.7347  -3.009
+motiv:fundingstate   2.8485     1.0591   2.689
+```
 
-For plotting the fixed effect estimates (which are often the bit we're most interested in) from multilevel models, we can't rely on using `predict()`, `fitted()` or `augment()`, as these return to us the cluster-specific predicted values.  
+We can map these estimates onto plots, just like we did with the "coefficients" part of the `lm()` output. The intercept is the height of the blue ("private") line where `motiv` is zero. The `motiv` estimate is the slope of that blue line. `fundingstate` is the difference in height moving from the blue line to the purple line, when `motiv` is zero. Finally the interaction is the adjustment from the slope of the blue line to the slope of the purple line (it's positive, which means the "state" line goes up more steeply - as we can see!)
 
-Instead, we need to use tools like the __effects__ package that we saw at the end of the USMR course, that takes a fixed effect and averages over the other terms in the model:  
+
+## Extracting model parameters
+
+Alongside `summary()`, there are some useful functions in R that allow us to extract the parameters estimated by the model: 
+
+:::rtip
+__fixed effects__  
+
+The fixed effects represent the estimated average relationship within the entire sample of clusters.
 
 ```{r}
-library(effects)
-effect(term="motiv*funding",mod=smod3,xlevels=20) |>
-  as.data.frame() |>
-  ggplot(aes(x=motiv,y=fit,col=funding,fill=funding))+
-  geom_line()+
-  geom_ribbon(aes(ymin=lower,ymax=upper),alpha=.3)
+fixef(smod3)
 ```
 
 :::
-::::
+
+
+:::rtip
+__random effect variances__  
+
+The random effect variances (sometimes referred to as the "variance components") represent the estimated spread with which clusters vary around the fixed effects. 
+
+```{r}
+VarCorr(smod3)
+```
+
+:::
+
+
+## Making model predictions  
+
+While they are not computed directly in the estimation of the model, the cluster-specific deviations from fixed effects can be extracted from our models   
+
+:::rtip
+__random effects__  
+
+Often referred to as the "random effects", the deviations for each cluster from the fixed effects can be obtained using `ranef()`.  
+Note that each row is a cluster (a school, in this example), and the columns show the distance from the fixed effects. We can see that "Anderson High School" has an estimated intercept that is 9.39 _higher_ than average, and an estimate slope of motivation that is 0.61 _lower_ than average.  
+
+```{r}
+#| eval: false
+ranef(smod3)
+```
+```
+$schoolid
+                                       (Intercept)       motiv
+Anderson High School                    9.386006   -0.60628851
+Ardnamurchan High School               -3.413536    0.15035243
+Balwearie High School                  -13.599480   1.12438549
+Beeslack Community High School          9.658259   -0.14963519
+...                                     ...         ...
+```
+
+We can also visualise all these using a handy function. This sort of visualisation is great for checking for peculiar clusters.  
+```{r}
+dotplot.ranef.mer(ranef(smod3))
+```
+
+:::
+
+:::rtip
+__cluster coefficients__  
+
+Rather than looking at _deviations_ from fixed effects, we can calculate the intercept and slopes for each cluster.  
+
+We can get these out using `coef()`
+```{r}
+#| eval: false
+coef(smod3)
+```
+```
+$schoolid
+                               (Intercept) motiv       fundingstate  motiv:fundingstate
+Anderson High School           49.70028    2.02311498  -17.25313     2.848511
+Ardnamurchan High School       36.90073    2.77975592  -17.25313     2.848511
+Balwearie High School          26.71479    3.75378898  -17.25313     2.848511
+Beeslack Community High School 49.97253    2.47976830  -17.25313     2.848511
+...                            ...         ...         ...           ...
+```
+
+:::sticky
+<center>
+fixef() + ranef() = coef()
+</center>
+:::
+
+For example, if we are estimating that "Anderson High School" has an intercept that is 9.39 higher than average, and the average (our fixed effect intercept) is 40.31, then we know that this has an intercept of 40.31 + 9.39 = 49.70.  
+
+However, note that we also have slopes for things that aren't present in the output of `ranef()` - we have the slopes for the *fixed* predictors for each cluster too, but because these are fixed they are simply the same number of each cluster.  
+
+Because "Anderson High School" is a state-funded school, the intercept is not just "9.39 above our fixed effect intercept" - it is estimated to be 17.25 lower than that because it is state-funded. So our estimated intercept for this school is 40.31 + 9.39 - 17.25 = 32.45.  
+
+In fact, we can essentially write out a regression equation for each individual cluster. For instance, "Anderson High School" is a state-funded school, so the expected grade for a child $i$ from this school would be: 
+$$
+\begin{align}
+\widehat{grade_i} &= 49.70 + (2.02 \cdot motiv_i) - (17.25 \cdot 1) + (2.85 \cdot motiv_i \cdot 1) \\
+&= 32.45 + (4.87 \cdot motiv_i) \\
+\end{align}
+$$
+And for Beeslack Community High School, which is a _private_ funded school, the expected grade would be:
+$$
+\begin{align}
+\widehat{grade_i} &= 49.97 + (2.48 \cdot motiv_i) - (17.25 \cdot 0) + (2.85 \cdot motiv_i \cdot 0) \\
+&= 49.97 + (2.48 \cdot motiv_i) \\
+\end{align}
+$$
+
+:::
+
+
+## Visualising models
+
+In the vast majority of analyses using multilevel models, the bit that people are most interested in is the fixed effects - these represent the estimated effects averaged across the clusters in our sample.  
+
+It's tempting, then, to think that we could take the model-predicted values for each observation (`predict()`/`fitted()`/`augment()` etc.) and average them up to get our estimated effects. If every cluster had the same amount of data at every level of the predictor then this would work but we would have more issues in estimating the uncertainty. 
+
+Instead, it is common to use helpful packages that can provide us with a small dataframe of estimated effects and uncertainty, that we can then plot. One such package is the __effects__ package, which has the `effect()` function, that can be used as so:
+```{r}
+library(effects)
+effect(term = "motiv*funding", mod = smod3) |>
+  as.data.frame()
+```
+
+We can then use this to plot: 
+```{r}
+effect(term = "motiv*funding", mod = smod3) |>
+  as.data.frame() |>
+  ggplot(aes(x = motiv, col = funding, fill = funding)) +
+  geom_line(aes(y = fit)) + 
+  geom_ribbon(aes(y = fit, ymin = lower, ymax = upper), alpha = .3)
+```
+
+However, as with plotting all estimated effects, it is very useful to also display the underlying data, to make clear the variability we would actually expect. The plot above shows us what we would expect for children from the schools _on average_. It doesn't clearly depict how schools and children vary, and a reader could easily take away the idea that we expect most children to fall within those bands. 
+
+One easy way is to adjust plot is to simply show the raw data behind our estimated effects, which requires giving the ggplot() code data from two different places:  
+```{r}
+efplot <- effect(term = "motiv*funding", mod = smod3) |>
+  as.data.frame()
+
+ggplot(data = schoolmot, 
+       aes(x = motiv, col = funding, fill = funding)) +
+  geom_point(aes(y = grade), alpha = .3) + 
+  geom_line(data = efplot, aes(y = fit)) + 
+  geom_ribbon(data = efplot, 
+              aes(y = fit, ymin = lower, ymax = upper), alpha = .3)
+```
 
 
 <div class="divider div-transparent div-dot"></div>

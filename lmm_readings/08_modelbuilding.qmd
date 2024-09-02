@@ -157,7 +157,7 @@ What do we do in these cases? Simplify, simplify, simplify!
 
 The scale of our predictors can sometimes play a part here. If we were fitting a model of `shoe_size ~ height`, then the estimated coefficient is going to depend on how we measure height. If we measure it in millimeters, then we'll probably have a very small coefficient (people's shoe size will only change by a tiny amount for every 1mm height they gain), but if we measure height in kilometers, then we'll have a very big coefficient ("grow an extra kilometer in height, and your shoe size will increase 10000 sizes"!!).  
 
-In the multilevel model, we're estimating the variances in these relationships across a set of clusters. If the coefficient is in millimeters, then the variance is in millimeters too, and so the number will be quite small. If it's in kilometers, the coefficient is in units 100,000 times bigger, and so is the variance.  
+In the multilevel model, we're estimating the variances in these relationships across a set of groups (or 'clusters'). If the coefficient is in millimeters, then the variance is in millimeters too, and so the number will be quite small. If it's in kilometers, the coefficient is in units 100,000 times bigger, and so is the variance.  
 
 Scaling predictors doesn't change the relationship being studied, but it does change the numeric values we are asking our relationship to be presented in. As the estimation of multilevel models can get into difficulty when variances are too close to zero, you may occasionally receive messages such as those below.  
 
@@ -561,20 +561,57 @@ The benefit for us in this context is that we have a correlation matrix in our r
 
 In the **lme4** package the `rePCA()` function can do this when we give it an `lmer()` model.  
 
-TODO example
+```{r}
+#| echo: false
+#| eval: false
+set.seed(132)
+n_groups = 20
+xgrid = expand_grid(x1=0:1,x2=0:1)
+g = rep(1:n_groups, e = nrow(xgrid)*5)
+x1 = rnorm(length(g))
+x2 = rnorm(length(g))
+x3 = rnorm(length(g))
+re = MASS::mvrnorm(n=n_groups, mu=rep(0,3),Sigma = diag(3)*c(3,2,1))
+summary(re)
+re0 = re[,1][g]
+rex1 = re[,2][g]
+rex2 = re[,3][g]
+lp = (0 + re0) + (2 + rex1) * x1 + (1 + rex2) * x2 + -1*x1*x2 
+y = rnorm(length(g), mean = lp, sd = 2)
+df = data.frame(x1,x2,x3,g = factor(g), y)
+write_csv(df,"../docs/lmmpcademo.csv")
+```
 
+Here our full model is singular:
+```{r}
+df <- read_csv("https://uoepsy.github.io/lmm/lmmpcademo.csv")
+```
+```{r}
+#| message: true
+fullmod <- lmer(y~x1*x2*x3+(1+x1*x2*x3|g), data = df)
+```
 
+The `rePCA()` function shows that 4 things explain 100% of the variance (the row of "cumulative proportion" reaches 1 by the 4th column):
+```{r}
+summary(rePCA(fullmod))
+```
 
+Removing the correlations is still overfitted, but indicates to us that many of the random effects associated with predictor `x3` have very small or zero variances, along with the `x1:x2` interaction
+```{r}
+modz <- lmer(y~x1*x2*x3+(1+x1*x2*x3||g),df)
+VarCorr(modz)
+```
 
+```{r}
+# remove x3
+mod1 <- lmer(y~x1*x2*x3+(1+x1*x2||g),df) # still singular
 
-1. fit maximal
-2. summary(rePCA(model))
-3. fit ZCP
+# remove x1:x2 interaction
+mod2 <- lmer(y~x1*x2*x3+(1+x1+x2||g),df) # no longer singular! 
 
-
-
-
-
+# try reintroducing correlations
+mod3 <- lmer(y~x1*x2*x3+(1+x1+x2|g),df) # still fits!
+```
 
 :::
 
@@ -584,56 +621,59 @@ TODO example
 
 Some approaches to model building are more data-driven. The relatively new package **buildmer** will sequentially remove (or add, depending on direction) random effect terms to obtain the most complex model that can converge, and then can be used to sequentially remove predictors based on some criteria such as a likelihood ratio test.  
 
-For example, if we start with a maximal model which doesn't converge:
-
-```{r}
-
-```
-
-Using buildmer and setting the direction to "order", we can request that it starts with an empty model and adds in each random effect in order of their contribution to a certain criterion (in this case, the change in log-likelihood).  
+Using buildmer and setting the direction to "order", we can give it the fully maximal model, and request that it assess the inclusion of each term in order of their contribution to a certain criterion (in this case, a likelihood ratio test).  
 It stops when adding in terms results in non-convergence:  
 
+```{r}
+df <- read_csv("https://uoepsy.github.io/lmm/lmmpcademo.csv")
 
 library(buildmer)
-buildmer(formula,buildmerControl=buildmerControl(direction="order", crit="LRT"))
+bmod1 <- buildmer(y~x1*x2*x3+(1+x1*x2*x3|g), 
+                  data = df,
+                  buildmerControl = buildmerControl(direction="order", crit="LRT")
+          )
+```
+
+We can then see the resulting model formula here:  
+_(note these are a type of R object we've not encountered before, and we access the model using `@` rather than `$`)_
+```{r}
+newform <- formula(bmod1@model)
+newform
+```
+
+This can then be fed into buildmer *again*, and using that model as a starting point, we can request that it sequentially eliminate terms according to the same likelihood ratio criterion. It will also consider removing fixed effects here, which you might not want to do, in which case you can specify in the `include` argument all the relevant terms you want to forcibly keep. 
+In this case, no additional terms are removed: 
+```{r}
+#| eval: false
+bmod2 <- buildmer(newform, data = df,
+         buildmerControl=buildmerControl(
+           include=~x1*x2*x3,direction="backward", crit="LRT"))
+
+finalmod <- bmod2@model
+```
+```{r}
+#| include: false
+bmod2 <- buildmer(newform, data = df,
+         buildmerControl=buildmerControl(
+           include=~x1*x2*x3,direction="backward", crit="LRT"))
+finalmod <- bmod2@model
+```
+```{r}
+formula(finalmod)
+```
 
 
+:::imp
+Some things to note - as far as I can tell, **buildmer** does not consider removing random effect correlations. 
 
-We can then, using that model as a starting point, request that it sequentially eliminate terms according to that same criterion:  
+As with anything attempt at automating something like this, there's a high risk that we use it as an _alternative_ to careful thought. Remember - the 'best fitting model' is not the same as the model that best represents our understanding of the world, or the one that best answers our research question. 
 
-buildmer(formula,buildmerControl=buildmerControl(direction="backward", crit="LRT"))
-
+:::
 
 :::
 
 
 
-
-
-
-
-```{r}
-#| include: false
-set.seed(24)
-N = 200
-n_groups = 20
-g = rep(1:n_groups, e = N/n_groups)
-x = rep(0:9,n_groups)
-re0 = rnorm(n_groups, sd = 1)
-re = re0[g]
-rex = re0/2
-re_x = rex[g]
-lp = (0 + re) + (0 + re_x) * x
-y = rnorm(N, mean = lp, sd = .1)
-df=data.frame(x, g = factor(g), y)
-
-model1 <- lmer(y ~ 1 + x + (1 + x | g), data = df)
-library(buildmer)
-buildmer(y ~ 1 + x + (1 + x | g), data = df,buildmerControl=buildmerControl(direction=c("order","backward"), crit="LRT")) |> summary()
-
-summary(model1)
-
-```
 
 
 

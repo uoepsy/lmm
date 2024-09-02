@@ -108,8 +108,6 @@ if(f.classList.contains('jk-circle-right')) {
 </script>
 
 <!---<script src="https://kit.fontawesome.com/120b08a6f5.js" crossorigin="anonymous"></script>-->
-<link href="site_libs/panelset-0.3.0/panelset.css" rel="stylesheet">
-<script src="site_libs/panelset-0.3.0/panelset.js"></script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -153,7 +151,7 @@ if(f.classList.contains('jk-circle-right')) {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_clustered.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1: Clustered Data</span></a>
+ <span class="menu-text">1: Group-Structured Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -314,7 +312,7 @@ if(f.classList.contains('jk-circle-right')) {
 <div id="fig-glmml2p" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="04_log_files/figure-html/fig-glmml2p-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: logistic multilevel models model the change in log-odds of y, varying by clusters. This looks just like the standard linear multilevel model, but converted back to probabilities we get our nice curves!</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;1: logistic multilevel models model the change in log-odds of y, varying by cluster. This looks just like the standard linear multilevel model, but converted back to probabilities we get our nice curves!</figcaption>
 </figure>
 </div>
 </div>
@@ -322,12 +320,12 @@ if(f.classList.contains('jk-circle-right')) {
 <p>Beyond the material covered in , there are a few aspects of the logistic multilevel model that are worth commenting on.</p>
 <p>Firstly, GLMMs (‘generalised linear mixed models’) can take more time to run (for bigger datasets we’re talking minutes, and sometimes even hours!).</p>
 <p>Secondly, our choices of methods of inference (see <a href="03_inference.html">Chapter 3</a>) are slightly different from what they were for <code>lmer()</code>. We continue to have the likelihood based methods as well as parametric bootstrapping (although this will more often result in computational issues with <code>glmer</code>). We also have the traditional <span class="math inline">\(z\)</span>-statistics that have carried over from <code>glm()</code>. We can get confidence intervals that follow this same method by using <code>confint(model, method="Wald")</code>, which may often be preferred purely for the fact that they are quick!</p>
-<p>Finally, one small but noteworthy feature of the logistic multilevel model is that our fixed effects coefficients, when translated back to odds ratios, represent “cluster specific” effects of a predictor:</p>
+<p>Finally, one small but noteworthy feature of the logistic multilevel model is that our fixed effects coefficients, when translated back to odds ratios, represent “cluster specific” effects of a predictor.</p>
+<p>This becomes important when deciding if we want to estimate effects for “the average cluster”, or for “clusters on average”. In the linear multilevel model these two are the same, but not so in the logistic.</p>
 <ul>
-<li>For a linear multilevel model: <code>lmer(y ~ x + (1 + x | cluster))</code>, the fixed effect of <span class="math inline">\(x\)</span> gives the change in the <span class="math inline">\(y\)</span> when <span class="math inline">\(x\)</span> is increased by one unit, averaged across clusters</li>
-<li>For a logistic multilevel model: <code>glmer(ybin ~ x + (1 + x | cluster), family=binomial)</code>, the odds ratio for <span class="math inline">\(x\)</span> - <code>exp(fixef(model))</code> - gives the multiplicative change in odds of <span class="math inline">\(y\)</span> when <span class="math inline">\(x\)</span> is increased by one unit <strong>for a particular cluster.</strong></li>
+<li>For a linear multilevel model: <code>lmer(y ~ x + (1 + x | cluster))</code>, the fixed effect of <span class="math inline">\(x\)</span> gives us, <strong>for clusters on average,</strong> the change in the <span class="math inline">\(y\)</span> when <span class="math inline">\(x\)</span> is increased by one unit.</li>
+<li>For a logistic multilevel model: <code>glmer(ybin ~ x + (1 + x | cluster), family=binomial)</code>, the odds ratio for <span class="math inline">\(x\)</span> - <code>exp(fixef(model))</code> - gives us, <strong>for the average cluster,</strong> the multiplicative change in odds of <span class="math inline">\(y\)</span> when <span class="math inline">\(x\)</span> is increased by one unit.</li>
 </ul>
-<p>This becomes important when deciding if we want to estimate outcomes for individual clusters, or estimate group effects (in which case a mixed model might not be best).</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1071,15 +1069,15 @@ statussubordinate   4.3042614 1.4106434 13.1334867</code></pre>
     <tr><td headers="term" class="gt_row gt_left">difficultydifficult</td>
 <td headers="est" class="gt_row gt_right">-0.86</td>
 <td headers="OR" class="gt_row gt_right">0.42</td>
-<td headers="OR interpretation" class="gt_row gt_left">odds of successful problem solving are more than halved (0.42 times the odds) when a given monkey moves from an easy to a difficult problem</td></tr>
+<td headers="OR interpretation" class="gt_row gt_left">odds of successful problem solving are more than halved (0.42 times the odds) when the average monkey moves from an easy to a difficult problem</td></tr>
     <tr><td headers="term" class="gt_row gt_left">statusdominant</td>
 <td headers="est" class="gt_row gt_right">0.67</td>
 <td headers="OR" class="gt_row gt_right">1.95</td>
-<td headers="OR interpretation" class="gt_row gt_left">odds of success would be almost doubled (1.95 times the odds) if a monkey were to change from adolescent to dominant status (NB this is non-significant)</td></tr>
+<td headers="OR interpretation" class="gt_row gt_left">odds of success would be almost doubled (1.95 times the odds) if the average monkey were to change from adolescent to dominant status (NB this is non-significant)</td></tr>
     <tr><td headers="term" class="gt_row gt_left">statussubordinate</td>
 <td headers="est" class="gt_row gt_right">1.46</td>
 <td headers="OR" class="gt_row gt_right">4.30</td>
-<td headers="OR interpretation" class="gt_row gt_left">odds of success would quadruple (4.3 times the odds) if a monkey were to change from adolescent to subordinate status</td></tr>
+<td headers="OR interpretation" class="gt_row gt_left">odds of success would quadruple (4.3 times the odds) if the average monkey were to change from adolescent to subordinate status</td></tr>
   </tbody>
   
   
@@ -1093,7 +1091,7 @@ statussubordinate   4.3042614 1.4106434 13.1334867</code></pre>
 <div class="no-row-height column-margin column-container"><div class="">
 <p><strong>Side note</strong></p>
 <p>Contrast this with what we would get from a <em>linear</em> multilevel model. If we were instead modelling a “problem score” with <code>lmer()</code>, rather than “solved yes/no” with <code>glmer()</code>, our coefficients would be interpreted as the estimated difference in scores between adolescent and subordinate monkeys.</p>
-<p>Note that estimating differences between groups is not quite the same idea as estimating the effect “if a particular monkey changed from adolescent to subordinate”. In the linear world, these two things are the same, but our odds ratios give us only the latter.</p>
+<p>Note that estimating differences between groups is not quite the same idea as estimating the effect “if a particular (the average) monkey changed from adolescent to subordinate”. In the linear world, these two things are the same, but our odds ratios give us only the latter.</p>
 </div></div></section>
 </section>
 </section>

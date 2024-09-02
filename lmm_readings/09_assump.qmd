@@ -523,6 +523,10 @@ The same is true in our multilevel model. In @fig-conflmm3 we can see that we ha
 knitr::include_graphics("images/endogeneity/Slide4.PNG")
 ```
 
+
+::: {.callout-note collapse="true"}
+#### other models
+
 This is an assumption that we do _not_ have to make with our 'no pooling' model of `lm(y ~ cluster + x)`, because by putting the cluster in as another predictor we include the covariance between it and our predictor of interest (@fig-conflmm4). 
 
 ```{r}
@@ -532,7 +536,9 @@ This is an assumption that we do _not_ have to make with our 'no pooling' model 
 knitr::include_graphics("images/endogeneity/Slide6.PNG")
 ```
 
-However, in some cases, this might not be the case! For instance, if we are interested in whether drinking more alcohol is associated with more/less anxiety, and we had a model such `lmer(anxiety ~ alcohol + (1 | person))`, then our random effects ("persons") are likely associated with different drinking habits, as in @fig-conflmm5.  
+:::
+
+In some cases, this assumption might not hold! For instance, if we are interested in whether drinking more alcohol is associated with more/less anxiety, and we had a model such `lmer(anxiety ~ alcohol + (1 | person))`, then our random effects ("persons") are likely associated with different drinking habits, as in @fig-conflmm5.  
 
 ```{r}
 #| echo: false

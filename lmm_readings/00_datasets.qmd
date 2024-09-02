@@ -31,7 +31,7 @@ library(lme4)
 
 # All the data!  
 
-Below are all the datasets that we have seen across the readings and exercises, as well as a few extra ones that should be new! For each one, there is a quick explanation of the study design which also details the research aims of the project.  
+Below are various datasets from these readings and from lectures and exercises across our courses. For each one, there is a quick explanation of the study design which also details the research aims of the project.  
   
 Pick one of the datasets and: 
 

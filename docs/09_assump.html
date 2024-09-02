@@ -153,7 +153,7 @@ if(f.classList.contains('jk-circle-right')) {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_clustered.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1: Clustered Data</span></a>
+ <span class="menu-text">1: Group-Structured Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -839,6 +839,18 @@ b_{0i} &amp;= \gamma_{00} + \zeta_{0i} \\
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+other models
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>This is an assumption that we do <em>not</em> have to make with our ‘no pooling’ model of <code>lm(y ~ cluster + x)</code>, because by putting the cluster in as another predictor we include the covariance between it and our predictor of interest (<a href="#fig-conflmm4">Figure&nbsp;8</a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -850,7 +862,10 @@ b_{0i} &amp;= \gamma_{00} + \zeta_{0i} \\
 </div>
 </div>
 </div>
-<p>However, in some cases, this might not be the case! For instance, if we are interested in whether drinking more alcohol is associated with more/less anxiety, and we had a model such <code>lmer(anxiety ~ alcohol + (1 | person))</code>, then our random effects (“persons”) are likely associated with different drinking habits, as in <a href="#fig-conflmm5">Figure&nbsp;9</a>.</p>
+</div>
+</div>
+</div>
+<p>In some cases, this assumption might not hold! For instance, if we are interested in whether drinking more alcohol is associated with more/less anxiety, and we had a model such <code>lmer(anxiety ~ alcohol + (1 | person))</code>, then our random effects (“persons”) are likely associated with different drinking habits, as in <a href="#fig-conflmm5">Figure&nbsp;9</a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-conflmm5" class="quarto-figure quarto-figure-center anchored">

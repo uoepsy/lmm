@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LMM/MLM - 1: Clustered Data</title>
+<title>LMM/MLM - 1: Group-Structured Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -125,7 +125,7 @@ if(f.classList.contains('jk-circle-right')) {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_clustered.html">1: Clustered Data</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_clustered.html">1: Group-Structured Data</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -153,7 +153,7 @@ if(f.classList.contains('jk-circle-right')) {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_clustered.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">1: Clustered Data</span></a>
+ <span class="menu-text">1: Group-Structured Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -256,12 +256,12 @@ if(f.classList.contains('jk-circle-right')) {
    
   <ul>
   <li><a href="#our-starting-point" id="toc-our-starting-point" class="nav-link active" data-scroll-target="#our-starting-point">Our Starting Point</a></li>
-  <li><a href="#clustered-data" id="toc-clustered-data" class="nav-link" data-scroll-target="#clustered-data">Clustered Data</a>
+  <li><a href="#group-structured-data" id="toc-group-structured-data" class="nav-link" data-scroll-target="#group-structured-data">Group-Structured Data</a>
   <ul class="collapse">
   <li><a href="#clusters-clusters-everywhere" id="toc-clusters-clusters-everywhere" class="nav-link" data-scroll-target="#clusters-clusters-everywhere">Clusters clusters everywhere</a></li>
-  <li><a href="#what-are-clusters" id="toc-what-are-clusters" class="nav-link" data-scroll-target="#what-are-clusters">What are ‘clusters’?</a></li>
+  <li><a href="#what-are-these-groupsclusters" id="toc-what-are-these-groupsclusters" class="nav-link" data-scroll-target="#what-are-these-groupsclusters">What are these ‘groups’/‘clusters’?</a></li>
   </ul></li>
-  <li><a href="#working-with-clustered-data" id="toc-working-with-clustered-data" class="nav-link" data-scroll-target="#working-with-clustered-data">Working with Clustered Data</a>
+  <li><a href="#working-with-group-structured-data" id="toc-working-with-group-structured-data" class="nav-link" data-scroll-target="#working-with-group-structured-data">Working with Group-Structured Data</a>
   <ul class="collapse">
   <li><a href="#determining-sample-sizes" id="toc-determining-sample-sizes" class="nav-link" data-scroll-target="#determining-sample-sizes">Determining Sample Sizes</a></li>
   <li><a href="#icc---quantifying-clustering-in-an-outcome-variable" id="toc-icc---quantifying-clustering-in-an-outcome-variable" class="nav-link" data-scroll-target="#icc---quantifying-clustering-in-an-outcome-variable">ICC - Quantifying clustering in an outcome variable</a></li>
@@ -276,7 +276,7 @@ if(f.classList.contains('jk-circle-right')) {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">1: Clustered Data</h1>
+<h1 class="title">1: Group-Structured Data</h1>
 </div>
 
 
@@ -296,8 +296,8 @@ if(f.classList.contains('jk-circle-right')) {
 <ul>
 <li>A refresher on the linear regression model<br>
 </li>
-<li>An introduction to clustered data</li>
-<li>Working with clustered data (sample sizes, ICC, visualisations)</li>
+<li>An introduction to group-structured (or ‘clustered’) data</li>
+<li>Working with group-structured data (sample sizes, ICC, visualisations)</li>
 </ul>
 </div>
 <section id="our-starting-point" class="level1">
@@ -424,8 +424,8 @@ Refresher: Standard Error
 
 </div>
 </section>
-<section id="clustered-data" class="level1">
-<h1>Clustered Data</h1>
+<section id="group-structured-data" class="level1">
+<h1>Group-Structured Data</h1>
 <p>A common example to start thinking about clustered data is to think about conducting a study on school children. Each observation in our sample is a different child, and they come from a set of various schools (i.e.&nbsp;we might get 20 children from Dunfermline High School, 15 from Farr High School, and so on). If we ignore the clustering of children into their respective schools, we can end up reaching completely different conclusions.</p>
 <p>This can be seen in <a href="#fig-egschool">Figure&nbsp;5</a> - in which each datapoint is a single child. If we consider them to be independent of one another (Left-Hand plot), then we might think there is a strong positive relationship between <code>grade</code> and <code>motivation</code>. Once we colour them by which school they belong to, we can see that the observations in the top right of the plots are all high for some other reason - because they come from the green school.</p>
 <div class="cell" data-layout-align="center">
@@ -992,19 +992,19 @@ SE(b_p) = \sqrt{  \frac{MSE}{Var(x_p) \cdot (1-R^2_{x_p|x1,...}) }}
 </div>
 <p>The common thread throughout all these designs is the hierarchy. At the lowest level of our hierarchy is the individual observed thing. For some designs, individual people might be the lowest observation level, for others, people might be the clusters (i.e.&nbsp;we have multiple data points per person).</p>
 </section>
-<section id="what-are-clusters" class="level2">
-<h2 class="anchored" data-anchor-id="what-are-clusters">What are ‘clusters’?</h2>
-<p>At the fundamental level, we are using the term ‘cluster’ here to refer to <strong>a grouping of observations.</strong> In fact, we will probably start using the terms “clusters” and “groups” interchangeably, so it’s worth taking a bit of time to try and understand the <em>kind</em> of groupings that we’re talking about (and how we think about them).</p>
+<section id="what-are-these-groupsclusters" class="level2">
+<h2 class="anchored" data-anchor-id="what-are-these-groupsclusters">What are these ‘groups’/‘clusters’?</h2>
+<p>At the fundamental level, we are using the term ‘cluster’ here to refer to <strong>a grouping of observations.</strong> In fact, we use the terms “clusters” and “groups” interchangeably in this context, so it’s worth taking a bit of time to try and understand the <em>kind</em> of groupings that we’re talking about (and how we think about them).</p>
 <div class="sticky">
 <ul>
 <li>“Clusters” are just “groups”.<br>
 </li>
-<li>When we talk about clustered data, the groups we are discussing can be thought of as a <em>random sample of higher level units</em>.<br>
+<li>When we talk about clustered data, the groups we are discussing are typically those that can be thought of as a <em>random sample of higher level units</em>.<br>
 </li>
-<li>More often than not, the specific group-differences are not of interest.</li>
+<li>Often the specific group-differences are not of interest.</li>
 </ul>
 </div>
-<p>Contrast the idea of ‘clusters’ with how we think about other sorts of groupings. In a study that looks at “how do drugs placebo/aspirin/beta-blockers influence people’s heart rate?” (<a href="#fig-clgroup">Figure&nbsp;7</a> LH plot), we can group participants into which drug they have received. But these groupings are the very groups of interest to us, and we are interested in comparing placebo with aspirin with beta-blockers. If we were to run the study again, we’ll use the same drugs (they’re not just a random sample of drugs - the x-axis of our LH plot in <a href="#fig-clgroup">Figure&nbsp;7</a> will be the same).</p>
+<p>Contrast the idea of ‘clusters’ with how we think about other sorts of groupings. In a study that looks at “how does heart rate differ between people taking placebo vs aspirin vs beta-blockers?” (<a href="#fig-clgroup">Figure&nbsp;7</a> LH plot), we can group participants into which drug they have received. But these groupings are the very groups of interest to us, and we are interested in comparing placebo with aspirin with beta-blockers. If we were to run the study again, we’ll use the same drugs (they’re not just a random sample of drugs - the x-axis of our LH plot in <a href="#fig-clgroup">Figure&nbsp;7</a> will be the same).</p>
 <p>If we are interested in “what is the average grade at GCSE?”, and we have children grouped into different schools (<a href="#fig-clgroup">Figure&nbsp;7</a> RH plot), we are probably not interested in all the specific differences between grades in Broughton High School vs Gryffe High School etc. If we were to run our study again, we don’t collect data from the same set of schools. We can view these schools as ‘clusters’ - they are another source of random variation (i.e.&nbsp;not systematic variation such as the effect of a drug, but variation we see just because schools are different from one another).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -1075,8 +1075,8 @@ optional: “Panel data”
 </div>
 </section>
 </section>
-<section id="working-with-clustered-data" class="level1">
-<h1>Working with Clustered Data</h1>
+<section id="working-with-group-structured-data" class="level1">
+<h1>Working with Group-Structured Data</h1>
 <div class="frame">
 <p><strong>SchoolMot Data</strong></p>
 <p>This dataset contains information on 900 children from 30 different schools across Scotland. The data was collected as part of a study looking at whether education-related motivation is associated with school grades.<br>
@@ -2569,7 +2569,7 @@ fundingstate                                 NA         NA      NA       NA
 <li id="fn2"><p>With the exception of Generalized Least Squares (an extension of Weighted Least Squares), for which we <em>can</em> actually specify a correlational structure of the residuals. As this course focuses on multilevel models, we will not cover GLS here. However, it can often be a useful method if our the nature of the dependency in our residuals is simply a nuisance thing (i.e.&nbsp;not something that has any properties which are of interest to us).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>or “mean squares residual”<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>It’s <a href="https://en.wikipedia.org/wiki/Turtles_all_the_way_down" target="_blank">“turtles all the way down”</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Depending on the research question and design of the study, we may be only interested in things that occur at “level 1” (the lowest observation level). While not the focus of this course, there are alternative methods (survey weighting tools, cluster robust standard errors, or generalised estimating equations) that we may use to simply “account for the nuisance clustering”.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>While multilevel models are great for multilevel questions, sometimes we may be interested in <em>only</em> things that occur at “level 1” (the lowest observation level). While not the focus of this course, there are also many other methods (survey weighting tools, cluster robust standard errors, or generalised estimating equations) that we may use to simply “account for the nuisance clustering”.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>Note, this is not true for a set of analytical methods called “cluster analysis”, which attempts to identify clusters that haven’t been measured/observed (or may not even ‘exist’ in any real sense of the word).<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn7"><p>although this symbol get used for lots of other correlation-y things too!<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn8"><p>another way to think of this is that we could figure out the the estimated <code>grade ~ funding</code> difference exactly from the set of <code>grade ~ schoolid</code> coefficients.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

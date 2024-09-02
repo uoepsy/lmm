@@ -14,7 +14,6 @@ source('assets/setup.R')
 library(xaringanExtra)
 library(tidyverse)
 library(patchwork)
-xaringanExtra::use_panelset()
 ```
 
 :::lo
@@ -42,7 +41,7 @@ The same logic applies as it did for `glm()` where we are not modeling the outco
 ```{r}
 #| echo: false
 #| label: fig-glmml2p
-#| fig-cap: "logistic multilevel models model the change in log-odds of y, varying by clusters. This looks just like the standard linear multilevel model, but converted back to probabilities we get our nice curves!"  
+#| fig-cap: "logistic multilevel models model the change in log-odds of y, varying by cluster. This looks just like the standard linear multilevel model, but converted back to probabilities we get our nice curves!"  
 #| out-width: "100%"
 #| fig-height: 3.5
 mmd <- read_csv("../../data/msmr_mindfuldecline.csv") |> mutate(isImp=imp=="imp")
@@ -72,12 +71,14 @@ Firstly, GLMMs ('generalised linear mixed models') can take more time to run (fo
 
 Secondly, our choices of methods of inference (see [Chapter 3](03_inference.html)) are slightly different from what they were for `lmer()`. We continue to have the likelihood based methods as well as parametric bootstrapping (although this will more often result in computational issues with `glmer`). We also have the traditional $z$-statistics that have carried over from `glm()`. We can get confidence intervals that follow this same method by using `confint(model, method="Wald")`, which may often be preferred purely for the fact that they are quick!   
 
-Finally, one small but noteworthy feature of the logistic multilevel model is that our fixed effects coefficients, when translated back to odds ratios, represent "cluster specific" effects of a predictor: 
+Finally, one small but noteworthy feature of the logistic multilevel model is that our fixed effects coefficients, when translated back to odds ratios, represent "cluster specific" effects of a predictor. 
 
-- For a linear multilevel model: `lmer(y ~ x + (1 + x | cluster))`, the fixed effect of $x$ gives the change in the $y$ when $x$ is increased by one unit, averaged across clusters 
-- For a logistic multilevel model: `glmer(ybin ~ x + (1 + x | cluster), family=binomial)`, the odds ratio for $x$ - `exp(fixef(model))` - gives the multiplicative change in odds of $y$ when $x$ is increased by one unit __for a particular cluster.__  
+This becomes important when deciding if we want to estimate effects for "the average cluster", or for "clusters on average". In the linear multilevel model these two are the same, but not so in the logistic.  
 
-This becomes important when deciding if we want to estimate outcomes for individual clusters, or estimate group effects (in which case a mixed model might not be best). 
+
+- For a linear multilevel model: `lmer(y ~ x + (1 + x | cluster))`, the fixed effect of $x$ gives us, __for clusters on average,__ the change in the $y$ when $x$ is increased by one unit.
+- For a logistic multilevel model: `glmer(ybin ~ x + (1 + x | cluster), family=binomial)`, the odds ratio for $x$ - `exp(fixef(model))` - gives us, __for the average cluster,__ the multiplicative change in odds of $y$ when $x$ is increased by one unit.  
+
 
 ::: {.callout-caution collapse="true"}
 #### optional: why are OR from glmer cluster-specific?  
@@ -343,9 +344,9 @@ broom.mixed::tidy(mmod) |>
     OR = round(exp(estimate),2),
     `OR interpretation` = c(
       "estimated odds of an adolescent monkey solving an easy problem",
-      "odds of successful problem solving are more than halved (0.42 times the odds) when a given monkey moves from an easy to a difficult problem",
-      "odds of success would be almost doubled (1.95 times the odds) if a monkey were to change from adolescent to dominant status (NB this is non-significant)",
-      "odds of success would quadruple (4.3 times the odds) if a monkey were to change from adolescent to subordinate status"
+      "odds of successful problem solving are more than halved (0.42 times the odds) when the average monkey moves from an easy to a difficult problem",
+      "odds of success would be almost doubled (1.95 times the odds) if the average monkey were to change from adolescent to dominant status (NB this is non-significant)",
+      "odds of success would quadruple (4.3 times the odds) if the average monkey were to change from adolescent to subordinate status"
     )
   ) |> gt::gt()
 ```
@@ -355,8 +356,7 @@ __Side note__
 
 Contrast this with what we would get from a _linear_ multilevel model. If we were instead modelling a "problem score" with `lmer()`, rather than "solved yes/no" with `glmer()`, our coefficients would be interpreted as the estimated difference in scores between adolescent and subordinate monkeys.  
 
-Note that estimating differences between groups is not quite the same idea as estimating the effect "if a particular monkey changed from adolescent to subordinate". In the linear world, these two things are the same, but our odds ratios give us only the latter. 
-
+Note that estimating differences between groups is not quite the same idea as estimating the effect "if a particular (the average) monkey changed from adolescent to subordinate". In the linear world, these two things are the same, but our odds ratios give us only the latter. 
 
 :::
 

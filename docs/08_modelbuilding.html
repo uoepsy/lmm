@@ -153,7 +153,7 @@ if(f.classList.contains('jk-circle-right')) {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_clustered.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1: Clustered Data</span></a>
+ <span class="menu-text">1: Group-Structured Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -415,7 +415,7 @@ Scales can matter!
 <div class="callout-body-container callout-body">
 <!-- Suppose that people tend to be between 140cm and 190cm tall and (for some reason) we decide to measure their height in kilometers. In these units, people tend to be between 0.00140km and 0.00190km tall. If we calculate the variance of height-in-km, we're going to get a very small number.  -->
 <p>The scale of our predictors can sometimes play a part here. If we were fitting a model of <code>shoe_size ~ height</code>, then the estimated coefficient is going to depend on how we measure height. If we measure it in millimeters, then we’ll probably have a very small coefficient (people’s shoe size will only change by a tiny amount for every 1mm height they gain), but if we measure height in kilometers, then we’ll have a very big coefficient (“grow an extra kilometer in height, and your shoe size will increase 10000 sizes”!!).</p>
-<p>In the multilevel model, we’re estimating the variances in these relationships across a set of clusters. If the coefficient is in millimeters, then the variance is in millimeters too, and so the number will be quite small. If it’s in kilometers, the coefficient is in units 100,000 times bigger, and so is the variance.</p>
+<p>In the multilevel model, we’re estimating the variances in these relationships across a set of groups (or ‘clusters’). If the coefficient is in millimeters, then the variance is in millimeters too, and so the number will be quite small. If it’s in kilometers, the coefficient is in units 100,000 times bigger, and so is the variance.</p>
 <p>Scaling predictors doesn’t change the relationship being studied, but it does change the numeric values we are asking our relationship to be presented in. As the estimation of multilevel models can get into difficulty when variances are too close to zero, you may occasionally receive messages such as those below.</p>
 <p>Pay attention to them, and check your variables. If some are on very different scales, then consider trying to rescale them to something that is still meaningful for you.</p>
 <p style="color:red">
@@ -689,12 +689,59 @@ optional: PCA on the random effect variance-covariance matrix
 <p>We’re probably yet to hear about “PCA” (principal component analysis), but the very high-level view is that it aims to simplify a set of variables by identifying the most important patterns or “components” (allowing us drop less important ways in which people vary). For instance, if a survey asked 10 questions, 5 of which were about physical health, and 5 which were about mental health, then the 5 physical health questions would likely be correlated with one another more than with other questions, and similarly the 5 mental health questions would likely be correlated with one another. PCA might tell us something like “given this set of correlations, 2 ‘dimensions’ can explain most of the variability that we see”.</p>
 <p>The benefit for us in this context is that we have a correlation matrix in our random effects from a maximal model, and we can use PCA to ask “how many ‘dimensions’ capture most of this variation?”</p>
 <p>In the <strong>lme4</strong> package the <code>rePCA()</code> function can do this when we give it an <code>lmer()</code> model.</p>
-<p>TODO example</p>
-<ol type="1">
-<li>fit maximal</li>
-<li>summary(rePCA(model))</li>
-<li>fit ZCP</li>
-</ol>
+<p>Here our full model is singular:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://uoepsy.github.io/lmm/lmmpcademo.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fullmod <span class="ot">&lt;-</span> <span class="fu">lmer</span>(y<span class="sc">~</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">+</span>(<span class="dv">1</span><span class="sc">+</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">|</span>g), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>boundary (singular) fit: see help('isSingular')</code></pre>
+</div>
+</div>
+<p>The <code>rePCA()</code> function shows that 4 things explain 100% of the variance (the row of “cumulative proportion” reaches 1 by the 4th column):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">rePCA</span>(fullmod))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$g
+Importance of components:
+                        [,1]   [,2]   [,3]    [,4]      [,5]      [,6]
+Standard deviation     1.001 0.6168 0.4345 0.17121 0.0001071 1.716e-05
+Proportion of Variance 0.626 0.2377 0.1180 0.01832 0.0000000 0.000e+00
+Cumulative Proportion  0.626 0.8637 0.9817 1.00000 1.0000000 1.000e+00
+                            [,7] [,8]
+Standard deviation     2.627e-06    0
+Proportion of Variance 0.000e+00    0
+Cumulative Proportion  1.000e+00    1</code></pre>
+</div>
+</div>
+<p>Removing the correlations is still overfitted, but indicates to us that many of the random effects associated with predictor <code>x3</code> have very small or zero variances, along with the <code>x1:x2</code> interaction</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>modz <span class="ot">&lt;-</span> <span class="fu">lmer</span>(y<span class="sc">~</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">+</span>(<span class="dv">1</span><span class="sc">+</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">||</span>g),df)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">VarCorr</span>(modz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Groups   Name        Std.Dev.  
+ g        (Intercept) 1.78468090
+ g.1      x1          1.09999696
+ g.2      x2          0.97991858
+ g.3      x3          0.00000000
+ g.4      x1:x2       0.00000000
+ g.5      x1:x3       0.32845398
+ g.6      x2:x3       0.00010242
+ g.7      x1:x2:x3    0.00000000
+ Residual             1.96163101</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove x3</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(y<span class="sc">~</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">+</span>(<span class="dv">1</span><span class="sc">+</span>x1<span class="sc">*</span>x2<span class="sc">||</span>g),df) <span class="co"># still singular</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># remove x1:x2 interaction</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(y<span class="sc">~</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">+</span>(<span class="dv">1</span><span class="sc">+</span>x1<span class="sc">+</span>x2<span class="sc">||</span>g),df) <span class="co"># no longer singular! </span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># try reintroducing correlations</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>mod3 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(y<span class="sc">~</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">+</span>(<span class="dv">1</span><span class="sc">+</span>x1<span class="sc">+</span>x2<span class="sc">|</span>g),df) <span class="co"># still fits!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -711,12 +758,46 @@ optional: data-driven approaches
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Some approaches to model building are more data-driven. The relatively new package <strong>buildmer</strong> will sequentially remove (or add, depending on direction) random effect terms to obtain the most complex model that can converge, and then can be used to sequentially remove predictors based on some criteria such as a likelihood ratio test.</p>
-<p>For example, if we start with a maximal model which doesn’t converge:</p>
-<p>Using buildmer and setting the direction to “order”, we can request that it starts with an empty model and adds in each random effect in order of their contribution to a certain criterion (in this case, the change in log-likelihood).<br>
+<p>Using buildmer and setting the direction to “order”, we can give it the fully maximal model, and request that it assess the inclusion of each term in order of their contribution to a certain criterion (in this case, a likelihood ratio test).<br>
 It stops when adding in terms results in non-convergence:</p>
-<p>library(buildmer) buildmer(formula,buildmerControl=buildmerControl(direction=“order”, crit=“LRT”))</p>
-<p>We can then, using that model as a starting point, request that it sequentially eliminate terms according to that same criterion:</p>
-<p>buildmer(formula,buildmerControl=buildmerControl(direction=“backward”, crit=“LRT”))</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://uoepsy.github.io/lmm/lmmpcademo.csv"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(buildmer)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>bmod1 <span class="ot">&lt;-</span> <span class="fu">buildmer</span>(y<span class="sc">~</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">+</span>(<span class="dv">1</span><span class="sc">+</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">|</span>g), </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> df,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">buildmerControl =</span> <span class="fu">buildmerControl</span>(<span class="at">direction=</span><span class="st">"order"</span>, <span class="at">crit=</span><span class="st">"LRT"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>          )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can then see the resulting model formula here:<br>
+<em>(note these are a type of R object we’ve not encountered before, and we access the model using <code>@</code> rather than <code>$</code>)</em></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>newform <span class="ot">&lt;-</span> <span class="fu">formula</span>(bmod1<span class="sc">@</span>model)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>newform</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>y ~ 1 + x1 + x2 + x1:x2 + x3 + x2:x3 + x1:x3 + x1:x2:x3 + (1 + 
+    x2 + x1 | g)</code></pre>
+</div>
+</div>
+<p>This can then be fed into buildmer <em>again</em>, and using that model as a starting point, we can request that it sequentially eliminate terms according to the same likelihood ratio criterion. It will also consider removing fixed effects here, which you might not want to do, in which case you can specify in the <code>include</code> argument all the relevant terms you want to forcibly keep. In this case, no additional terms are removed:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>bmod2 <span class="ot">&lt;-</span> <span class="fu">buildmer</span>(newform, <span class="at">data =</span> df,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">buildmerControl=</span><span class="fu">buildmerControl</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">include=</span><span class="sc">~</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3,<span class="at">direction=</span><span class="st">"backward"</span>, <span class="at">crit=</span><span class="st">"LRT"</span>))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>finalmod <span class="ot">&lt;-</span> bmod2<span class="sc">@</span>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">formula</span>(finalmod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>y ~ 1 + x1 + x2 + x1:x2 + x3 + x2:x3 + x1:x3 + x1:x2:x3 + (1 + 
+    x2 + x1 | g)</code></pre>
+</div>
+</div>
+<div class="imp">
+<p>Some things to note - as far as I can tell, <strong>buildmer</strong> does not consider removing random effect correlations.</p>
+<p>As with anything attempt at automating something like this, there’s a high risk that we use it as an <em>alternative</em> to careful thought. Remember - the ‘best fitting model’ is not the same as the model that best represents our understanding of the world, or the one that best answers our research question.</p>
+</div>
 </div>
 </div>
 </div>

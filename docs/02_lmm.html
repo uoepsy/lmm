@@ -153,7 +153,7 @@ if(f.classList.contains('jk-circle-right')) {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_clustered.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1: Clustered Data</span></a>
+ <span class="menu-text">1: Group-Structured Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -262,12 +262,12 @@ if(f.classList.contains('jk-circle-right')) {
   <li><a href="#random-slopes" id="toc-random-slopes" class="nav-link" data-scroll-target="#random-slopes">random slopes</a></li>
   </ul></li>
   <li><a href="#partial-pooling" id="toc-partial-pooling" class="nav-link" data-scroll-target="#partial-pooling">Partial pooling</a></li>
-  <li><a href="#fitting-multilevel-models-in-r" id="toc-fitting-multilevel-models-in-r" class="nav-link" data-scroll-target="#fitting-multilevel-models-in-r">Fitting Multilevel Models in R</a>
+  <li><a href="#multilevel-models-in-r" id="toc-multilevel-models-in-r" class="nav-link" data-scroll-target="#multilevel-models-in-r">Multilevel Models in R</a>
   <ul class="collapse">
+  <li><a href="#a-multilevel-model-for-a-multilevel-question" id="toc-a-multilevel-model-for-a-multilevel-question" class="nav-link" data-scroll-target="#a-multilevel-model-for-a-multilevel-question">A multilevel model for a multilevel question</a></li>
   <li><a href="#extracting-model-parameters" id="toc-extracting-model-parameters" class="nav-link" data-scroll-target="#extracting-model-parameters">Extracting model parameters</a></li>
   <li><a href="#making-model-predictions" id="toc-making-model-predictions" class="nav-link" data-scroll-target="#making-model-predictions">Making model predictions</a></li>
-  <li><a href="#r-squared-in-multilevel-models" id="toc-r-squared-in-multilevel-models" class="nav-link" data-scroll-target="#r-squared-in-multilevel-models">R squared in multilevel models</a></li>
-  <li><a href="#a-more-complex-model" id="toc-a-more-complex-model" class="nav-link" data-scroll-target="#a-more-complex-model">A more complex model</a></li>
+  <li><a href="#visualising-models" id="toc-visualising-models" class="nav-link" data-scroll-target="#visualising-models">Visualising models</a></li>
   </ul></li>
   <li><a href="#model-estimation" id="toc-model-estimation" class="nav-link" data-scroll-target="#model-estimation">Model Estimation</a>
   <ul class="collapse">
@@ -713,8 +713,8 @@ optional: how does it work?
 
 </div>
 </section>
-<section id="fitting-multilevel-models-in-r" class="level1">
-<h1>Fitting Multilevel Models in R</h1>
+<section id="multilevel-models-in-r" class="level1">
+<h1>Multilevel Models in R</h1>
 <p>While there is a big conceptual shift from the single level regression model to the multilevel model, the shift in R code is considerably less.</p>
 <p>We’re going to use the <code>lme4</code> package, and specifically the functions <code>lmer()</code> and <code>glmer()</code>. “(g)lmer” here stands for “(generalised) linear mixed effects regression”, and the two functions are designed to be logical extensions of <code>lm()</code> and <code>glm()</code>.</p>
 <div class="cell" data-layout-align="center">
@@ -776,7 +776,7 @@ Correlation of Fixed Effects:
 motiv -0.825</code></pre>
 </div>
 </div>
-<p>The output contains two major components - the “fixed effects” and the “random effects”. The fixed effects part contains the estimated intercept and slope(s) for the average school. The random effects part contains the estimated variance (and standard deviation<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>) of school deviations around those fixed estimates.</p>
+<p>The output contains two major components - the “fixed effects” and the “random effects”. The fixed effects part contains the estimated average intercept and slope(s) across all our schools. The random effects part contains the estimated variance (and standard deviation<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>) of school deviations around those fixed estimates.</p>
 <p>So from our ouput we can build up a picture in our heads - we know from the fixed effects that in the average school, children with zero motivation have an estimated grade of 29, and for every 1 more motivated a child is, their grades are estimated to increase by 4.48.</p>
 <p>The random effects part tells us that we would expect schools to vary in their intercepts with a standard deviation of 12.6, and in their slopes with a standard deviation of 2.1.</p>
 <p>If we recall our rough heuristic about normal distributions - that 95% of the distribution falls within 2 standard deviations, then we can start to build up a picture - we would expect most schools to have intercepts about 25 either side of the fixed intercept, and we would expect most schools to have slopes that are about 4 either side of the fixed slope (so most slopes will be between 0.5 and 8.5 - i.e.&nbsp;most will be positive).</p>
@@ -797,7 +797,7 @@ motiv -0.825</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-mapping summary output to parts of the equation
+Mapping summary output to parts of the equation
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -815,94 +815,8 @@ mapping summary output to parts of the equation
 </div>
 </div>
 </div>
-<section id="extracting-model-parameters" class="level2">
-<h2 class="anchored" data-anchor-id="extracting-model-parameters">Extracting model parameters</h2>
-<p>Alongside <code>summary()</code>, there are some useful functions in R that allow us to extract the parameters estimated by the model:</p>
-<div class="rtip">
-<p><strong>fixed effects</strong></p>
-<p>The fixed effects represent the estimated average relationship within the entire sample of clusters.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(smod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>(Intercept)       motiv 
-  29.233320    4.475717 </code></pre>
-</div>
-</div>
-</div>
-<div class="rtip">
-<p><strong>random effect variances</strong></p>
-<p>The random effect variances (sometimes referred to as the “variance components”) represent the estimated spread with which clusters vary around the fixed effects.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">VarCorr</span>(smod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> Groups   Name        Std.Dev. Corr  
- schoolid (Intercept) 12.5745        
-          motiv        2.0708  -0.698
- Residual             11.8036        </code></pre>
-</div>
-</div>
-</div>
-</section>
-<section id="making-model-predictions" class="level2">
-<h2 class="anchored" data-anchor-id="making-model-predictions">Making model predictions</h2>
-<p>While they are not computed directly in the estimation of the model, the cluster-specific deviations from fixed effects can be extracted from our models</p>
-<div class="rtip">
-<p><strong>random effects</strong></p>
-<p>Often referred to as the “random effects”, the deviations for each cluster from the fixed effects can be obtained using <code>ranef()</code>.<br>
-Note that each row is a cluster (a school, in this example), and the columns show the distance from the fixed effects. We can see that “Anderson High School” has an estimated intercept that is 7.07 <em>higher</em> than average, and an estimate slope of motivation that is 0.47 <em>lower</em> than average.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ranef</span>(smod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<pre><code>$schoolid
-                                        (Intercept)       motiv
-Anderson High School                     7.07164826 -0.46505592
-Ardnamurchan High School                -7.26417838  0.70012536
-Balwearie High School                  -20.53626558  2.31397177
-Beeslack Community High School          18.63574795 -1.45057126
-...                                     ...          ...</code></pre>
-<p>We can also visualise all these using a handy function. This sort of visualisation is great for checking for peculiar clusters.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dotplot.ranef.mer</span>(<span class="fu">ranef</span>(smod2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$schoolid</code></pre>
-</div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="02_lmm_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="rtip">
-<p><strong>cluster coefficients</strong></p>
-<p>Rather than looking at <em>deviations</em> from fixed effects, we can calculate the intercept and slope for each cluster.<br>
-For example, if we are estimating that “Anderson High School” has an intercept that is 7.07 higher than average, and the average is 29.23, then we know that this has an intercept of 29.23 + 7.07 = 36.3.</p>
-<p>We can get these out using <code>coef()</code></p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(smod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<pre><code>$schoolid
-                                    (Intercept)  motiv
-Anderson High School                36.304968    4.010661
-Ardnamurchan High School            21.969141    5.175842
-Balwearie High School                8.697054    6.789689
-Beeslack Community High School      47.869068    3.025146
-...                                 ...          ...</code></pre>
-<div class="sticky">
-<center>
-fixef() + ranef() = coef()
-</center>
-</div>
-</div>
-</section>
-<section id="r-squared-in-multilevel-models" class="level2">
-<h2 class="anchored" data-anchor-id="r-squared-in-multilevel-models">R squared in multilevel models</h2>
-<p>TODO?</p>
-</section>
-<section id="a-more-complex-model" class="level2">
-<h2 class="anchored" data-anchor-id="a-more-complex-model">A more complex model</h2>
+<section id="a-multilevel-model-for-a-multilevel-question" class="level3">
+<h3 class="anchored" data-anchor-id="a-multilevel-model-for-a-multilevel-question">A multilevel model for a multilevel question</h3>
 <p>The models fitted in the reading thus far are fairly simple in that they only really have one predictor (a measure of a child’s education motivation, <code>motiv</code>), and our observations (children) happen to be clustered into groups (schools).</p>
 <p>However, the multilevel model can also allow us to study questions that we might have about features of those groups (i.e., things about the schools) and how those relate to observation-level variables (things about the children).</p>
 <p>For instance, we might have questions that take the form:</p>
@@ -916,13 +830,12 @@ fixef() + ranef() = coef()
 <p>Addressing such questions requires a different fixed effect structure in order to allow us to test the relevant estimate of interest. Specifically here we need the interaction between <code>motiv</code> and <code>funding</code> (private vs state).</p>
 <p>Note that this interaction is ‘cross-level’! It allows us to ask whether something about children (the <code>grade~motiv</code> relationship) depends upon something about the school they’re in (funding type).</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>smod3 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(grade <span class="sc">~</span> motiv <span class="sc">*</span> funding <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> motiv <span class="sc">|</span> schoolid), </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> schoolmot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>smod3 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(grade <span class="sc">~</span> motiv <span class="sc">*</span> funding <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> motiv <span class="sc">|</span> schoolid), </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> schoolmot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note, we <em>cannot</em> include <code>funding</code> in the random effects part of our model, because “the effect of funding on school grades” is something we assess by comparing <em>between</em> schools. We cannot think of that effect varying by-school because every school is <em>either</em> “private” <em>or</em> “state” funded. We never observe “Ardnamurchan High School” as anything other than “state” funded, so “the effect on grades of being state/private funded” does not exist for Ardnamurchan High School (and hence it is illogical to try and say that this effect varies between schools).</p>
-<p>Our additions to the fixed effects part here simply add in a couple of fixed terms to our model (the <code>funding</code> coefficient and the <code>motiv:funding</code> interaction coefficient). This means that in terms of our model structure, it is simply moving from the single line we had in <a href="#fig-rslopes2">Figure&nbsp;7</a>, to having two lines (one for “private” schools and one for “state” schools). The random effects are, as before, the variance in deviations of individual schools around these fixed estimates.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -931,7 +844,7 @@ Model equation
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>This model is not too much of an extension on our previous equation, but when we move to models with more than 2 levels (e.g., children in schools in districts), these equations can become very cumbersome.</p>
 <p>Additionally, as you become more practiced at fitting multilevel models, you may well begin to think of these models in terms of the <code>lmer()</code> syntax in R, rather than in terms of the mathematical expressions.</p>
@@ -954,93 +867,185 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} + \gamma_{11} \cdot \text{Funding}_i\\
 &amp;\text{grade}_{ij} = (\gamma_{00} + \zeta_{0i}) + \gamma_{01} \cdot \text{Funding}_i + (\gamma_{10} + \zeta_{1i})\cdot \text{motiv}_{ij} + \gamma_{11} \cdot \text{Funding}_i \cdot \text{motiv}_{ij} + \epsilon_{ij} \\
 \end{align}
 \]</span></p>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-optional: an attempted visual explanation
 </div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p><a href="#fig-crosslev1">Figure&nbsp;12</a> shows an attempted visual intuition of how the different parts of the model work:</p>
+<p>Our additions to the fixed effects part here simply add in a couple of fixed terms to our model (the <code>funding</code> coefficient and the <code>motiv:funding</code> interaction coefficient). This means that in terms of our model structure, it is simply moving from the single line we had in <a href="#fig-rslopes2">Figure&nbsp;7</a>, to having two lines (one for “private” schools and one for “state” schools) as in <a href="#fig-crosslev1">Figure&nbsp;12</a>. The random effects are, as before, the variance in deviations of individual schools around these fixed estimates.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-crosslev1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="02_lmm_files/figure-html/fig-crosslev1-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;12: visual explanation of a model with a cross-level interaction</figcaption>
+<p><img src="02_lmm_files/figure-html/fig-crosslev1-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption class="figure-caption">Figure&nbsp;12: visual explanation of a model with a cross-level interaction. Blue line is private-funded schools, purple line is state-funded schools</figcaption>
 </figure>
 </div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="panelset">
-<section id="model-summary" class="level4 panel">
-<h4 class="anchored" data-anchor-id="model-summary">model summary</h4>
+<p>Typically, the part of these models that we are interested in is the fixed effect estimates, which represent the association between motivation and grades, averaged across the schools, and the differences on average between state-funded vs private-funded schools:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(smod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Linear mixed model fit by REML ['lmerMod']
-Formula: grade ~ motiv * funding + (1 + motiv | schoolid)
-   Data: schoolmot
-
-REML criterion at convergence: 7083.6
-
-Scaled residuals: 
-     Min       1Q   Median       3Q      Max 
--3.08250 -0.67269  0.03043  0.63562  3.13012 
-
-Random effects:
- Groups   Name        Variance Std.Dev. Corr 
- schoolid (Intercept) 105.126  10.253        
-          motiv         2.595   1.611   -0.48
- Residual             139.030  11.791        
-Number of obs: 900, groups:  schoolid, 30
-
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(smod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>...
 Fixed effects:
                    Estimate Std. Error t value
 (Intercept)         40.3143     4.6414   8.686
 motiv                2.6294     0.8652   3.039
 fundingstate       -17.2531     5.7347  -3.009
-motiv:fundingstate   2.8485     1.0591   2.689
-
-Correlation of Fixed Effects:
-            (Intr) motiv  fndngs
-motiv       -0.782              
-fundingstat -0.809  0.633       
-mtv:fndngst  0.639 -0.817 -0.773</code></pre>
+motiv:fundingstate   2.8485     1.0591   2.689</code></pre>
+<p>We can map these estimates onto plots, just like we did with the “coefficients” part of the <code>lm()</code> output. The intercept is the height of the blue (“private”) line where <code>motiv</code> is zero. The <code>motiv</code> estimate is the slope of that blue line. <code>fundingstate</code> is the difference in height moving from the blue line to the purple line, when <code>motiv</code> is zero. Finally the interaction is the adjustment from the slope of the blue line to the slope of the purple line (it’s positive, which means the “state” line goes up more steeply - as we can see!)</p>
+</section>
+<section id="extracting-model-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="extracting-model-parameters">Extracting model parameters</h2>
+<p>Alongside <code>summary()</code>, there are some useful functions in R that allow us to extract the parameters estimated by the model:</p>
+<div class="rtip">
+<p><strong>fixed effects</strong></p>
+<p>The fixed effects represent the estimated average relationship within the entire sample of clusters.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(smod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       (Intercept)              motiv       fundingstate motiv:fundingstate 
+         40.314271           2.629403         -17.253134           2.848511 </code></pre>
+</div>
+</div>
+</div>
+<div class="rtip">
+<p><strong>random effect variances</strong></p>
+<p>The random effect variances (sometimes referred to as the “variance components”) represent the estimated spread with which clusters vary around the fixed effects.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">VarCorr</span>(smod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Groups   Name        Std.Dev. Corr  
+ schoolid (Intercept) 10.2531        
+          motiv        1.6108  -0.481
+ Residual             11.7911        </code></pre>
+</div>
 </div>
 </div>
 </section>
-<section id="plot" class="level4 panel">
-<h4 class="anchored" data-anchor-id="plot">plot</h4>
-<p>For plotting the fixed effect estimates (which are often the bit we’re most interested in) from multilevel models, we can’t rely on using <code>predict()</code>, <code>fitted()</code> or <code>augment()</code>, as these return to us the cluster-specific predicted values.</p>
-<p>Instead, we need to use tools like the <strong>effects</strong> package that we saw at the end of the USMR course, that takes a fixed effect and averages over the other terms in the model:</p>
+<section id="making-model-predictions" class="level2">
+<h2 class="anchored" data-anchor-id="making-model-predictions">Making model predictions</h2>
+<p>While they are not computed directly in the estimation of the model, the cluster-specific deviations from fixed effects can be extracted from our models</p>
+<div class="rtip">
+<p><strong>random effects</strong></p>
+<p>Often referred to as the “random effects”, the deviations for each cluster from the fixed effects can be obtained using <code>ranef()</code>.<br>
+Note that each row is a cluster (a school, in this example), and the columns show the distance from the fixed effects. We can see that “Anderson High School” has an estimated intercept that is 9.39 <em>higher</em> than average, and an estimate slope of motivation that is 0.61 <em>lower</em> than average.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effects)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">effect</span>(<span class="at">term=</span><span class="st">"motiv*funding"</span>,<span class="at">mod=</span>smod3,<span class="at">xlevels=</span><span class="dv">20</span>) <span class="sc">|&gt;</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>motiv,<span class="at">y=</span>fit,<span class="at">col=</span>funding,<span class="at">fill=</span>funding))<span class="sc">+</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>lower,<span class="at">ymax=</span>upper),<span class="at">alpha=</span>.<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ranef</span>(smod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>$schoolid
+                                       (Intercept)       motiv
+Anderson High School                    9.386006   -0.60628851
+Ardnamurchan High School               -3.413536    0.15035243
+Balwearie High School                  -13.599480   1.12438549
+Beeslack Community High School          9.658259   -0.14963519
+...                                     ...         ...</code></pre>
+<p>We can also visualise all these using a handy function. This sort of visualisation is great for checking for peculiar clusters.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dotplot.ranef.mer</span>(<span class="fu">ranef</span>(smod3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$schoolid</code></pre>
+</div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02_lmm_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="02_lmm_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
 </div>
+</div>
+<div class="rtip">
+<p><strong>cluster coefficients</strong></p>
+<p>Rather than looking at <em>deviations</em> from fixed effects, we can calculate the intercept and slopes for each cluster.</p>
+<p>We can get these out using <code>coef()</code></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(smod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>$schoolid
+                               (Intercept) motiv       fundingstate  motiv:fundingstate
+Anderson High School           49.70028    2.02311498  -17.25313     2.848511
+Ardnamurchan High School       36.90073    2.77975592  -17.25313     2.848511
+Balwearie High School          26.71479    3.75378898  -17.25313     2.848511
+Beeslack Community High School 49.97253    2.47976830  -17.25313     2.848511
+...                            ...         ...         ...           ...</code></pre>
+<div class="sticky">
+<center>
+fixef() + ranef() = coef()
+</center>
+</div>
+<p>For example, if we are estimating that “Anderson High School” has an intercept that is 9.39 higher than average, and the average (our fixed effect intercept) is 40.31, then we know that this has an intercept of 40.31 + 9.39 = 49.70.</p>
+<p>However, note that we also have slopes for things that aren’t present in the output of <code>ranef()</code> - we have the slopes for the <em>fixed</em> predictors for each cluster too, but because these are fixed they are simply the same number of each cluster.</p>
+<p>Because “Anderson High School” is a state-funded school, the intercept is not just “9.39 above our fixed effect intercept” - it is estimated to be 17.25 lower than that because it is state-funded. So our estimated intercept for this school is 40.31 + 9.39 - 17.25 = 32.45.</p>
+<p>In fact, we can essentially write out a regression equation for each individual cluster. For instance, “Anderson High School” is a state-funded school, so the expected grade for a child <span class="math inline">\(i\)</span> from this school would be: <span class="math display">\[
+\begin{align}
+\widehat{grade_i} &amp;= 49.70 + (2.02 \cdot motiv_i) - (17.25 \cdot 1) + (2.85 \cdot motiv_i \cdot 1) \\
+&amp;= 32.45 + (4.87 \cdot motiv_i) \\
+\end{align}
+\]</span> And for Beeslack Community High School, which is a <em>private</em> funded school, the expected grade would be: <span class="math display">\[
+\begin{align}
+\widehat{grade_i} &amp;= 49.97 + (2.48 \cdot motiv_i) - (17.25 \cdot 0) + (2.85 \cdot motiv_i \cdot 0) \\
+&amp;= 49.97 + (2.48 \cdot motiv_i) \\
+\end{align}
+\]</span></p>
+</div>
 </section>
+<section id="visualising-models" class="level2">
+<h2 class="anchored" data-anchor-id="visualising-models">Visualising models</h2>
+<p>In the vast majority of analyses using multilevel models, the bit that people are most interested in is the fixed effects - these represent the estimated effects averaged across the clusters in our sample.</p>
+<p>It’s tempting, then, to think that we could take the model-predicted values for each observation (<code>predict()</code>/<code>fitted()</code>/<code>augment()</code> etc.) and average them up to get our estimated effects. If every cluster had the same amount of data at every level of the predictor then this would work but we would have more issues in estimating the uncertainty.</p>
+<p>Instead, it is common to use helpful packages that can provide us with a small dataframe of estimated effects and uncertainty, that we can then plot. One such package is the <strong>effects</strong> package, which has the <code>effect()</code> function, that can be used as so:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effects)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">effect</span>(<span class="at">term =</span> <span class="st">"motiv*funding"</span>, <span class="at">mod =</span> smod3) <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   motiv funding      fit       se    lower    upper
+1    0.4 private 41.36603 4.376160 32.77731 49.95475
+2    3.0 private 48.20248 3.072408 42.17253 54.23244
+3    5.0 private 53.46129 2.975888 47.62077 59.30181
+4    7.0 private 58.72010 3.776268 51.30874 66.13146
+5    9.0 private 63.97890 5.064835 54.03858 73.91922
+6    0.4   state 25.25230 3.187004 18.99744 31.50717
+7    3.0   state 39.49488 2.314485 34.95244 44.03732
+8    5.0   state 50.45071 2.257980 46.01916 54.88225
+9    7.0   state 61.40654 2.797545 55.91603 66.89704
+10   9.0   state 72.36236 3.679698 65.14053 79.58419</code></pre>
+</div>
+</div>
+<p>We can then use this to plot:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">effect</span>(<span class="at">term =</span> <span class="st">"motiv*funding"</span>, <span class="at">mod =</span> smod3) <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> motiv, <span class="at">col =</span> funding, <span class="at">fill =</span> funding)) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> fit)) <span class="sc">+</span> </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> fit, <span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper), <span class="at">alpha =</span> .<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_lmm_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, as with plotting all estimated effects, it is very useful to also display the underlying data, to make clear the variability we would actually expect. The plot above shows us what we would expect for children from the schools <em>on average</em>. It doesn’t clearly depict how schools and children vary, and a reader could easily take away the idea that we expect most children to fall within those bands.</p>
+<p>One easy way is to adjust plot is to simply show the raw data behind our estimated effects, which requires giving the ggplot() code data from two different places:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>efplot <span class="ot">&lt;-</span> <span class="fu">effect</span>(<span class="at">term =</span> <span class="st">"motiv*funding"</span>, <span class="at">mod =</span> smod3) <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> schoolmot, </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> motiv, <span class="at">col =</span> funding, <span class="at">fill =</span> funding)) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> grade), <span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> efplot, <span class="fu">aes</span>(<span class="at">y =</span> fit)) <span class="sc">+</span> </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> efplot, </span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">y =</span> fit, <span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper), <span class="at">alpha =</span> .<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02_lmm_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+</div>
 </div>
 <div class="divider div-transparent div-dot">
 
@@ -1074,7 +1079,7 @@ lmer(<em>formula</em>,<br> &nbsp; &nbsp; &nbsp; &nbsp; data = <em>dataframe</em>
 <p><strong>TL;DR</strong></p>
 <p><code>lmer()</code> models are by default fitted with REML, which tends to be better for small samples.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1083,7 +1088,7 @@ optional: why REML?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>REML overcomes a problem for multilevel models fitted with standard MLE, which is that at each iteration of the maximum likelihood, the random effect variances are estimated <em>after</em> the fixed effects (because they are the variances of clusters around the fixed effects). This means that we are essentially treating the fixed effects as a known constant when estimating the random effect variance. The downside of this is that it biases our variance estimates to be smaller than they should be<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, especially if <span class="math inline">\(n_\textrm{clusters} - n_\textrm{level 2 predictors} - 1 &lt; 50\)</span>. This leads to the standard errors of the fixed effects being too small, thereby inflating our type 1 error rate (i.e.&nbsp;greater chance of incorrectly rejecting our null hypothesis).</p>
 <p>REML avoids this by first partialling out the fixed effects (i.e.&nbsp;removing all of the association, so that the fixed effects are 0 <em>by definition</em>), then using maximum likelihood to iteratively estimate the random effect variances. At the end, it then uses generalised least squares to estimate the fixed effects given the known random effect structure. Because this separates the estimation of fixed and random parts of the model, it results in unbiased estimates of the variance components.</p>
@@ -1118,8 +1123,8 @@ boundary (singular) fit: see ?isSingular
 </div>
 <p>There are lots of different ways to <a href="https://rstudio-pubs-static.s3.amazonaws.com/33653_57fc7b8e5d484c909b615d8633c01d51.html">deal with these</a> (to try to rule out hypotheses about what is causing them), but for the time being, if <code>lmer()</code> gives you convergence errors or singular fits, you could try changing the optimizer. Bobyqa is a good one: add <code>control = lmerControl(optimizer = "bobyqa")</code> when you run your model.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(y <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> x1 <span class="sc">+</span> ... <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> .... <span class="sc">|</span> g), <span class="at">data =</span> df, </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">control =</span> <span class="fu">lmerControl</span>(<span class="at">optimizer =</span> <span class="st">"bobyqa"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(y <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> x1 <span class="sc">+</span> ... <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> .... <span class="sc">|</span> g), <span class="at">data =</span> df, </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">control =</span> <span class="fu">lmerControl</span>(<span class="at">optimizer =</span> <span class="st">"bobyqa"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
