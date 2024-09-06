@@ -240,7 +240,7 @@ if(f.classList.contains('jk-circle-right')) {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./00_datasets.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Practice Datasets TODO arrange by methods</span></a>
+ <span class="menu-text">Practice Datasets</span></a>
   </div>
 </li>
       </ul>
@@ -876,7 +876,7 @@ other models
 </div>
 </div>
 </div>
-<p>One option here is to include people’s average alcohol consumption in as a fixed predictor, which removes the part of the random effect that is correlated with our predictor of interest, and models it explicitly. We will see more about this in the <a href="10_centering.html" target="_blank">Chapter on centering</a>, and how it separates out two different associations.</p>
+<p>One option here is to include people’s average alcohol consumption in as a fixed predictor, which removes the part of the random effect that is correlated with our predictor of interest, and models it explicitly. We will see more about this the next <a href="10_centering.html" target="_blank">Chapter on centering</a>, and how it separates out two different associations.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lmer</span>(anxiety <span class="sc">~</span> alcohol <span class="sc">+</span> avg_alcohol <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> person))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

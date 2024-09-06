@@ -144,7 +144,7 @@ Hence, the interpretation of $e^{b_1}$ is not the odds ratio for the effect of t
 ## Example
 
 :::frame
-__Data: monkeystatus.csv__  
+__Data: msmr_monkeystatus.csv__  
 
 ```{r}
 #| echo: false

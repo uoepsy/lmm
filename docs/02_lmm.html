@@ -240,7 +240,7 @@ if(f.classList.contains('jk-circle-right')) {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./00_datasets.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Practice Datasets TODO arrange by methods</span></a>
+ <span class="menu-text">Practice Datasets</span></a>
   </div>
 </li>
       </ul>
@@ -367,7 +367,7 @@ motiv          1.815      0.344   5.275 1.66e-07 ***
 &amp;\text{grade}_i = b_0 + b_1 \cdot \text{motiv}_i + \epsilon_i
 \end{align}
 \]</span> i.e.&nbsp;For any child <span class="math inline">\(i\)</span> that we choose, that child’s grade (<span class="math inline">\(\text{grade}_i\)</span>) is some fixed number (<span class="math inline">\(b_0\)</span>) plus some fixed amount (<span class="math inline">\(b_1\)</span>) times that child’s motivation (<span class="math inline">\(\text{motiv}_i\)</span>).</p>
-<p>The issue, as we saw in <a href="01_clustered.html#clustered-data">Chapter 1</a>, is that the children in our study are actually related to one another in that they can be grouped into the schools that we sampled them from. It’s entirely possible (and likely) that there are school-level differences might actually account for quite a lot of the variation in grades. In the previous reading we actually estimated this to account for approximately 22% grade variation (<a href="01_clustered.html#icc---quantifying-clustering-in-an-outcome-variable">Chapter 1-#ICC</a>).</p>
+<p>The issue, as we saw in <a href="01_clustered.html#group-structured-data">Chapter 1</a>, is that the children in our study are actually related to one another in that they can be grouped into the schools that we sampled them from. It’s entirely possible (and likely) that there are school-level differences might actually account for quite a lot of the variation in grades. In the previous reading we actually estimated this to account for approximately 22% grade variation (<a href="01_clustered.html#icc---quantifying-clustering-in-an-outcome-variable">Chapter 1-#ICC</a>).</p>
 <p>One option we have hinted at is that we could consider adding in the <code>schoolid</code> as a predictor to our linear model to estimate all these school-level differences (<code>lm(grade ~ schoolid + motiv)</code>). This is a good start, and may oftentimes be perfectly acceptable if our clustering is simply a nuisance thing that we want to account for - adding in the clustering as another predictor will completely account for <em>all</em> cluster-level variability in our outcome variable.</p>
 <p>However, more frequently these clusters are themselves additional units of observation that have features of interest to us. For instance, we may be interested in how the funding that a school receives moderates the association between childrens motivation and grades - i.e.&nbsp;we’re interested in things that happen both at the child-level (motivation, grades), <em>and</em> at the school-level (funding). For these scenarios, we really need a multilevel model.</p>
 <div class="callout callout-style-default callout-note callout-titled">

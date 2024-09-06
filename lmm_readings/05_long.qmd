@@ -109,12 +109,12 @@ And we can fit interactions between predictors and time (`y ~ time * x`) to ask 
 
 
 :::frame
-__Data: mindfuldecline.csv__  
+__Data: lmm_mindfuldecline.csv__  
 
 A study is interested in examining **whether engaging in mindfulness can prevent cognitive decline in older adults**. They recruit a sample of 20 participants at age 60, and administer the Addenbrooke's Cognitive Examination (ACE) every 2 years (until participants were aged 78). Half of the participants complete weekly mindfulness sessions, while the remaining participants did not.   
 
   
-The data are available at: [https://uoepsy.github.io/data/msmr_mindfuldecline.csv](https://uoepsy.github.io/data/msmr_mindfuldecline.csv){target="_blank"}.  
+The data are available at: [https://uoepsy.github.io/data/lmm_mindfuldecline.csv](https://uoepsy.github.io/data/lmm_mindfuldecline.csv){target="_blank"}.  
 
 ```{r}
 #| echo: false

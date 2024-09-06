@@ -547,7 +547,7 @@ In some cases, this assumption might not hold! For instance, if we are intereste
 knitr::include_graphics("images/endogeneity/Slide7.PNG")
 ```
 
-One option here is to include people's average alcohol consumption in as a fixed predictor, which removes the part of the random effect that is correlated with our predictor of interest, and models it explicitly. We will see more about this in the [Chapter on centering](10_centering.html){target="_blank"}, and how it separates out two different associations.  
+One option here is to include people's average alcohol consumption in as a fixed predictor, which removes the part of the random effect that is correlated with our predictor of interest, and models it explicitly. We will see more about this the next [Chapter on centering](10_centering.html){target="_blank"}, and how it separates out two different associations.  
 ```{r}
 #| echo: true
 #| eval: false

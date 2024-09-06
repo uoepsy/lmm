@@ -360,7 +360,7 @@ as.data.frame(ranef(m3)$g) |>
 
 ```
 
-We can choose (if we so wish) to __not__ estimate the correlations between random effects. This choice equates to fixing this correlation in our model be 0. We do this by using two vertical lines `||` instead of one. By removing correlations between random effects we are reducing the number of parameters than are being estimated - our model becomes simpler! However, it is worth noting that this decision should be thought about carefully - does it make sense to constrain a given correlation to be zero? 
+We can choose (if we so wish) to __not__ estimate the correlations between random effects. This choice equates to fixing this correlation in our model be 0. We do this by using two vertical lines `||` instead of one. By removing correlations between random effects we are reducing the number of parameters than are being estimated - our model becomes simpler! However, it is worth noting that this decision should be thought about carefully - does it make sense to constrain a given correlation to be zero? One benefit of fitting models with correlations removed is that it can help to highlight terms which are the cause of singular fits.  
  
 
 
@@ -370,6 +370,8 @@ We can choose (if we so wish) to __not__ estimate the correlations between rando
 | `... + (0 + x | g)`   | random slopes only | $$\zeta_{1i} \sim N (0, \sigma_1)$$ |
 | `... + (1 + x || g)` | random intercepts and slopes, zero covariance | $$\begin{bmatrix} \zeta_{0i}\\ \zeta_{1i} \end{bmatrix} \sim N \left( \begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} \sigma_0 & 0 \\ 0 & \sigma_1 \end{bmatrix} \right)$$ |
 | `... + (1 + x | g)`   | random intercepts and slopes | $$\begin{bmatrix} \zeta_{0i}\\ \zeta_{1i} \end{bmatrix} \sim N \left( \begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} \sigma_0 & \rho_{01} \\ \rho_{01} & \sigma_1 \end{bmatrix} \right)$$ |
+
+
 
 :::
 

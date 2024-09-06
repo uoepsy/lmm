@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -111,8 +77,6 @@ if(f.classList.contains('jk-circle-right')) {
 <link href="site_libs/panelset-0.3.0/panelset.css" rel="stylesheet">
 <script src="site_libs/panelset-0.3.0/panelset.js"></script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -240,7 +204,7 @@ if(f.classList.contains('jk-circle-right')) {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./00_datasets.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Practice Datasets TODO arrange by methods</span></a>
+ <span class="menu-text">Practice Datasets</span></a>
   </div>
 </li>
       </ul>
@@ -251,20 +215,7 @@ if(f.classList.contains('jk-circle-right')) {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#centering-predictors-in-lm" id="toc-centering-predictors-in-lm" class="nav-link active" data-scroll-target="#centering-predictors-in-lm">Centering predictors in <code>lm()</code></a></li>
-  <li><a href="#centering-predictors-in-multilevel-models" id="toc-centering-predictors-in-multilevel-models" class="nav-link" data-scroll-target="#centering-predictors-in-multilevel-models">Centering predictors in multilevel models</a>
-  <ul class="collapse">
-  <li><a href="#group-mean-centering" id="toc-group-mean-centering" class="nav-link" data-scroll-target="#group-mean-centering">group mean centering</a></li>
-  <li><a href="#within-and-between-effects" id="toc-within-and-between-effects" class="nav-link" data-scroll-target="#within-and-between-effects">within and between effects</a></li>
-  <li><a href="#the-within-between-model" id="toc-the-within-between-model" class="nav-link" data-scroll-target="#the-within-between-model">the within between model</a></li>
-  <li><a href="#optional-contextual-effects-and-the-mundlak-model" id="toc-optional-contextual-effects-and-the-mundlak-model" class="nav-link" data-scroll-target="#optional-contextual-effects-and-the-mundlak-model">optional: contextual effects and the mundlak model</a></li>
-  </ul></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -290,164 +241,10 @@ if(f.classList.contains('jk-circle-right')) {
 <p>This reading:</p>
 <p><strong>FORTHCOMING</strong></p>
 </div>
-<section id="centering-predictors-in-lm" class="level2">
-<h2 class="anchored" data-anchor-id="centering-predictors-in-lm">Centering predictors in <code>lm()</code></h2>
-<p>There are lots of ways we can transform a variable. For instance, we can transform something in millimeters to being in centimeters by dividing it by 10. We could transform a <code>height</code> variable into <code>height above/below 2 meters</code> variable by subtracting 2 meters from it.</p>
-<p>A couple of common transformations we have seen already are ‘centering’ and ‘standardising’. When we “center” a variable, we subtracting some number (often the mean of the variable) from every value. So if we ‘mean-center’ a variable measuring height in cm, and the mean height of my sample is 175cm, then a value of 190 becomes +15, and a value of 150 becomes -25, and so on.<br>
-When we ‘standardise’ a variable, we mean-center it and then divide the resulting values by the standard deviation. So if the standard deviation of heights in my sample is 15, then the value of 190 becomes <span class="math inline">\(\frac{190-175}{15} = \frac{15}{15} = 1\)</span>, and the 150 becomes <span class="math inline">\(\frac{150-175}{15} = \frac{-25}{15} = -1.67\)</span>.</p>
-<p>How does this choice affect the linear models we might be fitting? The short answer is that it doesn’t! The overall fit of <code>lm()</code> is not changed in any way when we apply these linear transformations to predictors or outcomes.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. However, transformations <em>do</em> change what we get out of our model.</p>
-<p>If we re-center a predictor on some new value (such as the mean), then all this does is change what “zero” means in our variable. This means that if we re-center a predictor in our linear model, the only thing that changes is our intercept. This is because the intercept is “when all predictors are zero”. And we are changing what “zero” represents! When we scale a predictor, this will change the slope. Why? Because it changes what “moving 1” represents. So if we standardise a variable, it changes both the intercept and the slope. However, note that the significance of the slope remains <em>exactly the same</em>, we are only changing the <em>units</em> that we are using to expressing that slope.</p>
-<p>The example below shows a model of heart rates (<code>HR</code>) predicted by hours slept (<code>hrs_sleep</code>). In <a href="#fig-scalexlm">Figure&nbsp;1</a> you can see our original model (top left), and then various transformations applied to our predictor. Note how these transformations don’t affect the model itself - the regression line (and the uncertainty in the line) is the same in each plot. We can see that re-centering changes what the intercept represents. In the top left plot, “0” represents zero hours slept, so the intercept is the estimated heart rate for someone who didn’t sleep at all. Similarly, in the top right plot, “0” now represents the mean hours slept, so the intercept is the heart rate for someone who slept an average amount. In the bottom left plot (where hours slept is ‘standardized’), not only have we changed what “0” represents, but we have changed what moving “1” represents. Rather being an increase of 1 hour of sleep, in this plot it represents an increase of 1 standard deviation hours sleep (whatever that is for our sample - it looks to be about 2.5). This means our estimated slope is the change in heart rate when having 1 SD more hours sleep (approx 2.5).</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-scalexlm" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="10_centering_files/figure-html/fig-scalexlm-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Centering and scaling predictors in linear regression models. Intercepts and their interpretation change when re-centered, and slope coefficients and their interpretation change when scaling, but the overall model stays the same.</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>The thing to note is that the lines themselves are all the same, because the models are all exactly the same. We can prove this to ourselves by comparing the 4 models:</p>
-<div class="cell" data-layout-align="center">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>hrdat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://uoepsy.github.io/data/usmr_hrsleep.csv"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># original model:</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>mod_orig <span class="ot">&lt;-</span> <span class="fu">lm</span>(HR <span class="sc">~</span> hrs_sleep, <span class="at">data =</span> hrdat)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># model with hrs_sleep mean centered</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>mod_mc <span class="ot">&lt;-</span> <span class="fu">lm</span>(HR <span class="sc">~</span> <span class="fu">scale</span>(hrs_sleep, <span class="at">scale=</span><span class="cn">FALSE</span>), <span class="at">data =</span> hrdat)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># model with hrs_sleep standardised</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>mod_z <span class="ot">&lt;-</span> <span class="fu">lm</span>(HR <span class="sc">~</span> <span class="fu">scale</span>(hrs_sleep), <span class="at">data =</span> hrdat)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># model with hrs_sleep centered on 8 hours the I() function is a handy function that is just needed because the + and - symbols normally get interprted in lm() as adding and removing predictors. </span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>mod_8 <span class="ot">&lt;-</span> <span class="fu">lm</span>(HR <span class="sc">~</span> <span class="fu">I</span>(hrs_sleep<span class="dv">-8</span>), <span class="at">data =</span> hrdat) </span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># all models are identical fit</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod_orig, mod_mc, mod_z, mod_8)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Variance Table
-
-Model 1: HR ~ hrs_sleep
-Model 2: HR ~ scale(hrs_sleep, scale = FALSE)
-Model 3: HR ~ scale(hrs_sleep)
-Model 4: HR ~ I(hrs_sleep - 8)
-  Res.Df    RSS Df   Sum of Sq F Pr(&gt;F)
-1     68 3524.5                        
-2     68 3524.5  0 -4.5475e-13         
-3     68 3524.5  0  0.0000e+00         
-4     68 3524.5  0  0.0000e+00         </code></pre>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Centering when we have interactions
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>When we have an interactions in a model such as <code>lm(y~x+z+x:z)</code>, the individual coefficients for <code>x</code> and <code>z</code> are specifically the associations “when the other variable included in the interaction is zero”. Because re-centering a variable changes the meaning of “zero”, this means that these two coefficients will change.</p>
-<p>For instance, a model of heart rates (<code>HR</code>) that includes an interaction between <code>hrs_sleep</code> and whether someone smokes, our coefficient for <code>smoke</code> estimates the difference in HR between smokers vs non-smokers who get zero hours of sleep (red to blue point in the left-hand plot of <a href="#fig-intcent">Figure&nbsp;2</a>). If we mean-center the <code>hrs_sleep</code> variable in our model, then it becomes the estimated difference in HR between smokers vs non-smokers who get the average hours of sleep (red to blue point in the right-hand plot of <a href="#fig-intcent">Figure&nbsp;2</a>).</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-intcent" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="10_centering_files/figure-html/fig-intcent-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: mean-centering a variable that is involved in an interaction will change the point at which the marginal effect of other variable is estimated at</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="centering-predictors-in-multilevel-models" class="level2">
-<h2 class="anchored" data-anchor-id="centering-predictors-in-multilevel-models">Centering predictors in multilevel models</h2>
-<p>In multilevel models, things can be a little bit different. We have already seen in the longitudinal example (<a href="05_long.html#modelling-change-over-time" target="_blank">Chapter 5</a>) that recentering a variable can have certain advantages in allowing us to fit multilevel models.</p>
-<p>Because multilevel models involve estimating group-level variability in intercepts and slopes, if our intercept is very far away from our data (e.g., if all our data is from ages 60 to 80, and we are estimating variability at age 0), then slight changes in a slope can have huge influences on intercepts (<a href="#fig-centconv">Figure&nbsp;3</a>), resulting in models that don’t converge.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-centconv" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="10_centering_files/figure-html/fig-centconv-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: lines indicate predicted values from the model with random intercepts and random slopes of age. Due to how age is coded, the ‘intercept’ is estimated back at age 0</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>So re-centering a predictor can help both to allow models to converge and to provide estimates of variability that are at more meaningful places (e.g., we could recenter the <code>age</code> variable on 60 and the intercept variation would become the variability in peoples’ cognition <em>at the start of the study period</em>). Beyond that, re-centering on a constant number (such as the overall mean, min or max) doesn’t change much in terms of our fixed effects.</p>
-<p>However, in some cases (typically in observational, rather than experimental studies), having multi-level data may mean that we don’t just have <em>one</em> “overall” mean for a predictor, but also a separate mean for each group.</p>
-<section id="group-mean-centering" class="level3">
-<h3 class="anchored" data-anchor-id="group-mean-centering">group mean centering</h3>
-<p>Let’s suppose we are interested in studying school childrens’ self-concept.</p>
-<p>we have classes classes vary in the average grades plot x y plot x y and line for each class</p>
-<p>what if the association btw grade and selfconc is actually entirely down to your ‘grade relative to peers’?</p>
-<p>in order to study ‘grade relative to peers’ we need to consider each child’s relative standing - i.e.&nbsp;is it high <em>for the class</em> or low <em>for the class</em>?</p>
-<p>we can look at</p>
-</section>
-<section id="within-and-between-effects" class="level3">
-<h3 class="anchored" data-anchor-id="within-and-between-effects">within and between effects</h3>
-</section>
-<section id="the-within-between-model" class="level3">
-<h3 class="anchored" data-anchor-id="the-within-between-model">the within between model</h3>
-<p>y ~ 1 + xbarj + (x-xbarj) + ( 1 + (x-xbarj) | g )</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gconf <span class="ot">=</span> <span class="cf">function</span>(){</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  N <span class="ot">=</span> <span class="dv">200</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  n_groups <span class="ot">=</span> <span class="dv">20</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  g <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_groups, <span class="at">e =</span> N<span class="sc">/</span>n_groups)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">=</span> <span class="fu">rnorm</span>(n_groups,<span class="dv">0</span>,<span class="dv">5</span>)[g]</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="fu">rnorm</span>(N,u)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  re <span class="ot">=</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(n_groups, <span class="at">mu=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="at">Sigma=</span><span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,.<span class="dv">5</span>),<span class="at">ncol=</span><span class="dv">2</span>))</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  re1 <span class="ot">=</span> re[,<span class="dv">1</span>][g]</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  re_x <span class="ot">=</span> re[,<span class="dv">2</span>][g]</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  lp <span class="ot">=</span> (<span class="dv">0</span> <span class="sc">+</span> re1) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> re_x) <span class="sc">*</span> x <span class="sc">+</span> <span class="sc">-</span><span class="dv">3</span><span class="sc">*</span>u</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">=</span> <span class="fu">rnorm</span>(N, <span class="at">mean =</span> lp, <span class="at">sd =</span> <span class="dv">1</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">=</span> <span class="fu">data.frame</span>(x, <span class="at">g =</span> <span class="fu">factor</span>(g), y, y)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ggplot(df,aes(x=x,y=y,col=g))+</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   geom_point()+guides(col="none")+</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   geom_smooth(method=lm,se=F)</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">ri=</span><span class="fu">fixef</span>(<span class="fu">lmer</span>(y<span class="sc">~</span><span class="dv">1</span><span class="sc">+</span>x<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>g),df))[<span class="st">'x'</span>],</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">rs=</span><span class="fu">fixef</span>(<span class="fu">lmer</span>(y<span class="sc">~</span><span class="dv">1</span><span class="sc">+</span>x<span class="sc">+</span>(<span class="dv">1</span><span class="sc">+</span>x<span class="sc">|</span>g),df))[<span class="st">'x'</span>],</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">mui=</span><span class="fu">fixef</span>(<span class="fu">lmer</span>(y<span class="sc">~</span><span class="dv">1</span><span class="sc">+</span>x<span class="sc">+</span>xm<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>g),df <span class="sc">|&gt;</span> <span class="fu">group_by</span>(g) <span class="sc">|&gt;</span><span class="fu">mutate</span>(<span class="at">xm=</span><span class="fu">mean</span>(x))))[<span class="st">'x'</span>],</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu=</span><span class="fu">fixef</span>(<span class="fu">lmer</span>(y<span class="sc">~</span><span class="dv">1</span><span class="sc">+</span>x<span class="sc">+</span>xm<span class="sc">+</span>(<span class="dv">1</span><span class="sc">+</span>x<span class="sc">|</span>g),df <span class="sc">|&gt;</span> <span class="fu">group_by</span>(g) <span class="sc">|&gt;</span><span class="fu">mutate</span>(<span class="at">xm=</span><span class="fu">mean</span>(x))))[<span class="st">'x'</span>],</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">mwb=</span><span class="fu">fixef</span>(<span class="fu">lmer</span>(y<span class="sc">~</span><span class="dv">1</span><span class="sc">+</span>xd<span class="sc">+</span>xm<span class="sc">+</span>(<span class="dv">1</span><span class="sc">+</span>xd<span class="sc">|</span>g),df <span class="sc">|&gt;</span> <span class="fu">group_by</span>(g) <span class="sc">|&gt;</span><span class="fu">mutate</span>(<span class="at">xm=</span><span class="fu">mean</span>(x),<span class="at">xd=</span>x<span class="sc">-</span>xm)))[<span class="st">'xd'</span>]</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> <span class="fu">t</span>(<span class="fu">replicate</span>(<span class="dv">100</span>,<span class="fu">gconf</span>()))</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">2</span>))</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(res[,<span class="dv">1</span>]);<span class="fu">hist</span>(res[,<span class="dv">2</span>]);<span class="fu">hist</span>(res[,<span class="dv">3</span>]);<span class="fu">hist</span>(res[,<span class="dv">4</span>]);<span class="fu">hist</span>(res[,<span class="dv">5</span>])</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(res)</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(res,<span class="dv">2</span>,sd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="optional-contextual-effects-and-the-mundlak-model" class="level3">
-<h3 class="anchored" data-anchor-id="optional-contextual-effects-and-the-mundlak-model">optional: contextual effects and the mundlak model</h3>
 
 
-</section>
-</section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>the fit of models <em>does</em> change if we apply a non-linear transformation, such as <span class="math inline">\(x^2\)</span>, <span class="math inline">\(log(x)\)</span>, etc., and this can sometimes be useful for studying effects that are more likely to be non-linear!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
