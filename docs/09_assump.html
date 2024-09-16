@@ -263,7 +263,7 @@ if(f.classList.contains('jk-circle-right')) {
   </ul></li>
   <li><a href="#influence" id="toc-influence" class="nav-link" data-scroll-target="#influence">Influence</a></li>
   <li><a href="#optional-extra-the-dharma-package" id="toc-optional-extra-the-dharma-package" class="nav-link" data-scroll-target="#optional-extra-the-dharma-package">Optional Extra: The DHARMa Package</a></li>
-  <li><a href="#optional-extra-group-confounding" id="toc-optional-extra-group-confounding" class="nav-link" data-scroll-target="#optional-extra-group-confounding">Optional Extra: Group confounding</a></li>
+  <li><a href="#optional-extra-group-confounding-and-the-random-effects-assumption" id="toc-optional-extra-group-confounding-and-the-random-effects-assumption" class="nav-link" data-scroll-target="#optional-extra-group-confounding-and-the-random-effects-assumption">Optional Extra: Group confounding and the random effects assumption</a></li>
   </ul>
 </nav>
     </div>
@@ -290,8 +290,16 @@ if(f.classList.contains('jk-circle-right')) {
 <div class="lo">
 <p>This reading:</p>
 <ul>
-<li><p>Multilevel model assumptions: random effects can be thought of as another level of residual!</p></li>
-<li><p>Influence in multilevel models: influential observations and influential groups.</p></li>
+<li>Multilevel model assumptions
+<ul>
+<li>Random effects can be thought of as another level of residual</li>
+</ul></li>
+<li>Case diagnostics in multilevel models
+<ul>
+<li>influential observations and influential groups<br>
+</li>
+</ul></li>
+<li>Optional Extra: Group confounding and the random effects assumption</li>
 </ul>
 </div>
 <section id="mlm-assumptions-diagnostics" class="level1">
@@ -789,8 +797,8 @@ For instance, to refit our model without employees of the ‘Nursing Studies’ 
 
 </div>
 </section>
-<section id="optional-extra-group-confounding" class="level1">
-<h1>Optional Extra: Group confounding</h1>
+<section id="optional-extra-group-confounding-and-the-random-effects-assumption" class="level1">
+<h1>Optional Extra: Group confounding and the random effects assumption</h1>
 <p>In terms of our model equation (below for the random intercepts only model), the assumptions underlying our ability to generalise from these models are that both the residuals <span class="math inline">\(\varepsilon\)</span> and the random effects <span class="math inline">\(\zeta_0\)</span> are normally distributed with a mean of zero across the predictors of the model.</p>
 <p><span class="math display">\[
 \begin{align}
@@ -828,7 +836,7 @@ b_{0i} &amp;= \gamma_{00} + \zeta_{0i} \\
 </div>
 </div>
 </div>
-<p>The same is true in our multilevel model. In <a href="#fig-conflmm3">Figure&nbsp;7</a> we can see that we have <em>two</em> sources of error: the observation level, and the cluster level. The assumption we make is that in the true ‘data generating process’ there is no covariance between predictors and either error term.</p>
+<p>The same is true in our multilevel model. In <a href="#fig-conflmm3">Figure&nbsp;7</a> we can see that we have <em>two</em> sources of error: the observation level, and the cluster level. The assumption we make is that in the true ‘data generating process’ there is no covariance between predictors and either error term. This sometimes get referred to as the “random effects assumption” or the “endogeneity/exogeneity assumption”.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-conflmm3" class="quarto-figure quarto-figure-center anchored">
@@ -894,7 +902,13 @@ other models
 
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>“endogeneity” is a term used to refer to variables that are influenced by other variables in a system. In the multilevel model, the predictors are assumed to be ‘exogenous’ (i.e.&nbsp;not influenced by anything)<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
