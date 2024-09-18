@@ -20,8 +20,8 @@ xaringanExtra::use_panelset()
 :::lo
 This reading:  
 
-An example of "change over time" - fitting multilevel models to longitudinal data.  
-    - *The application of multilevel models to longitudinal data is very much just that - we are taking the same sort of models we have already learned about and simply applying them to a different context in which "time" is a predictor.* 
+- Walkthrough Example: "change over time" - fitting multilevel models to longitudinal data.  
+    - *The application of multilevel models to longitudinal data is simply taking the same sort of models we have already learned about and applying them to a different context in which "time" is a predictor.* 
 
 :::
 

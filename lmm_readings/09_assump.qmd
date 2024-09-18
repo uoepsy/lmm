@@ -23,9 +23,11 @@ library(broom.mixed)
 :::lo
 This reading:  
 
-- Multilevel model assumptions: random effects can be thought of as another level of residual!  
-
-- Influence in multilevel models: influential observations and influential groups.
+- Multilevel model assumptions
+    - Random effects can be thought of as another level of residual 
+- Case diagnostics in multilevel models
+    - influential observations and influential groups  
+- Optional Extra: Group confounding and the random effects assumption
 
 :::
 
@@ -476,7 +478,7 @@ plotResiduals(msim, form = jsuni$NSSrating)
 
 <div class="divider div-transparent div-dot"></div>
 
-# Optional Extra: Group confounding 
+# Optional Extra: Group confounding and the random effects assumption
 
 In terms of our model equation (below for the random intercepts only model), the assumptions underlying our ability to generalise from these models are that both the residuals $\varepsilon$ and the random effects $\zeta_0$ are normally distributed with a mean of zero across the predictors of the model.  
 
@@ -515,7 +517,7 @@ If the underlying way in which the data was generated (i.e. the population we ar
 knitr::include_graphics("images/endogeneity/Slide3.PNG")
 ```
 
-The same is true in our multilevel model. In @fig-conflmm3 we can see that we have _two_ sources of error: the observation level, and the cluster level. The assumption we make is that in the true 'data generating process' there is no covariance between predictors and either error term.  
+The same is true in our multilevel model. In @fig-conflmm3 we can see that we have _two_ sources of error: the observation level, and the cluster level. The assumption we make is that in the true 'data generating process' there is no covariance between predictors and either error term. This sometimes get referred to as the "random effects assumption" or the "endogeneity/exogeneity assumption".^["endogeneity" is a term used to refer to variables that are influenced by other variables in a system. In the multilevel model, the predictors are assumed to be 'exogenous' (i.e. not influenced by anything)]  
 ```{r}
 #| echo: false
 #| label: fig-conflmm3

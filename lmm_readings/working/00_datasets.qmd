@@ -1,5 +1,5 @@
 ---
-title: "Practice Datasets TODO arrange by methods"
+title: "Practice Datasets"
 params: 
     SHOW_SOLS: TRUE
     showme2: FALSE
@@ -33,36 +33,14 @@ library(lme4)
 
 Below are various datasets from these readings and from lectures and exercises across our courses. For each one, there is a quick explanation of the study design which also details the research aims of the project.  
   
-Pick one of the datasets and: 
-
-1. explore the data, and do any required cleaning (most of them are clean already)
-2. conduct an analysis to address the research aims
-3. write a short description of the sample data [(see 5B #the-sample-data)](05b_writing.html#the-sample-data){target="_blank"}
-4. write a short explanation of your methods [(see 5B #the-methods)](05b_writing.html#the-methods){target="_blank"}
-5. write a short summary of your results, along with suitable visualisations and tables [(see 5B #the-results)](05b_writing.html#the-results){target="_blank"}
-6. Post some of your writing on Piazza and we can collectively discuss it!  
-
-If you like, work on this as a group - set up a google doc to collaboratively write together (it's much more fun that way!)
-
-
-# simple random effect structures
-
-
-
-# more complex groupings
-
-
-
-# non-linear change
-
-
-
-
-## Readings 
+Pick one of the datasets to test yourself with fitting, checking, interpreting and reporting on multilevel models. 
 
 
 ::: {.callout-note collapse="true"}
-#### motivation and grades in school children
+#### schoolmot.csv - motivation and grades in school children
+:::tag
+\#cross-sectional
+:::
 
 This dataset contains information on 900 children from 30 different schools across Scotland. The data was collected as part of a study looking at **whether education-related motivation is associated with school grades. This is expected to be different for state vs privately funded schools.**   
 All children completed an 'education motivation' questionnaire, and their end-of-year grade average has been recorded.    
@@ -92,6 +70,8 @@ mod1 <- lmer(grade ~ motiv * funding +
 summary(mod1)
 ```
 `r solend()`
+
+
 
 ::: {.callout-note collapse="true"}
 #### monkey social status and problem solving ability

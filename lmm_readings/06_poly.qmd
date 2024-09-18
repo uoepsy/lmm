@@ -41,7 +41,7 @@ res <- broom::tidy(linmod) |> mutate(across(estimate:statistic,~round(.,2)))
 This reading:  
 
 - The basics of modelling non-linear change via polynomial terms. 
-- An example with MLM
+- Walkthrough Example: Polynomial growth in multilevel context
 
 For additional reading, [Winter & Wieling, 2016](https://doi.org/10.1093/jole/lzv003) is pretty good (mainly focus on sections 1-3)
 

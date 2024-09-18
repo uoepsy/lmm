@@ -19,7 +19,8 @@ library(patchwork)
 :::lo
 This reading:  
 
-An example: Logistic multilevel models (`lm()` is to `glm()` as `lmer()` is to `glmer()`)  
+- Walkthrough Example: Logistic multilevel models
+    - `lm()` is to `glm()` as `lmer()` is to `glmer()`
 
 :::
 

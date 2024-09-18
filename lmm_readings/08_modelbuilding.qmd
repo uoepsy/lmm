@@ -23,11 +23,10 @@ library(broom.mixed)
 :::lo
 This reading:  
 
-- the 'maximal' model
-
-- non-convergence and overfitted models
-
-- strategies for simplifying models
+- Model building and convergence issues
+    - The 'maximal' model
+    - Non-convergence and overfitted models
+    - Strategies for simplifying models
 
 :::
 
