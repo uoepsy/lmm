@@ -74,6 +74,18 @@ summary(mod1)
 
 These data come from 112 people across 12 different Scottish dwellings (cities and towns). Information is captured on their ages and a measure of life satisfaction. The researchers are interested in if there is an association between age and life-satisfaction. 
 
+Data are available at [https://uoepsy.github.io/data/lmm_lifesatscot.csv](https://uoepsy.github.io/data/lmm_lifesatscot.csv){target="_blank"}.
+
+```{r}
+#| echo: false
+df <- read_csv("https://uoepsy.github.io/data/lmm_lifesatscot.csv")
+tibble(
+  variable = names(df),
+  description = c("Age (years)","Life Satisfaction score","Dwelling (town/city in Scotland)","Size of Dwelling (> or <100k people)")
+) |> gt::gt()
+```
+
+
 :::
 `r solbegin(show=params$SHOW_SOLS, toggle=params$TOGGLE)`
 ```{r}
@@ -117,8 +129,6 @@ tibble(
 ```
 :::
 
-
-:::
 `r solbegin(show=params$SHOW_SOLS, toggle=params$TOGGLE)`
 ```{r}
 df <- read_csv("https://uoepsy.github.io/data/lmm_jsup.csv")
@@ -495,10 +505,13 @@ summary(mod1)
 ::: {.callout-note collapse="true"}
 #### lmm_nssjobsat.csv - <br><span class="tag">\#cross-sectional</span>
 
-TODO
+```{r}
+#| echo: false
+df<-read_csv("https://uoepsy.github.io/data/msmr_nssjobsat.csv")
+```
 
-Let's suppose we are studying employee job satisfaction at the university. We have TODO 
-employees from  TODO different departments, and we got them to fill in a job satisfaction questionnaire, and got information on what their payscale was. We have also taken information from the national student survey on the level of student satisfaction for each department.  
+Let's suppose we are studying employee job satisfaction at the university. We have `r nrow(df)` 
+employees from `r n_distinct(df$dept)` different departments, and we got them to fill in a job satisfaction questionnaire, and got information on what their payscale was. We have also taken information from the national student survey on the level of student satisfaction for each department.  
 
 Each datapoint here represents an individual employee, and these employees are grouped into departments.  
 
@@ -508,7 +521,13 @@ Data are available at [https://uoepsy.github.io/data/msmr_nssjobsat.csv](https:/
 #| echo: false
 df<-read_csv("https://uoepsy.github.io/data/msmr_nssjobsat.csv")
 tibble(variable=names(df),
-       description = ""
+       description = c(
+         "National Student Satisfaction Rating for the Department",
+         "Department name",
+         "Pay scale of employee",
+         "Job satisfaction of employee",
+         "Binary question of whether the employee considered themselves to be satisfied with their work (1) or not (0)"
+       )
 ) %>% gt::gt()
 ```
 
@@ -1054,12 +1073,12 @@ dotplot.ranef.mer(ranef(mod1))$statement
 
 
 ::: {.callout-note collapse="true"}
-#### lmm_alcgad.csv - <br><span class="tag">\#repeated-measures</span>
+#### lmm_alcgad.csv - relative levels of anxiety and alcohol use<br><span class="tag">\#repeated-measures</span>
 
 A research study is investigating **how anxiety is associated with drinking habits**. Data was collected from 50 participants from 5 centers. Researchers administered the generalised anxiety disorder (GAD-7) questionnaire to measure levels of anxiety over the past week, and collected information on the units of alcohol participants had consumed within the week. Each participant was observed on 10 different occasions. 
 
 ```{r}
-#| echo: true
+#| echo: false
 tibble(
   variable = names(read_csv("https://uoepsy.github.io/data/lmm_alcgad.csv")),
   description = c(
@@ -1216,8 +1235,15 @@ We have data from `r n_distinct(bfdat$class)` classes of children, capturing inf
 Data are available at  [https://uoepsy.github.io/data/lmm_bflpe.csv](https://uoepsy.github.io/data/lmm_bflpe.csv)  
 
 ```{r}
+#| echo: false
 bfdat <- read_csv("https://uoepsy.github.io/data/lmm_bflpe.csv")
-head(bfdat)
+tibble(
+  variable = names(bfdat),
+  description = c("Children's School Grade",
+                  "Class Identifier",
+                  "Children's Self-Concept Score",
+                  "Child Identifier")
+) |> gt::gt()
 ```
 :::
 `r solbegin(show=params$SHOW_SOLS, toggle=params$TOGGLE)`
@@ -1229,7 +1255,7 @@ head(bfdat)
 
 
 ::: {.callout-note collapse="true"}
-#### hangry.csv - hunger + anger = hanger
+#### hangry.csv - hunger + anger = hanger<br><span class="tag">\#cross-sectional</span>
 
 This study is interested in evaluating **whether peoples' hunger levels are associated with their levels of irritability** (i.e., "the hangry hypothesis"), and if this differs between people on a diet vs those who aren't. 81 participants were recruited into the study. Once a week for 5 consecutive weeks, participants were asked to complete two questionnaires, one assessing their level of hunger, and one assessing their level of irritability. The time and day at which participants were assessed was at a randomly chosen hour between 7am and 7pm each week. 46 of the participants were following a five-two diet (five days of normal eating, 2 days of fasting), and the remaining 35 were following no specific diet.  
 
