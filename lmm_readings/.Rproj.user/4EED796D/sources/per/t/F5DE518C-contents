@@ -323,7 +323,7 @@ Crossed structures are, in simplest terms, anything that is not nested. So if a 
 For instance:  
 
 - Each observation is an assessment of a patient by a therapist. Patients see various therapists, and therapists see many different patients (patients and therapists are not nested)
-- Each observation is an individual trial, which will be one from a set of experimental items. All participants see all items, but all items are seen by all participants, so items and participants are not nested. 
+- Each observation is an individual trial, which will be one from a set of experimental items. All participants see all items, and "item 1" for participant 1 is the same "item 1" as when we see it for participant 2, and 3, and so on.. So items are not nested within participants.  
 
 This sort of structure is referred to as "crossed" because of the lines crossing in such diagrams as in @fig-crossed. In @fig-crossed, observations can be grouped into tasks, but they can also be grouped into participants.  
 

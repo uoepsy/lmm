@@ -939,7 +939,7 @@ laughs <- read_csv("https://uoepsy.github.io/data/lmm_laughs.csv")
 ```
 
 These data are simulated to imitate an experiment that investigates the effect of visual non-verbal communication (i.e. gestures, facial expressions) on joke appreciation. 
-`r n_distinct(laughs$ppt)` Participants took part in the experiment, in which they each rated how funny they found a set of `r n_distinct(laughs$joke_id)` jokes. For each participant, the order of these `r n_distinct(laughs$joke_id)` jokes was randomly set for each run of the experiment. For each participant, the set of jokes was randomly split into two halves, with the first half being presented in audio-only, and the second half being presented in audio and video. This meant that each participant saw `r n_distinct(laughs$ppt)/2` jokes with video and `r n_distinct(laughs$ppt)/2` without, and each joke would be presented in with video roughly half of the times it was seen.  
+`r n_distinct(laughs$ppt)` Participants took part in the experiment, in which they each rated how funny they found a set of `r n_distinct(laughs$joke_id)` jokes. For each participant, the order of these `r n_distinct(laughs$joke_id)` jokes was randomly set for each run of the experiment. For each participant, the set of jokes was randomly split into two halves, with the first half being presented in audio-only, and the second half being presented in audio and video. This meant that each participant saw `r n_distinct(laughs$joke_id)/2` jokes with video and `r n_distinct(laughs$joke_id)/2` without, and each joke would be presented in with video roughly half of the times it was seen.  
 
 The researchers want to investigate **whether the delivery (audio/audiovideo) of jokes is associated with differences in humour-ratings.**  
 
