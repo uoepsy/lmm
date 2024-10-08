@@ -88,12 +88,13 @@ knitr::include_graphics("images/structure_nestednew.png")
 ```
 
 
-In R, we can specify a nested structure using:  
+In R, we can specify a nested structure using either of:  
 ```{r}
 #| eval: false
 ... + (1 + ... | school) + (1 + .... | school:child)
+... + (1 + ... | school) + (1 + .... | child:school)
 ```
-This specifies that things can vary between schools and that things can also vary between the children within the schools.  
+This specifies that things can vary between schools and that things can also vary between the children within the schools. Note that when we use the colon `:` the order doesn't matter - it just means "the combination of school and child variables", so whether we group observations from child 1 in school A as "A.1" or "1.A" doesn't matter - it gets at the same group:  
 
 So `(1 | school) + (1 | school:child)` means that the intercept varies by school (some schools have a higher $y$, some have lower), and also by the children within the schools (some children have a higher $y$ for the school, some have lower).  
 

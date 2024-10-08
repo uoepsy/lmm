@@ -64,7 +64,7 @@ lmer(outcome ~ fixed effects +
     
 2. If there is a grouping structure to your data, and those groups (preferably n>7 or 8) are perceived as a random sample of a wider population (the specific groups aren't interesting to you), then consider including random intercepts (and possibly random slopes of predictors) for those groups `(1 + ... | grouping)`.  
 
-3. If there are multiple different grouping structures, is one nested within another? If so, we can specify this as `(1 | higher_grouping ) + (1 |  lower_grouping:higher_grouping)`.  
+3. If there are multiple different grouping structures, is one nested within another? If so, we can specify this as `(1 | higher_grouping ) + (1 |  lower_grouping:higher_grouping)`.^[the order doesn't matter with the colon, so `(1 | higher_grouping ) + (1 |  higher_grouping:lower_grouping)` is just the same]  
 If the grouping structures are **not** nested, we can specify them as crossed: `(1 | grouping1) + (1 | grouping2)`.  
 
 

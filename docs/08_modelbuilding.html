@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LMM/MLM - 8: Model Building</title>
+<title>8: Model Building – LMM/MLM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,8 +94,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script>
@@ -111,8 +119,35 @@ if(f.classList.contains('jk-circle-right')) {
 <link href="site_libs/panelset-0.3.0/panelset.css" rel="stylesheet">
 <script src="site_libs/panelset-0.3.0/panelset.js"></script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -122,12 +157,12 @@ if(f.classList.contains('jk-circle-right')) {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./08_modelbuilding.html">8: Model Building</a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./08_modelbuilding.html">8: Model Building</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -137,7 +172,7 @@ if(f.classList.contains('jk-circle-right')) {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">LMM/MLM</a> 
@@ -218,9 +253,9 @@ if(f.classList.contains('jk-circle-right')) {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Additional Docs</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -248,7 +283,7 @@ if(f.classList.contains('jk-circle-right')) {
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -283,7 +318,9 @@ if(f.classList.contains('jk-circle-right')) {
   </div>
   
 
+
 </header>
+
 
 <div class="lo">
 <p>This reading:</p>
@@ -321,7 +358,7 @@ if(f.classList.contains('jk-circle-right')) {
 <li>The fixed effects are the things we want to use to explain/predict variation in the outcome variable. These will often be the things that are of specific inferential interest along with potential confounders and other covariates. Just like the simple linear model.</li>
 </ul></li>
 <li><p>If there is a grouping structure to your data, and those groups (preferably n&gt;7 or 8) are perceived as a random sample of a wider population (the specific groups aren’t interesting to you), then consider including random intercepts (and possibly random slopes of predictors) for those groups <code>(1 + ... | grouping)</code>.</p></li>
-<li><p>If there are multiple different grouping structures, is one nested within another? If so, we can specify this as <code>(1 | higher_grouping ) + (1 |  lower_grouping:higher_grouping)</code>.<br>
+<li><p>If there are multiple different grouping structures, is one nested within another? If so, we can specify this as <code>(1 | higher_grouping ) + (1 |  lower_grouping:higher_grouping)</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a><br>
 If the grouping structures are <strong>not</strong> nested, we can specify them as crossed: <code>(1 | grouping1) + (1 | grouping2)</code>.</p></li>
 <li><p>If any of the predictors in the fixed effects vary <strong>within</strong> the groups, it may be possible to also include them as random effects. For predictors that instead vary <strong>between</strong> groups, it rarely makes sense to include these as by-group random effects. For example, if we had a model with <code>lmer(score ~ genetic_status + (1 + genetic_status | patient))</code> then we would be trying to model a process where “the effect of genetic_status on scores is different for each patient”. But if you consider an individual patient, their genetic status never changes. For patient <span class="math inline">\(i\)</span>, what is “the effect of genetic status on score”? It’s undefined. This is because genetic status only varies <em>between</em> patients.</p>
 <ul>
@@ -366,15 +403,19 @@ Things we can try
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
-<li>Fine-tune an optimizer. Using the optCtrl argument to [g]lmerControl (see <code>?convergence</code> for details), we can have a lot of control over the optimizer. Recall that the optimizer is a method of iteratively assessing a set of parameters to maximise the probability of seeing the observed data<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. We can change things such as the number of steps the algorithm keeps trying for, and the thresholds at which the algorithm stops (<a href="#fig-tolerance">Figure&nbsp;1</a>).</li>
+<li>Fine-tune an optimizer. Using the optCtrl argument to [g]lmerControl (see <code>?convergence</code> for details), we can have a lot of control over the optimizer. Recall that the optimizer is a method of iteratively assessing a set of parameters to maximise the probability of seeing the observed data<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. We can change things such as the number of steps the algorithm keeps trying for, and the thresholds at which the algorithm stops (<a href="#fig-tolerance" class="quarto-xref">Figure&nbsp;1</a>).</li>
 </ul>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-tolerance" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/tolerance.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: An optimizer will stop after a certain number of iterations, or when it meets a tolerance threshold</figcaption>
+<div id="fig-tolerance" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tolerance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/tolerance.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tolerance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: An optimizer will stop after a certain number of iterations, or when it meets a tolerance threshold
+</figcaption>
 </figure>
 </div>
 </div>
@@ -392,13 +433,17 @@ Things we can try
 boundary (singular) fit: see ?isSingular
 </p>
 <p>Up to now, we’ve been largely ignoring these messages, but we should really have been addressing them in some way. ‘Singular fit’ warnings indicate that our model is likely to be ‘overfitted’ - that is, the random effects structure which we have specified is <strong>too complex to be supported by the data</strong>.</p>
-<p>For simple random effect structures (i.e.&nbsp;a random intercept + a random slope), we can often see this issue reflected in the variance components of the random effect, when variances get estimated at (or very close to) zero, and/or when correlations get estimated at (or very close to) 1 or -1 (<a href="#fig-singular">Figure&nbsp;2</a>). With more complex structures it is not always so easily visible, but we can do a double check for this issue using the handy <code>isSingular(model)</code> function - if it returns <code>TRUE</code> then it indicates our model might be overfitted.</p>
+<p>For simple random effect structures (i.e.&nbsp;a random intercept + a random slope), we can often see this issue reflected in the variance components of the random effect, when variances get estimated at (or very close to) zero, and/or when correlations get estimated at (or very close to) 1 or -1 (<a href="#fig-singular" class="quarto-xref">Figure&nbsp;2</a>). With more complex structures it is not always so easily visible, but we can do a double check for this issue using the handy <code>isSingular(model)</code> function - if it returns <code>TRUE</code> then it indicates our model might be overfitted.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-singular" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/varcorrsingular.png" width="550" height="300" class="figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: In simple random effect structures we can often easily see issues of overfitting as they are reflected in variances being estimated as 0 and/or correlations being estimated as perfect correlations of 1 or -1</figcaption>
+<div id="fig-singular" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-singular-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/varcorrsingular.png" class="quarto-figure quarto-figure-center figure-img" width="550" height="300">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-singular-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: In simple random effect structures we can often easily see issues of overfitting as they are reflected in variances being estimated as 0 and/or correlations being estimated as perfect correlations of 1 or -1
+</figcaption>
 </figure>
 </div>
 </div>
@@ -484,13 +529,17 @@ Random Effect Correlations
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The ‘random effects’ part of multilevel models includes not just variances of group-level effects, but also the correlations between different terms. The part of the output of the <code>VarCorr()</code> function that comes under “Corr” is a correlation matrix (i.e., a square symmetric matrix with the same columns as rows, and 1s on the diagonal, see <a href="#fig-varcorr">Figure&nbsp;3</a>).</p>
+<p>The ‘random effects’ part of multilevel models includes not just variances of group-level effects, but also the correlations between different terms. The part of the output of the <code>VarCorr()</code> function that comes under “Corr” is a correlation matrix (i.e., a square symmetric matrix with the same columns as rows, and 1s on the diagonal, see <a href="#fig-varcorr" class="quarto-xref">Figure&nbsp;3</a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-varcorr" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/varcorr.png" width="519" class="figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: The VarCorr() function shows the same information as in the top part of the summary() output - the variances/std.deviations of each random effect term, and the lower half of the correlation matrix of these terms (the upper half filled in here for illustration)</figcaption>
+<div id="fig-varcorr" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-varcorr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/varcorr.png" class="quarto-figure quarto-figure-center figure-img" width="519">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-varcorr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: The VarCorr() function shows the same information as in the top part of the summary() output - the variances/std.deviations of each random effect term, and the lower half of the correlation matrix of these terms (the upper half filled in here for illustration)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -509,20 +558,24 @@ Random Effect Correlations
 \right)
 \]</span></p>
 <p>In essence, this means we are estimating means, variances (or standard deviations), and covariances (or correlations). The means of random effects are by definition 0, and we have already seen plenty about the variances thus far when talking about random effects. The correlations are the estimated relationship between different terms - e.g., do groups with higher intercepts tend to have higher/lower slopes?</p>
-<p>It often helps to think about what these would be like when the correlations are perfect (i.e.&nbsp;1 or -1). In <a href="#fig-perfcor">Figure&nbsp;4</a>, we can see that in the Left hand panel, the higher a group starts, the more upwards the slope (and vice versa). In the Right hand panel the reverse is true - groups with higher intercepts have more downwards slopes. In the middle panel, where the correlation is 0, there’s no systematic pattern between where the lines start and their angle across x.</p>
-<p>We can see a visualisation of the distributions below each plot, with each point representing a group in the model. For perfect correlations, plots of group-intercepts against group-slopes will fall along a perfectly straight line. When there is no correlation these are scattered randomly, and as the estimated correlation gets stronger, the circular density in the bottom-middle plot of <a href="#fig-perfcor">Figure&nbsp;4</a> becomes more elliptical.</p>
+<p>It often helps to think about what these would be like when the correlations are perfect (i.e.&nbsp;1 or -1). In <a href="#fig-perfcor" class="quarto-xref">Figure&nbsp;4</a>, we can see that in the Left hand panel, the higher a group starts, the more upwards the slope (and vice versa). In the Right hand panel the reverse is true - groups with higher intercepts have more downwards slopes. In the middle panel, where the correlation is 0, there’s no systematic pattern between where the lines start and their angle across x.</p>
+<p>We can see a visualisation of the distributions below each plot, with each point representing a group in the model. For perfect correlations, plots of group-intercepts against group-slopes will fall along a perfectly straight line. When there is no correlation these are scattered randomly, and as the estimated correlation gets stronger, the circular density in the bottom-middle plot of <a href="#fig-perfcor" class="quarto-xref">Figure&nbsp;4</a> becomes more elliptical.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-perfcor" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="08_modelbuilding_files/figure-html/fig-perfcor-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;4: Group specific lines when intercepts and slopes are perfectly positively (Left) and negatively (Right) correlated</figcaption>
+<div id="fig-perfcor" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-perfcor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="08_modelbuilding_files/figure-html/fig-perfcor-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-perfcor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Group specific lines when intercepts and slopes are perfectly positively (Left) and negatively (Right) correlated
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>We can choose (if we so wish) to <strong>not</strong> estimate the correlations between random effects. This choice equates to fixing this correlation in our model be 0. We do this by using two vertical lines <code>||</code> instead of one. By removing correlations between random effects we are reducing the number of parameters than are being estimated - our model becomes simpler! However, it is worth noting that this decision should be thought about carefully - does it make sense to constrain a given correlation to be zero? One benefit of fitting models with correlations removed is that it can help to highlight terms which are the cause of singular fits.</p>
-<table class="table">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 36%">
 <col style="width: 36%">
@@ -656,7 +709,7 @@ optional: attempted visual explanation
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="08_modelbuilding_files/figure-html/unnamed-chunk-9-1.png" style="width:80.0%" height="200" class="figure-img"></p>
+<p><img src="08_modelbuilding_files/figure-html/unnamed-chunk-9-1.png" class="quarto-figure quarto-figure-center figure-img" style="width:80.0%" height="200"></p>
 </figure>
 </div>
 </div>
@@ -666,7 +719,7 @@ optional: attempted visual explanation
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="08_modelbuilding_files/figure-html/unnamed-chunk-10-1.png" style="width:80.0%" height="200" class="figure-img"></p>
+<p><img src="08_modelbuilding_files/figure-html/unnamed-chunk-10-1.png" class="quarto-figure quarto-figure-center figure-img" style="width:80.0%" height="200"></p>
 </figure>
 </div>
 </div>
@@ -709,11 +762,11 @@ optional: PCA on the random effect variance-covariance matrix
 <pre><code>$g
 Importance of components:
                         [,1]   [,2]   [,3]    [,4]      [,5]      [,6]
-Standard deviation     1.001 0.6168 0.4345 0.17121 0.0001071 1.716e-05
-Proportion of Variance 0.626 0.2377 0.1180 0.01832 0.0000000 0.000e+00
-Cumulative Proportion  0.626 0.8637 0.9817 1.00000 1.0000000 1.000e+00
+Standard deviation     1.001 0.6167 0.4345 0.17128 8.903e-05 1.889e-05
+Proportion of Variance 0.626 0.2377 0.1180 0.01833 0.000e+00 0.000e+00
+Cumulative Proportion  0.626 0.8637 0.9817 1.00000 1.000e+00 1.000e+00
                             [,7] [,8]
-Standard deviation     2.627e-06    0
+Standard deviation     1.129e-06    0
 Proportion of Variance 0.000e+00    0
 Cumulative Proportion  1.000e+00    1</code></pre>
 </div>
@@ -725,7 +778,7 @@ Cumulative Proportion  1.000e+00    1</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code> Groups   Name        Std.Dev.  
  g        (Intercept) 1.78468090
- g.1      x1          1.09999696
+ g.1      x1          1.09999695
  g.2      x2          0.97991858
  g.3      x3          0.00000000
  g.4      x1:x2       0.00000000
@@ -813,7 +866,8 @@ It stops when adding in terms results in non-convergence:</p>
 
 <ol>
 <li id="fn1"><p>this doesn’t mean simply including <em>every</em> predictor in the fixed effects also in the random effects part. ‘possible’ refers to ‘possible given the study design’<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>instead of maximising the likelihood, more often (for practical reasons) our algorithms try to minimise <span class="math inline">\(-2 \times\)</span> the log-likelihood<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>the order doesn’t matter with the colon, so <code>(1 | higher_grouping ) + (1 |  higher_grouping:lower_grouping)</code> is just the same<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>instead of maximising the likelihood, more often (for practical reasons) our algorithms try to minimise <span class="math inline">\(-2 \times\)</span> the log-likelihood<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -851,18 +905,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -894,11 +937,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -908,8 +990,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -921,7 +1012,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -965,6 +1179,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -990,6 +1205,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1055,12 +1296,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</div>
+    <div class="nav-footer-center">
+<p>© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

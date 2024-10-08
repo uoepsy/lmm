@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LMM/MLM - 6: Polynomial Growth in MLM</title>
+<title>6: Polynomial Growth in MLM – LMM/MLM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,8 +94,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script>
@@ -111,8 +119,35 @@ if(f.classList.contains('jk-circle-right')) {
 <link href="site_libs/panelset-0.3.0/panelset.css" rel="stylesheet">
 <script src="site_libs/panelset-0.3.0/panelset.js"></script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -122,12 +157,12 @@ if(f.classList.contains('jk-circle-right')) {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./06_poly.html">6: Polynomial Growth in MLM</a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./06_poly.html">6: Polynomial Growth in MLM</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -137,7 +172,7 @@ if(f.classList.contains('jk-circle-right')) {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">LMM/MLM</a> 
@@ -218,9 +253,9 @@ if(f.classList.contains('jk-circle-right')) {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Additional Docs</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -248,7 +283,7 @@ if(f.classList.contains('jk-circle-right')) {
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -284,7 +319,9 @@ if(f.classList.contains('jk-circle-right')) {
   </div>
   
 
+
 </header>
+
 
 <div class="lo">
 <p>This reading:</p>
@@ -299,17 +336,21 @@ if(f.classList.contains('jk-circle-right')) {
 <section id="linear-vs-non-linear" class="level1">
 <h1>Linear vs Non-Linear</h1>
 <p>Forget about multilevel models for a little while, as we can think about this in the single level world.</p>
-<p>Suppose we had collected the data on 74 children, and measured the number of pathways in their brains (“synaptic density”), see <a href="#fig-dfeg">Figure&nbsp;1</a>. We wanted to fit a model to predict synaptic density based on the values of age.</p>
+<p>Suppose we had collected the data on 74 children, and measured the number of pathways in their brains (“synaptic density”), see <a href="#fig-dfeg" class="quarto-xref">Figure&nbsp;1</a>. We wanted to fit a model to predict synaptic density based on the values of age.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>syndat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://uoepsy.github.io/data/msmr_synapticdens.csv"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(syndat, <span class="fu">aes</span>(<span class="at">x=</span>age,<span class="at">y=</span>syndens))<span class="sc">+</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>)<span class="sc">+</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Age (years)"</span>,<span class="at">y=</span><span class="st">"Synaptic Density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="fig-dfeg" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="06_poly_files/figure-html/fig-dfeg-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: A clearly non-linear pattern</figcaption>
+<div id="fig-dfeg" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dfeg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_poly_files/figure-html/fig-dfeg-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dfeg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: A clearly non-linear pattern
+</figcaption>
 </figure>
 </div>
 </div>
@@ -326,14 +367,18 @@ if(f.classList.contains('jk-circle-right')) {
 </li>
 <li>The estimated coefficient of x: <span class="math inline">\(b_1\)</span> = 0.3, t(72)=8.17, p &lt; .001</li>
 </ul>
-<p>Job done? Clearly not - we need only overlay model upon raw data (<a href="#fig-dfeg2">Figure&nbsp;2</a>) to see we are missing some key parts of the pattern.</p>
+<p>Job done? Clearly not - we need only overlay model upon raw data (<a href="#fig-dfeg2" class="quarto-xref">Figure&nbsp;2</a>) to see we are missing some key parts of the pattern.</p>
 </div><div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-dfeg2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="06_poly_files/figure-html/fig-dfeg2-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Uh-oh…</figcaption>
+<div id="fig-dfeg2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dfeg2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_poly_files/figure-html/fig-dfeg2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dfeg2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Uh-oh…
+</figcaption>
 </figure>
 </div>
 </div>
@@ -358,7 +403,7 @@ We can see this in our residuals!!
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -370,13 +415,17 @@ We can see this in our residuals!!
 </section>
 <section id="what-is-a-polynomial" class="level1">
 <h1>What is a polynomial?</h1>
-<p>For many purposes, extending the linear model to include higher-order terms can allow us to usefully summarise a non-linear relationships between two variables. For instance, fitting models with linear and quadratic terms (<span class="math inline">\(y\)</span> = <span class="math inline">\(b_0 + b_1 \cdot x \ + b_2 \cdot x^2 + \varepsilon\)</span>) and extending these to cubic (<span class="math inline">\(y\)</span> = <span class="math inline">\(b_0 + b_1 \cdot x \ + b_2 \cdot x^2 + b_3 \cdot x^3 + \varepsilon\)</span>) (or beyond), may aid in modelling nonlinear patterns, as in <a href="#fig-dfeg3">Figure&nbsp;3</a></p>
+<p>For many purposes, extending the linear model to include higher-order terms can allow us to usefully summarise a non-linear relationships between two variables. For instance, fitting models with linear and quadratic terms (<span class="math inline">\(y\)</span> = <span class="math inline">\(b_0 + b_1 \cdot x \ + b_2 \cdot x^2 + \varepsilon\)</span>) and extending these to cubic (<span class="math inline">\(y\)</span> = <span class="math inline">\(b_0 + b_1 \cdot x \ + b_2 \cdot x^2 + b_3 \cdot x^3 + \varepsilon\)</span>) (or beyond), may aid in modelling nonlinear patterns, as in <a href="#fig-dfeg3" class="quarto-xref">Figure&nbsp;3</a></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-dfeg3" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="06_poly_files/figure-html/fig-dfeg3-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Linear, quadratic and cubic models fitted to the same dataset.</figcaption>
+<div id="fig-dfeg3" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dfeg3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_poly_files/figure-html/fig-dfeg3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dfeg3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Linear, quadratic and cubic models fitted to the same dataset.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -404,7 +453,7 @@ How does a polynomial term capture non-linearity?
 <div class="callout-body-container callout-body">
 <p>Suppose we have the model <span class="math inline">\(y = b_0 + b_1 \cdot x + \varepsilon\)</span>. Let’s take a sequence of values for <span class="math inline">\(x\)</span>, and write out the model equation for the predicted values <span class="math inline">\(\hat y\)</span> from this model.</p>
 <p>We can see that for each row, the predicted value increases by <span class="math inline">\(b_1\)</span>. In the column with example coefficients, each row increases by 1.</p>
-<table class="table">
+<table class="caption-top table">
 <thead>
 <tr class="header">
 <th>x</th>
@@ -442,7 +491,7 @@ How does a polynomial term capture non-linearity?
 </table>
 <p>Now let’s do the same for the model with the quadratic term in, <span class="math inline">\(y = b_0 + b_1 \cdot x + b_2 \cdot x^2 + \varepsilon\)</span>.<br>
 We can see now that each row doesn’t increase by the same amount! The increases are 2, 4, 6 for our example coefficients.</p>
-<table class="table">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
 <col style="width: 33%">
@@ -489,7 +538,7 @@ We can see now that each row doesn’t increase by the same amount! The increase
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -500,16 +549,20 @@ We can see now that each row doesn’t increase by the same amount! The increase
 </div>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>As the order of polynomials increases, we tend to be less interested in these terms in our model. Linear change is the easiest to think about: are things going up? or down? (or neither?). Quadratic change is the next most interesting, and it may help to think of this as the “rate of change”. For instance, in <a href="#fig-quad1">Figure&nbsp;4</a>, it is the quadratic term which differs between the two groups trajectories.</p>
+<p>As the order of polynomials increases, we tend to be less interested in these terms in our model. Linear change is the easiest to think about: are things going up? or down? (or neither?). Quadratic change is the next most interesting, and it may help to think of this as the “rate of change”. For instance, in <a href="#fig-quad1" class="quarto-xref">Figure&nbsp;4</a>, it is the quadratic term which differs between the two groups trajectories.</p>
 </div><div class="column" style="width:10%;">
 
 </div><div class="column" style="width:40%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-quad1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="06_poly_files/figure-html/fig-quad1-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;4: Two lines for which the quadratic term differs</figcaption>
+<div id="fig-quad1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-quad1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_poly_files/figure-html/fig-quad1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-quad1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Two lines for which the quadratic term differs
+</figcaption>
 </figure>
 </div>
 </div>
@@ -528,13 +581,17 @@ Positive and negative coefficients for quadratic terms
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>One thing to focus on is the sign of the quadratic coefficient. When a quadratic term is positive, the curve is <span class="math inline">\(\cup\)</span> shaped, and when it is negative, the curve is <span class="math inline">\(\cap\)</span> shaped. To help illustrate, consider what each value from -10 to 10 is when squared (they’re all positive, as in the RH side of <a href="#fig-quad3">Figure&nbsp;5</a>)</p>
+<p>One thing to focus on is the sign of the quadratic coefficient. When a quadratic term is positive, the curve is <span class="math inline">\(\cup\)</span> shaped, and when it is negative, the curve is <span class="math inline">\(\cap\)</span> shaped. To help illustrate, consider what each value from -10 to 10 is when squared (they’re all positive, as in the RH side of <a href="#fig-quad3" class="quarto-xref">Figure&nbsp;5</a>)</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-quad3" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="06_poly_files/figure-html/fig-quad3-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;5: Negative quadratic term (Left) and Positive quadratic term (Right) lead to curvatures that are either U shaped (positive) or inverted-U shaped (negative)</figcaption>
+<div id="fig-quad3" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-quad3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_poly_files/figure-html/fig-quad3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-quad3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Negative quadratic term (Left) and Positive quadratic term (Right) lead to curvatures that are either U shaped (positive) or inverted-U shaped (negative)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -545,7 +602,7 @@ Positive and negative coefficients for quadratic terms
 <section id="raw-polynomials" class="level2">
 <h2 class="anchored" data-anchor-id="raw-polynomials">Raw Polynomials</h2>
 <p>There are two types of polynomial we can construct. “Raw” (or “Natural”) polynomials are the straightforward ones that you would expect (example in the table below), where the original value of <span class="math inline">\(x\)</span> is squared/cubed.</p>
-<table class="table">
+<table class="caption-top table">
 <thead>
 <tr class="header">
 <th><span class="math inline">\(x\)</span></th>
@@ -730,10 +787,14 @@ Take for instance, the 9th row below. The predicted value of y (shown in the <co
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>.lower,<span class="at">ymax=</span>.upper),<span class="at">fill=</span><span class="st">"darkorange"</span>, <span class="at">alpha=</span>.<span class="dv">2</span>)<span class="sc">+</span></span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"age"</span>) <span class="co"># our x-axis, "poly1", is just age!  </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="fig-fittedcubic" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="06_poly_files/figure-html/fig-fittedcubic-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;6: a cubic model</figcaption>
+<div id="fig-fittedcubic" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fittedcubic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_poly_files/figure-html/fig-fittedcubic-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fittedcubic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: a cubic model
+</figcaption>
 </figure>
 </div>
 </div>
@@ -750,7 +811,7 @@ poly1        3.375159   0.345570   9.767 1.06e-14 ***
 poly2       -0.331747   0.044664  -7.428 2.06e-10 ***
 poly3        0.009685   0.001614   6.001 7.79e-08 ***
 ---</code></pre>
-<p>With polynomials the interpretation is a little tricky because we have 3 coefficients that together explain the curvy line we see in <a href="#fig-fittedcubic">Figure&nbsp;6</a>, and these coefficients are all dependent upon one another.</p>
+<p>With polynomials the interpretation is a little tricky because we have 3 coefficients that together explain the curvy line we see in <a href="#fig-fittedcubic" class="quarto-xref">Figure&nbsp;6</a>, and these coefficients are all dependent upon one another.</p>
 <ul>
 <li><code>(Intercept)</code> = When all predictors are zero, i.e.&nbsp;the synaptic density at age 0.<br>
 </li>
@@ -759,14 +820,18 @@ poly3        0.009685   0.001614   6.001 7.79e-08 ***
 </li>
 <li><code>poly3</code> coefficient = Represents how the curvature is changing. It gets more abstract as the order of polynomials increase, so the easiest way to think about it is “the wiggliness”</li>
 </ul>
-<p>I’ve tried to represent what each term adds in <a href="#fig-polycoef">Figure&nbsp;7</a>. The intercept is the purple point where age is zero. The <code>poly1</code> coefficient is represented by the dashed blue line - the tangent of the curve at age zero. The <code>poly2</code> coef, rperesented by the dashed green line, is how the angle of the blue line is changing at age zero. Finally, the <code>poly3</code> coefficient tells us how much this curvature is changing (which gets us to our dashed orange line).</p>
+<p>I’ve tried to represent what each term adds in <a href="#fig-polycoef" class="quarto-xref">Figure&nbsp;7</a>. The intercept is the purple point where age is zero. The <code>poly1</code> coefficient is represented by the dashed blue line - the tangent of the curve at age zero. The <code>poly2</code> coef, rperesented by the dashed green line, is how the angle of the blue line is changing at age zero. Finally, the <code>poly3</code> coefficient tells us how much this curvature is changing (which gets us to our dashed orange line).</p>
 <p>Note that these interpretations are all dependent upon the others - e.g.&nbsp;the interpretation of <code>poly2</code> refers to how the angle of <code>poly1</code> is changing.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-polycoef" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="06_poly_files/figure-html/fig-polycoef-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;7: the instantaneous rate of change at x=0 (blue), the rate of change in the rate of change (i.e.&nbsp;curvature, green), and ‘rate of change in rate of change in rate of change’ (i.e.&nbsp;wiggliness, orange)</figcaption>
+<div id="fig-polycoef" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-polycoef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_poly_files/figure-html/fig-polycoef-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-polycoef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: the instantaneous rate of change at x=0 (blue), the rate of change in the rate of change (i.e.&nbsp;curvature, green), and ‘rate of change in rate of change in rate of change’ (i.e.&nbsp;wiggliness, orange)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -786,7 +851,7 @@ However, if we first <em>center</em> the set of numbers, so that 1,2,3,4,5 becom
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -800,7 +865,7 @@ However, if we first <em>center</em> the set of numbers, so that 1,2,3,4,5 becom
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -832,13 +897,17 @@ poly2       -14.3156     1.6365  -8.748 7.68e-13 ***
 poly3         9.8212     1.6365   6.001 7.79e-08 ***
 ---</code></pre>
 <p>The interpretation of the estimates themselves are not really very tangible anymore, because the scaling of the orthogonal polynomials has lost a clear link back to “age”.</p>
-<p>As the polynomial terms are centered on the mean of age, the intercept is the estimated synaptic density at the mean age (the purple dot in <a href="#fig-polycoeforth">Figure&nbsp;8</a>). The <code>poly1</code>, <code>poly2</code> and <code>poly3</code> coefficient represent the independent overall linear trend, centered curvature, and “wiggliness” of the relationship between synaptic density and age (as shown in the blue, green and orange lines in <a href="#fig-polycoeforth">Figure&nbsp;8</a> respectively).</p>
+<p>As the polynomial terms are centered on the mean of age, the intercept is the estimated synaptic density at the mean age (the purple dot in <a href="#fig-polycoeforth" class="quarto-xref">Figure&nbsp;8</a>). The <code>poly1</code>, <code>poly2</code> and <code>poly3</code> coefficient represent the independent overall linear trend, centered curvature, and “wiggliness” of the relationship between synaptic density and age (as shown in the blue, green and orange lines in <a href="#fig-polycoeforth" class="quarto-xref">Figure&nbsp;8</a> respectively).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-polycoeforth" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="06_poly_files/figure-html/fig-polycoeforth-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;8: the independent rate of change (blue), curvature (green) and wiggliness (orange) of the y~x relationship</figcaption>
+<div id="fig-polycoeforth" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-polycoeforth-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_poly_files/figure-html/fig-polycoeforth-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-polycoeforth-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: the independent rate of change (blue), curvature (green) and wiggliness (orange) of the y~x relationship
+</figcaption>
 </figure>
 </div>
 </div>
@@ -875,7 +944,7 @@ Model 2: syndens ~ poly(age, 3, raw = FALSE)
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -891,7 +960,7 @@ If we used orthogonal polynomials instead, we would see that the linear trend fo
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -912,11 +981,15 @@ If we used orthogonal polynomials instead, we would see that the linear trend fo
 <p>The present study is interested in examining whether the ‘middle-age slump’ happens to a similar extent for Orangutans as it does for Chimpanzees.</p>
 <p>200 apes (117 Chimps and 83 Orangutans) were included in the study. All apes were studied from early adulthood (10-12 years old for most great apes), and researchers administered the Happiness in Primates (HiP) scale to each participant every 3 years, up until the age of 40.</p>
 <p>The data are available at <a href="https://uoepsy.github.io/data/midlife_ape.csv" target="_blank">https://uoepsy.github.io/data/midlife_ape.csv</a>.</p>
-<p>The dataset has already been cleaned, and the researchers have confirmed that it includes 117 Chimps and 83 Orangutans, and every ape has complete data (i.e.&nbsp;10 rows for each ape). A data dictionary can be found in <a href="#tbl-midlifedict">Table&nbsp;1</a></p>
+<p>The dataset has already been cleaned, and the researchers have confirmed that it includes 117 Chimps and 83 Orangutans, and every ape has complete data (i.e.&nbsp;10 rows for each ape). A data dictionary can be found in <a href="#tbl-midlifedict" class="quarto-xref">Table&nbsp;1</a></p>
 <div class="cell" data-layout-align="center">
+<div id="tbl-midlifedict" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-midlifedict-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Data Dictionary: midlife_ape.csv
+</figcaption>
+<div aria-describedby="tbl-midlifedict-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="tbl-midlifedict" class="anchored">
-
 <div id="yuorywqdkd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#yuorywqdkd table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1366,30 +1439,42 @@ If we used orthogonal polynomials instead, we would see that the linear trend fo
   height: 0px !important;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;1:  <p>Data Dictionary: midlife_ape.csv</p> </caption>
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="variable">variable</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="description">description</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="variable" class="gt_row gt_left">apeID</td>
-<td headers="description" class="gt_row gt_left">Ape's Name (all names are chosen to be unique)</td></tr>
-    <tr><td headers="variable" class="gt_row gt_left">age</td>
-<td headers="description" class="gt_row gt_left">Age (in years) at assessment</td></tr>
-    <tr><td headers="variable" class="gt_row gt_left">species</td>
-<td headers="description" class="gt_row gt_left">Species (chimp v orangutan)</td></tr>
-    <tr><td headers="variable" class="gt_row gt_left">HiP</td>
-<td headers="description" class="gt_row gt_left">Happiness in Primate Scale (range 1 to 18)</td></tr>
-    <tr><td headers="variable" class="gt_row gt_left">timepoint</td>
-<td headers="description" class="gt_row gt_left">Study visit (1 to 10)</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="variable" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">variable</th>
+<th id="description" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">description</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="variable">apeID</td>
+<td class="gt_row gt_left" headers="description">Ape's Name (all names are chosen to be unique)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="variable">age</td>
+<td class="gt_row gt_left" headers="description">Age (in years) at assessment</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="variable">species</td>
+<td class="gt_row gt_left" headers="description">Species (chimp v orangutan)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="variable">HiP</td>
+<td class="gt_row gt_left" headers="description">Happiness in Primate Scale (range 1 to 18)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="variable">timepoint</td>
+<td class="gt_row gt_left" headers="description">Study visit (1 to 10)</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
+</div>
+</figure>
 </div>
 </div>
 </div>
@@ -1404,7 +1489,7 @@ If we used orthogonal polynomials instead, we would see that the linear trend fo
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -1419,7 +1504,7 @@ Here we can see some slight curvature - the chimps seem to have a notable dip in
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -1440,10 +1525,14 @@ Note
 <p>This illusion would not fool our multilevel model, however, which estimates the average of the individual lines</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-missing" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="06_poly_files/figure-html/fig-missing-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;9: hypothetical: if happier apes have missing data in mid life, the average looks non-linear, even though for each ape it is linear!</figcaption>
+<div id="fig-missing" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-missing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_poly_files/figure-html/fig-missing-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-missing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: hypothetical: if happier apes have missing data in mid life, the average looks non-linear, even though for each ape it is linear!
+</figcaption>
 </figure>
 </div>
 </div>
@@ -1497,7 +1586,7 @@ Both <code>age</code> and <code>timepoint</code> here contain the same informati
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -1522,7 +1611,6 @@ poly1:speciesorangutan   0.1104     2.3892 197.9811   0.046   0.9632
 poly2:speciesorangutan  -6.2718     2.7093 197.9991  -2.315   0.0216 *  </code></pre>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-
 <div id="migjbwdoyo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#migjbwdoyo table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1972,44 +2060,56 @@ poly2:speciesorangutan  -6.2718     2.7093 197.9991  -2.315   0.0216 *  </code><
   height: 0px !important;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="term">term</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="est">est</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="p">p</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="what it tells us">what it tells us</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="term" class="gt_row gt_left">(Intercept)</td>
-<td headers="est" class="gt_row gt_right">9.12</td>
-<td headers="p" class="gt_row gt_right">***</td>
-<td headers="what it tells us" class="gt_row gt_left">the average happiness at the average age is 9.11 (not hugely interesting).</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">poly1</td>
-<td headers="est" class="gt_row gt_right">1.88</td>
-<td headers="p" class="gt_row gt_right"></td>
-<td headers="what it tells us" class="gt_row gt_left">there is no significant linear trend of happiness over time for Chimpanzees (you can kind of see this in our plot above - they more or less end where they started)</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">poly2</td>
-<td headers="est" class="gt_row gt_right">9.40</td>
-<td headers="p" class="gt_row gt_right">***</td>
-<td headers="what it tells us" class="gt_row gt_left">there *is* a significant curvature to the chimpanzees' happiness trajectory. Because this estimate is positive, that means we know it is u-shaped and not n-shaped - i.e. - Chimpanzees have a mid-life slump in happiness!</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">speciesorangutan</td>
-<td headers="est" class="gt_row gt_right">0.69</td>
-<td headers="p" class="gt_row gt_right">*</td>
-<td headers="what it tells us" class="gt_row gt_left">at the average age, Orangutans are happier than Chimpanzees.</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">poly1:speciesorangutan</td>
-<td headers="est" class="gt_row gt_right">0.11</td>
-<td headers="p" class="gt_row gt_right"></td>
-<td headers="what it tells us" class="gt_row gt_left">the linear trend for Orangutans is not significantly different from the linear trend for Chimpanzees</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">poly2:speciesorangutan</td>
-<td headers="est" class="gt_row gt_right">-6.27</td>
-<td headers="p" class="gt_row gt_right">*</td>
-<td headers="what it tells us" class="gt_row gt_left">the curvature for Orangutans is significantly different from the curvature for Chimpanzees. Because the estimate is negative, that means it is less u-shaped than the Chimpanzee line - i.e. Orangutans do not have as much of a mid-life slump as Chimps do!</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">term</th>
+<th id="est" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">est</th>
+<th id="p" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">p</th>
+<th id="what it tells us" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">what it tells us</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">(Intercept)</td>
+<td class="gt_row gt_right" headers="est">9.12</td>
+<td class="gt_row gt_right" headers="p">***</td>
+<td class="gt_row gt_left" headers="what it tells us">the average happiness at the average age is 9.11 (not hugely interesting).</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="term">poly1</td>
+<td class="gt_row gt_right" headers="est">1.88</td>
+<td class="gt_row gt_right" headers="p"></td>
+<td class="gt_row gt_left" headers="what it tells us">there is no significant linear trend of happiness over time for Chimpanzees (you can kind of see this in our plot above - they more or less end where they started)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">poly2</td>
+<td class="gt_row gt_right" headers="est">9.40</td>
+<td class="gt_row gt_right" headers="p">***</td>
+<td class="gt_row gt_left" headers="what it tells us">there *is* a significant curvature to the chimpanzees' happiness trajectory. Because this estimate is positive, that means we know it is u-shaped and not n-shaped - i.e. - Chimpanzees have a mid-life slump in happiness!</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="term">speciesorangutan</td>
+<td class="gt_row gt_right" headers="est">0.69</td>
+<td class="gt_row gt_right" headers="p">*</td>
+<td class="gt_row gt_left" headers="what it tells us">at the average age, Orangutans are happier than Chimpanzees.</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">poly1:speciesorangutan</td>
+<td class="gt_row gt_right" headers="est">0.11</td>
+<td class="gt_row gt_right" headers="p"></td>
+<td class="gt_row gt_left" headers="what it tells us">the linear trend for Orangutans is not significantly different from the linear trend for Chimpanzees</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="term">poly2:speciesorangutan</td>
+<td class="gt_row gt_right" headers="est">-6.27</td>
+<td class="gt_row gt_right" headers="p">*</td>
+<td class="gt_row gt_left" headers="what it tells us">the curvature for Orangutans is significantly different from the curvature for Chimpanzees. Because the estimate is negative, that means it is less u-shaped than the Chimpanzee line - i.e. Orangutans do not have as much of a mid-life slump as Chimps do!</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
 </div>
@@ -2048,7 +2148,7 @@ TIMTOWTDI
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="350"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="350"></p>
 </figure>
 </div>
 </div>
@@ -2058,7 +2158,7 @@ TIMTOWTDI
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" width="350"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="350"></p>
 </figure>
 </div>
 </div>
@@ -2069,7 +2169,7 @@ TIMTOWTDI
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="06_poly_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid figure-img" width="350"></p>
+<p><img src="06_poly_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="350"></p>
 </figure>
 </div>
 </div>
@@ -2117,18 +2217,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -2160,11 +2249,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2174,8 +2302,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2187,7 +2324,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2231,6 +2491,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2256,6 +2517,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -2321,12 +2608,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</div>
+    <div class="nav-footer-center">
+<p>© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

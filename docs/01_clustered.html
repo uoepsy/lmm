@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LMM/MLM - 1: Group-Structured Data</title>
+<title>1: Group-Structured Data – LMM/MLM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,8 +94,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script>
@@ -111,8 +119,35 @@ if(f.classList.contains('jk-circle-right')) {
 <link href="site_libs/panelset-0.3.0/panelset.css" rel="stylesheet">
 <script src="site_libs/panelset-0.3.0/panelset.js"></script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -122,12 +157,12 @@ if(f.classList.contains('jk-circle-right')) {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_clustered.html">1: Group-Structured Data</a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_clustered.html">1: Group-Structured Data</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -137,7 +172,7 @@ if(f.classList.contains('jk-circle-right')) {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">LMM/MLM</a> 
@@ -218,9 +253,9 @@ if(f.classList.contains('jk-circle-right')) {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Additional Docs</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -248,7 +283,7 @@ if(f.classList.contains('jk-circle-right')) {
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -289,7 +324,9 @@ if(f.classList.contains('jk-circle-right')) {
   </div>
   
 
+
 </header>
+
 
 <div class="lo">
 <p>This reading:</p>
@@ -352,25 +389,33 @@ optional: a general notation
 \color{red}{\text{observed }y} &amp;= \color{blue}{\text{fitted }\hat y} \,\, \color{black}{+ \text{ residual }\hat \varepsilon}\\
 \end{align}
 \]</span></p>
-<p>We are theorising that our model contains all the systematic relationships with our outcome variable, we assume that the residuals - the leftovers - are essentially random noise. This is the <span class="math inline">\(\epsilon \sim N(0, \sigma)\)</span> bit, which is a way of specifying our assumption that the errors are normally distributed with a mean of zero (see <a href="#fig-slr2">Figure&nbsp;1</a>).</p>
+<p>We are theorising that our model contains all the systematic relationships with our outcome variable, we assume that the residuals - the leftovers - are essentially random noise. This is the <span class="math inline">\(\epsilon \sim N(0, \sigma)\)</span> bit, which is a way of specifying our assumption that the errors are normally distributed with a mean of zero (see <a href="#fig-slr2" class="quarto-xref">Figure&nbsp;1</a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-slr2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="01_clustered_files/figure-html/fig-slr2-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Simple linear regression model, with the systematic part of the model in blue, and residuals in red. The distributional assumption placed on the residuals is visualised by the orange normal curves - the residuals are normally distributed with a mean of zero, and this does not change across the fitted model.</figcaption>
+<div id="fig-slr2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-slr2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01_clustered_files/figure-html/fig-slr2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-slr2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Simple linear regression model, with the systematic part of the model in blue, and residuals in red. The distributional assumption placed on the residuals is visualised by the orange normal curves - the residuals are normally distributed with a mean of zero, and this does not change across the fitted model.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>We typically want to check our model residuals (by plotting or performing statistical tests) to determine if we have reason to believe our assumptions are violated. The easiest way to do this in R is with <code>plot(model)</code>, which provides us with a series of visuals to examine for unusual patterns and conspicuous observations.</p>
-<p>When model assumptions appear problematic, then our inferential tools go out the window. While our specific point estimates for our regression coefficients are our best linear estimates for the sample that we have, our standard errors rely on the distributional assumptions of the residuals<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. It is our standard errors that allow us to construct test statistics and compute p-values (<a href="#fig-inf1">Figure&nbsp;2</a>) and construct confidence intervals. Our assumptions underpin our ability to generalise from our specific sample to make statements about the broader population.</p>
+<p>When model assumptions appear problematic, then our inferential tools go out the window. While our specific point estimates for our regression coefficients are our best linear estimates for the sample that we have, our standard errors rely on the distributional assumptions of the residuals<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. It is our standard errors that allow us to construct test statistics and compute p-values (<a href="#fig-inf1" class="quarto-xref">Figure&nbsp;2</a>) and construct confidence intervals. Our assumptions underpin our ability to generalise from our specific sample to make statements about the broader population.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-inf1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/sum4.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: inference for regression coefficients</figcaption>
+<div id="fig-inf1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-inf1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/sum4.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inf1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: inference for regression coefficients
+</figcaption>
 </figure>
 </div>
 </div>
@@ -387,25 +432,33 @@ Refresher: Standard Error
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Taking <strong>samples</strong> from a <strong>population</strong> involves an element of <em>randomness</em>. The mean height of 10 randomly chosen Scottish people will not be exactly equal to the mean height of the entire Scottish population. Take another sample of 10, and we get <em>another</em> mean height (<a href="#fig-se">Figure&nbsp;3</a>).</p>
+<p>Taking <strong>samples</strong> from a <strong>population</strong> involves an element of <em>randomness</em>. The mean height of 10 randomly chosen Scottish people will not be exactly equal to the mean height of the entire Scottish population. Take another sample of 10, and we get <em>another</em> mean height (<a href="#fig-se" class="quarto-xref">Figure&nbsp;3</a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-se" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="01_clustered_files/figure-html/fig-se-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Estimates from random samples vary randomly around the population parameter</figcaption>
+<div id="fig-se" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-se-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01_clustered_files/figure-html/fig-se-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-se-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Estimates from random samples vary randomly around the population parameter
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The standard error of a statistic is the standard deviation of all the statistics we <em>might have</em> computed from samples of that size (<a href="#fig-se2">Figure&nbsp;4</a>). We can calculate a standard error using formulae (e.g.&nbsp;for a mean, the standard error is <span class="math inline">\(\frac{\sigma}{\sqrt{n}}\)</span>) but we can also use more computationally intensive approaches such as “bootstrapping” to actually generate an empirical sampling distribution of statistics which we can then summarise.</p>
+<p>The standard error of a statistic is the standard deviation of all the statistics we <em>might have</em> computed from samples of that size (<a href="#fig-se2" class="quarto-xref">Figure&nbsp;4</a>). We can calculate a standard error using formulae (e.g.&nbsp;for a mean, the standard error is <span class="math inline">\(\frac{\sigma}{\sqrt{n}}\)</span>) but we can also use more computationally intensive approaches such as “bootstrapping” to actually generate an empirical sampling distribution of statistics which we can then summarise.</p>
 <p>We use the standard error to quantify the uncertainty around our sample statistic as an estimate of the population parameter, or to construct standardised test statistics in order to perform tests against some null hypothesis.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-se2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="01_clustered_files/figure-html/fig-se2-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;4: The standard error is the standard deviation of the ‘sampling distribution’ - the distribution of sample statistics that we <em>could</em> see.</figcaption>
+<div id="fig-se2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-se2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01_clustered_files/figure-html/fig-se2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-se2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: The standard error is the standard deviation of the ‘sampling distribution’ - the distribution of sample statistics that we <em>could</em> see.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -427,24 +480,32 @@ Refresher: Standard Error
 <section id="group-structured-data" class="level1">
 <h1>Group-Structured Data</h1>
 <p>A common example to start thinking about clustered data is to think about conducting a study on school children. Each observation in our sample is a different child, and they come from a set of various schools (i.e.&nbsp;we might get 20 children from Dunfermline High School, 15 from Farr High School, and so on). If we ignore the clustering of children into their respective schools, we can end up reaching completely different conclusions.</p>
-<p>This can be seen in <a href="#fig-egschool">Figure&nbsp;5</a> - in which each datapoint is a single child. If we consider them to be independent of one another (Left-Hand plot), then we might think there is a strong positive relationship between <code>grade</code> and <code>motivation</code>. Once we colour them by which school they belong to, we can see that the observations in the top right of the plots are all high for some other reason - because they come from the green school.</p>
+<p>This can be seen in <a href="#fig-egschool" class="quarto-xref">Figure&nbsp;5</a> - in which each datapoint is a single child. If we consider them to be independent of one another (Left-Hand plot), then we might think there is a strong positive relationship between <code>grade</code> and <code>motivation</code>. Once we colour them by which school they belong to, we can see that the observations in the top right of the plots are all high for some other reason - because they come from the green school.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-egschool" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="01_clustered_files/figure-html/fig-egschool-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;5: Observations (children) are clustered (into schools), and their outcome (grades) are dependent upon which cluster they are in. Ignoring the clustering may lead to erroneous conclusions</figcaption>
+<div id="fig-egschool" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-egschool-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01_clustered_files/figure-html/fig-egschool-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-egschool-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Observations (children) are clustered (into schools), and their outcome (grades) are dependent upon which cluster they are in. Ignoring the clustering may lead to erroneous conclusions
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Put another way - the children are <em>not</em> independent from one another, because they tend to be more similar to other children in the same school than they are to children from a different school. Our assumption of the normal linear model that <span class="math inline">\(\varepsilon \sim N(0,\sigma)\)</span> <span class="math inline">\(\text{ independently}\)</span> is violated, because groups of residuals <em>are</em> related to one another - e.g.&nbsp;all the children from the green school have positive residuals (see residuals vs fitted plot in <a href="#fig-egschool2">Figure&nbsp;6</a>).</p>
+<p>Put another way - the children are <em>not</em> independent from one another, because they tend to be more similar to other children in the same school than they are to children from a different school. Our assumption of the normal linear model that <span class="math inline">\(\varepsilon \sim N(0,\sigma)\)</span> <span class="math inline">\(\text{ independently}\)</span> is violated, because groups of residuals <em>are</em> related to one another - e.g.&nbsp;all the children from the green school have positive residuals (see residuals vs fitted plot in <a href="#fig-egschool2" class="quarto-xref">Figure&nbsp;6</a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-egschool2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="01_clustered_files/figure-html/fig-egschool2-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;6: Residuals vs Fitted plot from the linear model that ignores the school/children structure of the data</figcaption>
+<div id="fig-egschool2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-egschool2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01_clustered_files/figure-html/fig-egschool2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-egschool2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Residuals vs Fitted plot from the linear model that ignores the school/children structure of the data
+</figcaption>
 </figure>
 </div>
 </div>
@@ -497,12 +558,16 @@ SE(b_p) = \sqrt{  \frac{MSE}{Var(x_p) \cdot (1-R^2_{x_p|x1,...}) }}
 <section id="clusters-clusters-everywhere" class="level2">
 <h2 class="anchored" data-anchor-id="clusters-clusters-everywhere">Clusters clusters everywhere</h2>
 <p>The idea of observing “children in schools” is just one such example of clustering that we might come across. This same <em>hierarchical data structure</em> can be found in other settings, such as patients within medical practices, employees within departments, people within towns etc. These sort of groups are higher level observations that we might sample (i.e.&nbsp;I randomly sample 20 schools, and then from each school randomly sample 30 children). However, there are also lots of cases where clustered data might arise as the result of our study design. For instance, in a <strong>Repeated Measures</strong> study we have individual experimental trials clustered within participants. <strong>Longitudinal</strong> studies exhibit the same data structure but have <em>time-ordered</em> observations clustered within people.</p>
-<p>In addition, we can extend this logic to think about having clusters of clusters, and clusters of cluster of clusters<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. <a href="#tbl-design">Table&nbsp;1</a> shows just a few examples of different levels of clustering that may arise from different types of study.</p>
+<p>In addition, we can extend this logic to think about having clusters of clusters, and clusters of cluster of clusters<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. <a href="#tbl-design" class="quarto-xref">Table&nbsp;1</a> shows just a few examples of different levels of clustering that may arise from different types of study.</p>
 <!-- Cross sectional studies are snapshots of a structure (and that structure may contain clusters); Repeated measures studies involve assessing the same person^[it doesn't have to be people, but in psychology it usually is!] multiple times across different experimental conditions/items (resulting in clusters of observation for each person);  Longitudinal studies also result in clusters of observations for each person, but there is a temporal sequence to these observations (e.g. at various ages).   -->
 <div class="cell" data-layout-align="center">
+<div id="tbl-design" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-design-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Various different study designs will give rise to clustered data.
+</figcaption>
+<div aria-describedby="tbl-design-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="tbl-design" class="anchored">
-
 <div id="ccbwyvqpvo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ccbwyvqpvo table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -952,42 +1017,54 @@ SE(b_p) = \sqrt{  \frac{MSE}{Var(x_p) \cdot (1-R^2_{x_p|x1,...}) }}
   height: 0px !important;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;1:  <p>Various different study designs will give rise to clustered data.</p> </caption>
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=" "> </th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Cross Sectional">Cross Sectional</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Repeated Measures">Repeated Measures</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Longitudinal">Longitudinal</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers=" " class="gt_row gt_left">Level n</td>
-<td headers="Cross Sectional" class="gt_row gt_left">...</td>
-<td headers="Repeated Measures" class="gt_row gt_left">...</td>
-<td headers="Longitudinal" class="gt_row gt_left">...</td></tr>
-    <tr><td headers=" " class="gt_row gt_left">...</td>
-<td headers="Cross Sectional" class="gt_row gt_left">...</td>
-<td headers="Repeated Measures" class="gt_row gt_left">...</td>
-<td headers="Longitudinal" class="gt_row gt_left">...</td></tr>
-    <tr><td headers=" " class="gt_row gt_left">Level 3</td>
-<td headers="Cross Sectional" class="gt_row gt_left">School</td>
-<td headers="Repeated Measures" class="gt_row gt_left">...</td>
-<td headers="Longitudinal" class="gt_row gt_left">Families</td></tr>
-    <tr><td headers=" " class="gt_row gt_left">Level 2</td>
-<td headers="Cross Sectional" class="gt_row gt_left">Classroom</td>
-<td headers="Repeated Measures" class="gt_row gt_left">Participants</td>
-<td headers="Longitudinal" class="gt_row gt_left">People</td></tr>
-    <tr><td headers=" " class="gt_row gt_left">Level 1 (Observations)</td>
-<td headers="Cross Sectional" class="gt_row gt_left">Children</td>
-<td headers="Repeated Measures" class="gt_row gt_left">Experimental Stimuli</td>
-<td headers="Longitudinal" class="gt_row gt_left">Time</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id=" " class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="Cross Sectional" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Cross Sectional</th>
+<th id="Repeated Measures" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Repeated Measures</th>
+<th id="Longitudinal" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Longitudinal</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers=" ">Level n</td>
+<td class="gt_row gt_left" headers="Cross Sectional">...</td>
+<td class="gt_row gt_left" headers="Repeated Measures">...</td>
+<td class="gt_row gt_left" headers="Longitudinal">...</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers=" ">...</td>
+<td class="gt_row gt_left" headers="Cross Sectional">...</td>
+<td class="gt_row gt_left" headers="Repeated Measures">...</td>
+<td class="gt_row gt_left" headers="Longitudinal">...</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers=" ">Level 3</td>
+<td class="gt_row gt_left" headers="Cross Sectional">School</td>
+<td class="gt_row gt_left" headers="Repeated Measures">...</td>
+<td class="gt_row gt_left" headers="Longitudinal">Families</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers=" ">Level 2</td>
+<td class="gt_row gt_left" headers="Cross Sectional">Classroom</td>
+<td class="gt_row gt_left" headers="Repeated Measures">Participants</td>
+<td class="gt_row gt_left" headers="Longitudinal">People</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers=" ">Level 1 (Observations)</td>
+<td class="gt_row gt_left" headers="Cross Sectional">Children</td>
+<td class="gt_row gt_left" headers="Repeated Measures">Experimental Stimuli</td>
+<td class="gt_row gt_left" headers="Longitudinal">Time</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
+</div>
+</figure>
 </div>
 </div>
 <p>The common thread throughout all these designs is the hierarchy. At the lowest level of our hierarchy is the individual observed thing. For some designs, individual people might be the lowest observation level, for others, people might be the clusters (i.e.&nbsp;we have multiple data points per person).</p>
@@ -1004,14 +1081,18 @@ SE(b_p) = \sqrt{  \frac{MSE}{Var(x_p) \cdot (1-R^2_{x_p|x1,...}) }}
 <li>Often the specific group-differences are not of interest.</li>
 </ul>
 </div>
-<p>Contrast the idea of ‘clusters’ with how we think about other sorts of groupings. In a study that looks at “how does heart rate differ between people taking placebo vs aspirin vs beta-blockers?” (<a href="#fig-clgroup">Figure&nbsp;7</a> LH plot), we can group participants into which drug they have received. But these groupings are the very groups of interest to us, and we are interested in comparing placebo with aspirin with beta-blockers. If we were to run the study again, we’ll use the same drugs (they’re not just a random sample of drugs - the x-axis of our LH plot in <a href="#fig-clgroup">Figure&nbsp;7</a> will be the same).</p>
-<p>If we are interested in “what is the average grade at GCSE?”, and we have children grouped into different schools (<a href="#fig-clgroup">Figure&nbsp;7</a> RH plot), we are probably not interested in all the specific differences between grades in Broughton High School vs Gryffe High School etc. If we were to run our study again, we don’t collect data from the same set of schools. We can view these schools as ‘clusters’ - they are another source of random variation (i.e.&nbsp;not systematic variation such as the effect of a drug, but variation we see just because schools are different from one another).</p>
+<p>Contrast the idea of ‘clusters’ with how we think about other sorts of groupings. In a study that looks at “how does heart rate differ between people taking placebo vs aspirin vs beta-blockers?” (<a href="#fig-clgroup" class="quarto-xref">Figure&nbsp;7</a> LH plot), we can group participants into which drug they have received. But these groupings are the very groups of interest to us, and we are interested in comparing placebo with aspirin with beta-blockers. If we were to run the study again, we’ll use the same drugs (they’re not just a random sample of drugs - the x-axis of our LH plot in <a href="#fig-clgroup" class="quarto-xref">Figure&nbsp;7</a> will be the same).</p>
+<p>If we are interested in “what is the average grade at GCSE?”, and we have children grouped into different schools (<a href="#fig-clgroup" class="quarto-xref">Figure&nbsp;7</a> RH plot), we are probably not interested in all the specific differences between grades in Broughton High School vs Gryffe High School etc. If we were to run our study again, we don’t collect data from the same set of schools. We can view these schools as ‘clusters’ - they are another source of random variation (i.e.&nbsp;not systematic variation such as the effect of a drug, but variation we see just because schools are different from one another).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-clgroup" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="01_clustered_files/figure-html/fig-clgroup-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;7: Groupings of observations may be of specific interest - e.g.&nbsp;comparing two different drugs - or may be a groupings that we have no specific interest in (e.g.&nbsp;school A is just a random school)</figcaption>
+<div id="fig-clgroup" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-clgroup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01_clustered_files/figure-html/fig-clgroup-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-clgroup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Groupings of observations may be of specific interest - e.g.&nbsp;comparing two different drugs - or may be a groupings that we have no specific interest in (e.g.&nbsp;school A is just a random school)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -1049,20 +1130,28 @@ optional: “Panel data”
 <p>In some fields (e.g.&nbsp;economics), clustering sometimes gets referred to as ‘panel data’. This can be a nice intuitive way of thinking about it, because we think of a plot of our data being split into different panels for each cluster:</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-panel1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/panel1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;8: Panels of data</figcaption>
+<div id="fig-panel1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-panel1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/panel1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-panel1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Panels of data
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-panel2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/panel2.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;9: Panels of panels of data</figcaption>
+<div id="fig-panel2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-panel2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/panel2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-panel2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: Panels of panels of data
+</figcaption>
 </figure>
 </div>
 </div>
@@ -1083,9 +1172,13 @@ optional: “Panel data”
 All children completed an ‘education motivation’ questionnaire, and their end-of-year grade average has been recorded.</p>
 <p>It is available at <a href="https://uoepsy.github.io/data/schoolmot.csv">https://uoepsy.github.io/data/schoolmot.csv</a>.</p>
 <div class="cell" data-layout-align="center">
+<div id="tbl-schoolmotdict" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-schoolmotdict-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: SchoolMot Data Dictionary. Children are clustered in Schools, with this group-identifier visible in the schoolid column
+</figcaption>
+<div aria-describedby="tbl-schoolmotdict-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="tbl-schoolmotdict" class="anchored">
-
 <div id="khuwsegytk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#khuwsegytk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1535,29 +1628,38 @@ All children completed an ‘education motivation’ questionnaire, and their en
   height: 0px !important;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;2:  <p>SchoolMot Data Dictionary. Children are clustered in Schools, with
-this group-identifier visible in the schoolid column</p> </caption>
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="variable">variable</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="description">description</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="variable" class="gt_row gt_left">motiv</td>
-<td headers="description" class="gt_row gt_left">Child's Education Motivation Score (range 0 - 10)</td></tr>
-    <tr><td headers="variable" class="gt_row gt_left">funding</td>
-<td headers="description" class="gt_row gt_left">Funding ('state' or 'private')</td></tr>
-    <tr><td headers="variable" class="gt_row gt_left">schoolid</td>
-<td headers="description" class="gt_row gt_left">Name of School that the child attends</td></tr>
-    <tr><td headers="variable" class="gt_row gt_left">grade</td>
-<td headers="description" class="gt_row gt_left">Child's end-of-year grade average (0-100)</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="variable" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">variable</th>
+<th id="description" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">description</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="variable">motiv</td>
+<td class="gt_row gt_left" headers="description">Child's Education Motivation Score (range 0 - 10)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="variable">funding</td>
+<td class="gt_row gt_left" headers="description">Funding ('state' or 'private')</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="variable">schoolid</td>
+<td class="gt_row gt_left" headers="description">Name of School that the child attends</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="variable">grade</td>
+<td class="gt_row gt_left" headers="description">Child's end-of-year grade average (0-100)</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
+</div>
+</figure>
 </div>
 </div>
 </div>
@@ -1626,7 +1728,7 @@ For different reasons, you might sometimes want to have data in wide, or in long
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Source: https://fromthebottomoftheheap.net/2019/10/25/pivoting-tidily/</figcaption>
+<figcaption>Source: https://fromthebottomoftheheap.net/2019/10/25/pivoting-tidily/</figcaption>
 </figure>
 </div>
 </div>
@@ -1642,7 +1744,6 @@ For different reasons, you might sometimes want to have data in wide, or in long
 In the description of the <strong>SchoolMot</strong> data above we are told the relevant numbers:</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-
 <div id="hzqdamhsjd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#hzqdamhsjd table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -2092,25 +2193,29 @@ In the description of the <strong>SchoolMot</strong> data above we are told the 
   height: 0px !important;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=" "> </th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Unit">Unit</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Sample Size">Sample Size</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers=" " class="gt_row gt_left">Level 2</td>
-<td headers="Unit" class="gt_row gt_left">School</td>
-<td headers="Sample Size" class="gt_row gt_right">30</td></tr>
-    <tr><td headers=" " class="gt_row gt_left">Level 1 (Observations)</td>
-<td headers="Unit" class="gt_row gt_left">Children</td>
-<td headers="Sample Size" class="gt_row gt_right">900</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id=" " class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="Unit" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Unit</th>
+<th id="Sample Size" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Sample Size</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers=" ">Level 2</td>
+<td class="gt_row gt_left" headers="Unit">School</td>
+<td class="gt_row gt_right" headers="Sample Size">30</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers=" ">Level 1 (Observations)</td>
+<td class="gt_row gt_left" headers="Unit">Children</td>
+<td class="gt_row gt_right" headers="Sample Size">900</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
 </div>
@@ -2156,9 +2261,9 @@ ICC \; (\rho) &amp;= \frac{\sigma^2_{b}}{\sigma^2_{b} + \sigma^2_e} \\
 &amp; \sigma^2_e: \text{within-group variance} \\  
 \end{align}
 \]</span></p>
-<p>This is illustrated in the <a href="#fig-schooliccplot">Figure&nbsp;10</a> below, in which our continuous outcome variable (children’s grades) is on the y-axis, and we have the different groups (our set of 30 schools) across the x-axis. We can think of the “between-group variance” as the variance of the group means around the overall mean (the black dots around the horizontal black line), and the “within-group variance” as the variance of the individual observations around each group mean (each set of coloured points around their respective larger black dot):</p>
+<p>This is illustrated in the <a href="#fig-schooliccplot" class="quarto-xref">Figure&nbsp;10</a> below, in which our continuous outcome variable (children’s grades) is on the y-axis, and we have the different groups (our set of 30 schools) across the x-axis. We can think of the “between-group variance” as the variance of the group means around the overall mean (the black dots around the horizontal black line), and the “within-group variance” as the variance of the individual observations around each group mean (each set of coloured points around their respective larger black dot):</p>
 <div class="cell" data-layout-align="center">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(schoolmot, <span class="fu">aes</span>(<span class="at">x=</span>schoolid, <span class="at">y=</span>grade))<span class="sc">+</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">col=</span>schoolid),<span class="at">alpha=</span>.<span class="dv">3</span>)<span class="sc">+</span></span>
@@ -2169,10 +2274,14 @@ ICC \; (\rho) &amp;= \frac{\sigma^2_{b}}{\sigma^2_{b} + \sigma^2_e} \\
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">col=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="fig-schooliccplot" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="01_clustered_files/figure-html/fig-schooliccplot-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;10: Variance in grades between schools. Data from <a href="https://uoepsy.github.io/data/schoolmot.csv">https://uoepsy.github.io/data/schoolmot.csv</a></figcaption>
+<div id="fig-schooliccplot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-schooliccplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01_clustered_files/figure-html/fig-schooliccplot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-schooliccplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Variance in grades between schools. Data from <a href="https://uoepsy.github.io/data/schoolmot.csv">https://uoepsy.github.io/data/schoolmot.csv</a>
+</figcaption>
 </figure>
 </div>
 </div>
@@ -2270,13 +2379,17 @@ The 29 here is the <span class="math inline">\(k-1\)</span> in the formula above
 </div>
 </div>
 <p>Another way of thinking about the ICC is that it is the correlation between two randomly drawn observations from the same group. This is a bit of a tricky thing to get your head round if you try to relate it to the type of “correlation” that you are familiar with. Pearson’s correlation (e.g think about a typical scatterplot) operates on <em>pairs of observations</em> (a set of values on the x-axis and their corresponding values on the y-axis), whereas ICC operates on <em>data which is structured in groups</em>.</p>
-<p>We can think of it as the average correlation between all possible pairs of observations from the same group. Suppose I pick a school, and within that pick 2 children and plot their grades against each other. I randomly pick another school, and another two children from it, and add them to the plot, and then keep doing this (<a href="#fig-icccorplot">Figure&nbsp;11</a>). The ICC is the correlation between such pairs.</p>
+<p>We can think of it as the average correlation between all possible pairs of observations from the same group. Suppose I pick a school, and within that pick 2 children and plot their grades against each other. I randomly pick another school, and another two children from it, and add them to the plot, and then keep doing this (<a href="#fig-icccorplot" class="quarto-xref">Figure&nbsp;11</a>). The ICC is the correlation between such pairs.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-icccorplot" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="01_clustered_files/figure-html/fig-icccorplot-1.png" class="img-fluid figure-img" style="width:60.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;11: ICC is the correlation of randomly drawn pairs from the same group</figcaption>
+<div id="fig-icccorplot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-icccorplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01_clustered_files/figure-html/fig-icccorplot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-icccorplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: ICC is the correlation of randomly drawn pairs from the same group
+</figcaption>
 </figure>
 </div>
 </div>
@@ -2454,7 +2567,7 @@ The data aren’t paired, they’re just random draws from a <strong>group.</str
 </section>
 <section id="visualisations" class="level2">
 <h2 class="anchored" data-anchor-id="visualisations">Visualisations</h2>
-<p>When we’re visualising data that has a hierarchical structure such as this (i.e.&nbsp;observations grouped into clusters), we need to be careful to think about what exactly we want to show. For instance, as we are interested in how motivation is associated with grades, we might make a little plot of the two variables, but this could hide the association that happens <em>within</em> a given school (see e.g. <a href="#fig-egschool">Figure&nbsp;5</a> from earlier).</p>
+<p>When we’re visualising data that has a hierarchical structure such as this (i.e.&nbsp;observations grouped into clusters), we need to be careful to think about what exactly we want to show. For instance, as we are interested in how motivation is associated with grades, we might make a little plot of the two variables, but this could hide the association that happens <em>within</em> a given school (see e.g. <a href="#fig-egschool" class="quarto-xref">Figure&nbsp;5</a> from earlier).</p>
 <p>Some useful <strong>ggplot</strong> tools here are:</p>
 <ul>
 <li><code>facet_wrap()</code> - make a separate little plot for each level of a grouping variable</li>
@@ -2470,7 +2583,7 @@ The data aren’t paired, they’re just random draws from a <strong>group.</str
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="01_clustered_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="01_clustered_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -2485,7 +2598,7 @@ The data aren’t paired, they’re just random draws from a <strong>group.</str
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="01_clustered_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="01_clustered_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -2545,14 +2658,18 @@ schoolidThe Mary Erskine School         -8.5731     3.1049  -2.761 0.005881 **
 schoolidWellington School                1.9114     3.1110   0.614 0.539099    
 fundingstate                                 NA         NA      NA       NA    
 ---</code></pre>
-<p>The other, slightly more abstract issue with the no pooling approach is that we are treating the schools as if they are completely <em>independent</em> entities. This is something we might disagree with. Suppose we had another school - School X - for which we had only <em>three</em> children’s data (<a href="#fig-borrowstrength">Figure&nbsp;12</a>). Intuitively, we don’t want to trust the line for School X as much as we trust the others (where we have 30 children’s data). In the no-pooling approach, it is only those three children from School X that contribute to the School X line. Take this further, and imagine we have only one child’s data from some School Y. In the no-pooling method, the model doesn’t learn <em>anything</em> from the other schools and cannot estimate a line for School Y.</p>
+<p>The other, slightly more abstract issue with the no pooling approach is that we are treating the schools as if they are completely <em>independent</em> entities. This is something we might disagree with. Suppose we had another school - School X - for which we had only <em>three</em> children’s data (<a href="#fig-borrowstrength" class="quarto-xref">Figure&nbsp;12</a>). Intuitively, we don’t want to trust the line for School X as much as we trust the others (where we have 30 children’s data). In the no-pooling approach, it is only those three children from School X that contribute to the School X line. Take this further, and imagine we have only one child’s data from some School Y. In the no-pooling method, the model doesn’t learn <em>anything</em> from the other schools and cannot estimate a line for School Y.</p>
 <p>What would be great is if we could <em>somehow</em> use the information from the other schools to inform our estimation of what is going on in Schools X and Y, and also enable us to consider questions that exist across different levels (e.g., how do featues of schools affect things for the children in them?). This is what multi-level modelling achieves, <em>partially</em> pooling information across the groups, and this is where we’ll turn to next.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-borrowstrength" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="01_clustered_files/figure-html/fig-borrowstrength-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;12: Blue lines show the estimated fitted values from the no-pooling approach lm(grade ~ motiv * schoolid). School X’s estimate is based on just the 3 datapoints from that school, and does not take into account any of the other schools in anyway.</figcaption>
+<div id="fig-borrowstrength" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-borrowstrength-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01_clustered_files/figure-html/fig-borrowstrength-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-borrowstrength-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: Blue lines show the estimated fitted values from the no-pooling approach lm(grade ~ motiv * schoolid). School X’s estimate is based on just the 3 datapoints from that school, and does not take into account any of the other schools in anyway.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -2610,18 +2727,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -2653,11 +2759,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2667,8 +2812,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2680,7 +2834,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2724,6 +3001,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2749,6 +3027,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -2814,12 +3118,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</div>
+    <div class="nav-footer-center">
+<p>© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

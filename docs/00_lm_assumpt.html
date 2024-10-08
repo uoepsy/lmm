@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LMM/MLM - LM Troubleshooting</title>
+<title>LM Troubleshooting – LMM/MLM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,8 +94,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script>
@@ -111,8 +119,35 @@ if(f.classList.contains('jk-circle-right')) {
 <link href="site_libs/panelset-0.3.0/panelset.css" rel="stylesheet">
 <script src="site_libs/panelset-0.3.0/panelset.js"></script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -122,12 +157,12 @@ if(f.classList.contains('jk-circle-right')) {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./00_lm_assumpt.html">Additional Docs</a></li><li class="breadcrumb-item"><a href="./00_lm_assumpt.html">LM Troubleshooting</a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./00_lm_assumpt.html">Additional Docs</a></li><li class="breadcrumb-item"><a href="./00_lm_assumpt.html">LM Troubleshooting</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -137,7 +172,7 @@ if(f.classList.contains('jk-circle-right')) {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">LMM/MLM</a> 
@@ -218,9 +253,9 @@ if(f.classList.contains('jk-circle-right')) {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Additional Docs</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -248,7 +283,7 @@ if(f.classList.contains('jk-circle-right')) {
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -266,7 +301,7 @@ if(f.classList.contains('jk-circle-right')) {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./00_lm_assumpt.html">Additional Docs</a></li><li class="breadcrumb-item"><a href="./00_lm_assumpt.html">LM Troubleshooting</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">LM Troubleshooting</h1>
 </div>
@@ -281,7 +316,9 @@ if(f.classList.contains('jk-circle-right')) {
   </div>
   
 
+
 </header>
+
 
 <p>In the face of plots (or tests) that appear to show violations of the distributional assumptions of linear regression (i.e.&nbsp;our residuals appear non-normal, or variance changes across the range of the fitted model), we should always take care to ensure our model is correctly specified (interactions or other non-linear effects, if present in the data but omitted from our model, can result in assumption violations). Following this, if we continue to have problems satisfying our assumptions, there are various options that give us more flexibility. Brief introductions to some of these methods are detailed below.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -303,25 +340,33 @@ LM assumptions in brief
 \color{red}{\text{observed }y} &amp;= \color{blue}{\text{fitted }\hat y} \,\, \color{black}{+ \text{ residual }\hat \varepsilon}\\
 \end{align}
 \]</span></p>
-<p>We are theorising that our model contains all the systematic relationships with our outcome variable, we assume that the residuals - the leftovers - are essentially random noise. This is the <span class="math inline">\(\epsilon \sim N(0, \sigma)\)</span> bit, which is a way of specifying our assumption that the errors are normally distributed with a mean of zero (see <a href="#fig-slr2">Figure&nbsp;1</a>).</p>
+<p>We are theorising that our model contains all the systematic relationships with our outcome variable, we assume that the residuals - the leftovers - are essentially random noise. This is the <span class="math inline">\(\epsilon \sim N(0, \sigma)\)</span> bit, which is a way of specifying our assumption that the errors are normally distributed with a mean of zero (see <a href="#fig-slr2" class="quarto-xref">Figure&nbsp;1</a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-slr2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="00_lm_assumpt_files/figure-html/fig-slr2-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Simple linear regression model, with the systematic part of the model in blue, and residuals in red. The distributional assumption placed on the residuals is visualised by the orange normal curves - the residuals are normally distributed with a mean of zero, and this does not change across the fitted model.</figcaption>
+<div id="fig-slr2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-slr2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_lm_assumpt_files/figure-html/fig-slr2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-slr2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Simple linear regression model, with the systematic part of the model in blue, and residuals in red. The distributional assumption placed on the residuals is visualised by the orange normal curves - the residuals are normally distributed with a mean of zero, and this does not change across the fitted model.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>We typically want to check our model residuals (by plotting or performing statistical tests) to determine if we have reason to believe our assumptions are violated. The easiest way to do this in R is with <code>plot(model)</code>, which provides us with a series of visuals to examine for unusual patterns and conspicuous observations.</p>
-<p>When model assumptions appear problematic, then our inferential tools go out the window. While our specific point estimates for our regression coefficients are our best linear estimates for the sample that we have, our standard errors rely on the distributional assumptions of the residuals<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. It is our standard errors that allow us to construct test statistics and compute p-values (<a href="#fig-inf1">Figure&nbsp;2</a>) and construct confidence intervals. Our assumptions underpin our ability to generalise from our specific sample to make statements about the broader population.</p>
+<p>When model assumptions appear problematic, then our inferential tools go out the window. While our specific point estimates for our regression coefficients are our best linear estimates for the sample that we have, our standard errors rely on the distributional assumptions of the residuals<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. It is our standard errors that allow us to construct test statistics and compute p-values (<a href="#fig-inf1" class="quarto-xref">Figure&nbsp;2</a>) and construct confidence intervals. Our assumptions underpin our ability to generalise from our specific sample to make statements about the broader population.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-inf1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/sum4.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: inference for regression coefficients</figcaption>
+<div id="fig-inf1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-inf1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/sum4.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inf1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: inference for regression coefficients
+</figcaption>
 </figure>
 </div>
 </div>
@@ -338,25 +383,33 @@ Refresher: Standard Error
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Taking <strong>samples</strong> from a <strong>population</strong> involves an element of <em>randomness</em>. The mean height of 10 randomly chosen Scottish people will not be exactly equal to the mean height of the entire Scottish population. Take another sample of 10, and we get <em>another</em> mean height (<a href="#fig-se">Figure&nbsp;3</a>).</p>
+<p>Taking <strong>samples</strong> from a <strong>population</strong> involves an element of <em>randomness</em>. The mean height of 10 randomly chosen Scottish people will not be exactly equal to the mean height of the entire Scottish population. Take another sample of 10, and we get <em>another</em> mean height (<a href="#fig-se" class="quarto-xref">Figure&nbsp;3</a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-se" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="00_lm_assumpt_files/figure-html/fig-se-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Estimates from random samples vary randomly around the population parameter</figcaption>
+<div id="fig-se" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-se-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_lm_assumpt_files/figure-html/fig-se-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-se-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Estimates from random samples vary randomly around the population parameter
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The standard error of a statistic is the standard deviation of all the statistics we <em>might have</em> computed from samples of that size (<a href="#fig-se2">Figure&nbsp;4</a>). We can calculate a standard error using formulae (e.g.&nbsp;for a mean, the standard error is <span class="math inline">\(\frac{\sigma}{\sqrt{n}}\)</span>) but we can also use more computationally intensive approaches such as “bootstrapping” to actually generate an empirical sampling distribution of statistics which we can then summarise.</p>
+<p>The standard error of a statistic is the standard deviation of all the statistics we <em>might have</em> computed from samples of that size (<a href="#fig-se2" class="quarto-xref">Figure&nbsp;4</a>). We can calculate a standard error using formulae (e.g.&nbsp;for a mean, the standard error is <span class="math inline">\(\frac{\sigma}{\sqrt{n}}\)</span>) but we can also use more computationally intensive approaches such as “bootstrapping” to actually generate an empirical sampling distribution of statistics which we can then summarise.</p>
 <p>We use the standard error to quantify the uncertainty around our sample statistic as an estimate of the population parameter, or to construct standardised test statistics in order to perform tests against some null hypothesis.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-se2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="00_lm_assumpt_files/figure-html/fig-se2-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;4: The standard error is the standard deviation of the ‘sampling distribution’ - the distribution of sample statistics that we <em>could</em> see.</figcaption>
+<div id="fig-se2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-se2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_lm_assumpt_files/figure-html/fig-se2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-se2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: The standard error is the standard deviation of the ‘sampling distribution’ - the distribution of sample statistics that we <em>could</em> see.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -389,21 +442,29 @@ Measurement!
 <p>A somewhat outdated approach, transforming our outcome variable prior to fitting the model, using something such as <code>log(y)</code> or <code>sqrt(y)</code>, will sometimes allow us to estimate a model for which our assumptions are satisfied.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-trouble1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="00_lm_assumpt_files/figure-html/fig-trouble1-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;5: A model of a transformed outcome variable can sometimes avoid violations of assumptions that arise when modeling the outcome variable directly. Data from https://uoepsy.github.io/data/trouble1.csv</figcaption>
+<div id="fig-trouble1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-trouble1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_lm_assumpt_files/figure-html/fig-trouble1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trouble1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: A model of a transformed outcome variable can sometimes avoid violations of assumptions that arise when modeling the outcome variable directly. Data from https://uoepsy.github.io/data/trouble1.csv
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The major downside of this is that we are no longer modelling <span class="math inline">\(y\)</span>, but some transformation <span class="math inline">\(f(y)\)</span> (<span class="math inline">\(y\)</span> with some function <span class="math inline">\(f\)</span> applied to it). Interpretation of the coefficients changes accordingly, such that we are no longer talking in terms of changes in y, but changes in <span class="math inline">\(f(y)\)</span>. When the transformation function used is non-linear (see the Right-Hand of <a href="#fig-logtr">Figure&nbsp;6</a>) a change in <span class="math inline">\(f(y)\)</span> is <strong>not the same</strong> for every <span class="math inline">\(y\)</span>.</p>
+<p>The major downside of this is that we are no longer modelling <span class="math inline">\(y\)</span>, but some transformation <span class="math inline">\(f(y)\)</span> (<span class="math inline">\(y\)</span> with some function <span class="math inline">\(f\)</span> applied to it). Interpretation of the coefficients changes accordingly, such that we are no longer talking in terms of changes in y, but changes in <span class="math inline">\(f(y)\)</span>. When the transformation function used is non-linear (see the Right-Hand of <a href="#fig-logtr" class="quarto-xref">Figure&nbsp;6</a>) a change in <span class="math inline">\(f(y)\)</span> is <strong>not the same</strong> for every <span class="math inline">\(y\)</span>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-logtr" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="00_lm_assumpt_files/figure-html/fig-logtr-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;6: The log transformation is non-linear</figcaption>
+<div id="fig-logtr" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-logtr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_lm_assumpt_files/figure-html/fig-logtr-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-logtr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: The log transformation is non-linear
+</figcaption>
 </figure>
 </div>
 </div>
@@ -424,10 +485,14 @@ Measurement!
 <p>There are various alternative calculations of standard errors that are robust to non-constance variance (or “heteroscedasticity”). The most commonly used are the “Huber-White” standard errors<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, which are robust to heteroscedasticity and/or non-normality. Fortunately, we don’t have to do any complicated calculations ourselves, as R will do all of the hard work for us.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-trouble2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="00_lm_assumpt_files/figure-html/fig-trouble2-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;7: Residual plots showing heteroscedasticity. The residuals vs fitted plot shows fanning out of residuals, and this is reflected in the scale-location plot showing the increasing variance. Data from https://uoepsy.github.io/data/trouble2.csv</figcaption>
+<div id="fig-trouble2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-trouble2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_lm_assumpt_files/figure-html/fig-trouble2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trouble2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Residual plots showing heteroscedasticity. The residuals vs fitted plot shows fanning out of residuals, and this is reflected in the scale-location plot showing the increasing variance. Data from https://uoepsy.github.io/data/trouble2.csv
+</figcaption>
 </figure>
 </div>
 </div>
@@ -489,18 +554,22 @@ Model 2: y ~ 1 + x + x2
 <section id="weighted-least-squares-wls" class="level1">
 <h1>Weighted Least Squares (WLS)</h1>
 <p>If we have some specific belief that our non-constant variance is due to differences in the variances of the outcome between various groups, then we might be better suited to use <strong>Weighted Least Squares</strong>.</p>
-<p>As an example, imagine we are looking at weight of different dog breeds (<a href="#fig-dogweight">Figure&nbsp;8</a>). The weights of chihuahuas are all quite close together (between 2 to 5kg), but the weight of, for example, spaniels is anywhere from 8 to 25kg - a much bigger variance.</p>
+<p>As an example, imagine we are looking at weight of different dog breeds (<a href="#fig-dogweight" class="quarto-xref">Figure&nbsp;8</a>). The weights of chihuahuas are all quite close together (between 2 to 5kg), but the weight of, for example, spaniels is anywhere from 8 to 25kg - a much bigger variance.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-dogweight" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="00_lm_assumpt_files/figure-html/fig-dogweight-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;8: The weights of 49 dogs, of 7 breeds</figcaption>
+<div id="fig-dogweight" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dogweight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_lm_assumpt_files/figure-html/fig-dogweight-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dogweight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: The weights of 49 dogs, of 7 breeds
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Recall that the default way that <code>lm()</code> deals with categorical predictors such as <code>dog breed</code>, is to compare each one to a reference level. In this case, that reference level is “beagle” (first in the alphabet). Looking at <a href="#fig-dogweight">Figure&nbsp;8</a> above, which comparison do you feel more confident in?</p>
+<p>Recall that the default way that <code>lm()</code> deals with categorical predictors such as <code>dog breed</code>, is to compare each one to a reference level. In this case, that reference level is “beagle” (first in the alphabet). Looking at <a href="#fig-dogweight" class="quarto-xref">Figure&nbsp;8</a> above, which comparison do you feel more confident in?</p>
 <ul>
 <li><strong>A:</strong> Beagles (14kg) vs Pugs (9.1kg). A difference of 4.9kg.<br>
 </li>
@@ -530,7 +599,7 @@ breedlurcher             5.905      2.332   2.533   0.0151 *
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="00_lm_assumpt_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="00_lm_assumpt_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -552,8 +621,8 @@ We can, in our dog-breeds example, allocate different weights to each breed. Acc
 breedpug               -4.858097  1.271562 -3.820576  0.0004
 breedspaniel            5.051696  2.763611  1.827933  0.0747
 breedchihuahua        -10.077615  1.095964 -9.195207  0.0000
-breedboxer             20.625429  1.820370 11.330351  0.0000
-breedgolden retriever  17.922779  2.976253  6.021927  0.0000
+breedboxer             20.625429  1.820370 11.330352  0.0000
+breedgolden retriever  17.922779  2.976253  6.021926  0.0000
 breedlurcher            5.905261  1.362367  4.334559  0.0001</code></pre>
 </div>
 </div>
@@ -594,13 +663,17 @@ x2d           1.1534     0.5323   2.167   0.0327 *
 ---</code></pre>
 </div>
 </div>
-<p>However, a quick look at our residual plots (<a href="#fig-trouble3">Figure&nbsp;9</a>) give us reason to hesitate. We can see clear deviations from normality in the QQ-plot.</p>
+<p>However, a quick look at our residual plots (<a href="#fig-trouble3" class="quarto-xref">Figure&nbsp;9</a>) give us reason to hesitate. We can see clear deviations from normality in the QQ-plot.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-trouble3" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="00_lm_assumpt_files/figure-html/fig-trouble3-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;9: Residual plots showing non-normality in the residuals. The points in the QQplot <em>should</em> follow the diagonal line, but they don’t. This is also shown in plotting a histogram of the residuals (bottom right). Data from https://uoepsy.github.io/data/trouble3.csv</figcaption>
+<div id="fig-trouble3" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-trouble3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_lm_assumpt_files/figure-html/fig-trouble3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trouble3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: Residual plots showing non-normality in the residuals. The points in the QQplot <em>should</em> follow the diagonal line, but they don’t. This is also shown in plotting a histogram of the residuals (bottom right). Data from https://uoepsy.github.io/data/trouble3.csv
+</figcaption>
 </figure>
 </div>
 </div>
@@ -732,7 +805,7 @@ Cautions
 <p>Many of the standard hypothesis tests that we have seen (<span class="math inline">\(t\)</span>-tests, correlations etc) have got equivalent tests that, instead of examining change in <span class="math inline">\(y\)</span>, examine change in something like <span class="math inline">\(rank(y)\)</span><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. By analyising ranked data, we don’t have to rely on the same distributional assumptions (ranked data always follows a uniform distribution), and any outliers will have exert less influence on our results.<br>
 However, these tests tend to be less powerful (if there <em>is</em> a true effect in the population, these tests have a lower chance of detecting it), and you lose a lot of interpretability.</p>
 <p>Wilcoxon tests are a non-parametric equivalent to the various <span class="math inline">\(t\)</span>-tests, and the Kruskal-Wallis test is the non-parametric version of the one-way ANOVA.</p>
-<table class="table">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 51%">
 <col style="width: 48%">
@@ -811,18 +884,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -854,11 +916,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -868,8 +969,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -881,7 +991,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -925,6 +1158,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -950,6 +1184,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1015,12 +1275,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</div>
+    <div class="nav-footer-center">
+<p>© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

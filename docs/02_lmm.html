@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LMM/MLM - 2: The Multi-level/Mixed Effect Model</title>
+<title>2: The Multi-level/Mixed Effect Model – LMM/MLM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,8 +94,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script>
@@ -111,8 +119,35 @@ if(f.classList.contains('jk-circle-right')) {
 <link href="site_libs/panelset-0.3.0/panelset.css" rel="stylesheet">
 <script src="site_libs/panelset-0.3.0/panelset.js"></script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -122,12 +157,12 @@ if(f.classList.contains('jk-circle-right')) {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02_lmm.html">2: The Multi-level/Mixed Effect Model</a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02_lmm.html">2: The Multi-level/Mixed Effect Model</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -137,7 +172,7 @@ if(f.classList.contains('jk-circle-right')) {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">LMM/MLM</a> 
@@ -218,9 +253,9 @@ if(f.classList.contains('jk-circle-right')) {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Additional Docs</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -248,7 +283,7 @@ if(f.classList.contains('jk-circle-right')) {
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -294,7 +329,9 @@ if(f.classList.contains('jk-circle-right')) {
   </div>
   
 
+
 </header>
+
 
 <div class="lo">
 <p>This reading:</p>
@@ -316,13 +353,17 @@ different names for the same thing
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The methods we’re going to start to look at are known by lots of different names (see <a href="#fig-wordcloud">Figure&nbsp;1</a>). The core idea is that <strong>model parameters vary at more than one level.</strong>.</p>
+<p>The methods we’re going to start to look at are known by lots of different names (see <a href="#fig-wordcloud" class="quarto-xref">Figure&nbsp;1</a>). The core idea is that <strong>model parameters vary at more than one level.</strong>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-wordcloud" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="02_lmm_files/figure-html/fig-wordcloud-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: size weighted by hits on google scholar search (sept 2020)</figcaption>
+<div id="fig-wordcloud" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-wordcloud-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_lmm_files/figure-html/fig-wordcloud-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wordcloud-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: size weighted by hits on google scholar search (sept 2020)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -334,13 +375,17 @@ different names for the same thing
 <section id="fixed-effects" class="level1">
 <h1>Fixed effects</h1>
 <p>In the simple linear regression model was written as <span class="math inline">\(\color{red}{y} = \color{blue}{b_0 + b_1x_1 \ + \ ... \ + \ b_px_p} \color{black}{\ + \ \varepsilon}\)</span>, the estimated coefficients <span class="math inline">\(\color{blue}{b_0}\)</span>, <span class="math inline">\(\color{blue}{b_1}\)</span> etc., are estimated as <strong>fixed</strong> values - i.e.&nbsp;we estimate just one number for <span class="math inline">\(b_0\)</span>, and one number for <span class="math inline">\(b_1\)</span>, for <span class="math inline">\(b_2\)</span> and so on, and that’s it.</p>
-<p>In the example where we model school children’s grades as a function of their motivation score, when we fit a simple regression model of <code>lm(grade ~ motiv)</code>, the estimated parameters are two values that define a line - an intercept and a slope (as in <a href="#fig-schoolplot1">Figure&nbsp;2</a>).</p>
+<p>In the example where we model school children’s grades as a function of their motivation score, when we fit a simple regression model of <code>lm(grade ~ motiv)</code>, the estimated parameters are two values that define a line - an intercept and a slope (as in <a href="#fig-schoolplot1" class="quarto-xref">Figure&nbsp;2</a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-schoolplot1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="02_lmm_files/figure-html/fig-schoolplot1-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Grade predicted by motivation. The simple linear regression model defines the height and slope of the black line.</figcaption>
+<div id="fig-schoolplot1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-schoolplot1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_lmm_files/figure-html/fig-schoolplot1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-schoolplot1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Grade predicted by motivation. The simple linear regression model defines the height and slope of the black line.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -466,13 +511,17 @@ y_{ij} = \underbrace{(\underbrace{\gamma_{00}}_{\textrm{fixed}} + \underbrace{\z
 \text{Level 2 (school):}&amp; \\
 b_{0i} &amp;= \gamma_{00} + \zeta_{0i} \\
 \end{align}
-\]</span> If we consider one of our schools (e.g.&nbsp;“Beeslack Community High School”) we can see that our model predicts that this school has higher grades than most other schools (<a href="#fig-ri_1school">Figure&nbsp;3</a>). We can see how this is modelled as a deviation <span class="math inline">\(\zeta_{0\text{B}}\)</span> (B for Beeslack) from some fixed value <span class="math inline">\(\gamma_{00}\)</span>.</p>
+\]</span> If we consider one of our schools (e.g.&nbsp;“Beeslack Community High School”) we can see that our model predicts that this school has higher grades than most other schools (<a href="#fig-ri_1school" class="quarto-xref">Figure&nbsp;3</a>). We can see how this is modelled as a deviation <span class="math inline">\(\zeta_{0\text{B}}\)</span> (B for Beeslack) from some fixed value <span class="math inline">\(\gamma_{00}\)</span>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-ri_1school" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="02_lmm_files/figure-html/fig-ri_1school-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Fitted values from a multilevel model with random intercepts for schools</figcaption>
+<div id="fig-ri_1school" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ri_1school-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_lmm_files/figure-html/fig-ri_1school-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ri_1school-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Fitted values from a multilevel model with random intercepts for schools
+</figcaption>
 </figure>
 </div>
 </div>
@@ -513,13 +562,17 @@ b_{0i} &amp;= \gamma_{00} + \zeta_{0i} \\
 </div>
 </div>
 <p>Remember, <span class="math inline">\(\sim N(m,s)\)</span> is a way of writing “are normally distributed with a mean of <span class="math inline">\(m\)</span> and a standard deviation of <span class="math inline">\(s\)</span>”. So the <span class="math inline">\(\zeta_{0i} \sim N(0,\sigma_0)\)</span> bit is saying that the school deviations from the fixed intercept are modelled as a <em>normal distribution</em>, with a mean of 0, and a standard deviation of <span class="math inline">\(\sigma_0\)</span> (which gets estimated by our model).</p>
-<p>This can be seen in <a href="#fig-ri_param">Figure&nbsp;4</a> - the model is actually estimating a fixed intercept; a fixed slope; and the spread of a normal distribution of school-level deviations from the fixed intercept.</p>
+<p>This can be seen in <a href="#fig-ri_param" class="quarto-xref">Figure&nbsp;4</a> - the model is actually estimating a fixed intercept; a fixed slope; and the spread of a normal distribution of school-level deviations from the fixed intercept.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-ri_param" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="02_lmm_files/figure-html/fig-ri_param-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;4: grade predicted by motivation, with a by-school random intercept. The school-level intercepts are modelled as a normal distribution. Parameters estimated by the model are shown in purple (fixed effects) and orange (variance of school-level deviations).</figcaption>
+<div id="fig-ri_param" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ri_param-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_lmm_files/figure-html/fig-ri_param-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ri_param-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: grade predicted by motivation, with a by-school random intercept. The school-level intercepts are modelled as a normal distribution. Parameters estimated by the model are shown in purple (fixed effects) and orange (variance of school-level deviations).
+</figcaption>
 </figure>
 </div>
 </div>
@@ -551,40 +604,52 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 \end{align}
 \]</span></p>
 <p>When we have random intercepts <em>and</em> random slopes, our assumption is that both of intercepts and slopes are normally distributed. However, we also typically allow these to be correlated, so the complicated looking bit at the bottom of the equation above is really just saying “random intercepts and slopes are normally distributed with mean of 0 and standard deviations of <span class="math inline">\(\sigma_0\)</span> and <span class="math inline">\(\sigma_1\)</span> respectively, and with a correlation of <span class="math inline">\(\rho_{01}\)</span>”. We’ll see more on this in future weeks, so don’t worry too much right now.</p>
-<p>In <a href="#fig-rslope">Figure&nbsp;5</a>, we can see now that both the intercept <em>and</em> the slope of grades across motivation are varying by-school.</p>
+<p>In <a href="#fig-rslope" class="quarto-xref">Figure&nbsp;5</a>, we can see now that both the intercept <em>and</em> the slope of grades across motivation are varying by-school.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-rslope" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="02_lmm_files/figure-html/fig-rslope-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;5: predicted values from the multilevel model that includes by-school random intercepts and by-school random slopes of motivation.</figcaption>
+<div id="fig-rslope" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rslope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_lmm_files/figure-html/fig-rslope-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rslope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: predicted values from the multilevel model that includes by-school random intercepts and by-school random slopes of motivation.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>Much like for the random intercepts, we are modelling the random slopes as the distribution of school-level deviations <span class="math inline">\(\zeta_{1i}\)</span> around a fixed estimate <span class="math inline">\(\gamma_{10}\)</span>.</p>
-<p>So each group (school) now has, as visualised in <a href="#fig-unlmm">Figure&nbsp;6</a>:</p>
+<p>So each group (school) now has, as visualised in <a href="#fig-unlmm" class="quarto-xref">Figure&nbsp;6</a>:</p>
 <ol type="1">
 <li>a deviation from the fixed intercept</li>
 <li>a deviation from the fixed slope</li>
 </ol>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-unlmm" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/un_lmm.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;6: random intercepts and random slopes</figcaption>
+<div id="fig-unlmm" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-unlmm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/un_lmm.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-unlmm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: random intercepts and random slopes
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>While it’s possible to show the distribution of intercepts on the left hand side of our <code>grade ~ motiv</code> plot, it’s hard to put the distribution of slopes on the same plot, so I have placed these in the bottom panel in <a href="#fig-rslopes2">Figure&nbsp;7</a>. We can see, for instance, that “Hutcheson’s Grammar School” has a higher intercept, but a lower slope.</p>
+<p>While it’s possible to show the distribution of intercepts on the left hand side of our <code>grade ~ motiv</code> plot, it’s hard to put the distribution of slopes on the same plot, so I have placed these in the bottom panel in <a href="#fig-rslopes2" class="quarto-xref">Figure&nbsp;7</a>. We can see, for instance, that “Hutcheson’s Grammar School” has a higher intercept, but a lower slope.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-rslopes2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="02_lmm_files/figure-html/fig-rslopes2-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;7: grade predicted by motivation, with by-school random intercepts and by-school random slopes of motivation. Parameters estimated by the model are shown in purple (fixed effects) and orange (variance of school-level deviations)</figcaption>
+<div id="fig-rslopes2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rslopes2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_lmm_files/figure-html/fig-rslopes2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rslopes2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: grade predicted by motivation, with by-school random intercepts and by-school random slopes of motivation. Parameters estimated by the model are shown in purple (fixed effects) and orange (variance of school-level deviations)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -617,13 +682,17 @@ optional: joint distribution of intercept and slopes
         \rho_{01} &amp; \sigma_1
     \end{bmatrix}
 \right)
-\]</span> For a visual intuition about this, see <a href="#fig-randcor">Figure&nbsp;8</a>, in which the x-axis is the intercept deviations, and the y-axis is the slope deviations. We can see that these are each distributed normally, but are negatively related (schools with higher intercepts tend to have slightly lower slopes).</p>
+\]</span> For a visual intuition about this, see <a href="#fig-randcor" class="quarto-xref">Figure&nbsp;8</a>, in which the x-axis is the intercept deviations, and the y-axis is the slope deviations. We can see that these are each distributed normally, but are negatively related (schools with higher intercepts tend to have slightly lower slopes).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-randcor" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="02_lmm_files/figure-html/fig-randcor-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;8: Intercept deviations (x axis) and slope deviations (y axis). One school is highlighted for comparison with previous plot of fitted values</figcaption>
+<div id="fig-randcor" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-randcor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_lmm_files/figure-html/fig-randcor-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-randcor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Intercept deviations (x axis) and slope deviations (y axis). One school is highlighted for comparison with previous plot of fitted values
+</figcaption>
 </figure>
 </div>
 </div>
@@ -645,7 +714,7 @@ optional: joint distribution of intercept and slopes
 <li>the number of observations in the cluster</li>
 </ol>
 <p>This is a really useful feature, because it means that a) the model is more skeptical of clusters with few datapoints than of those with many datapoints, and b) this skepticism is weaker when clusters are in general more distinct from one another than when they are quite similar.</p>
-<p>Another way of thinking about this is by looking at the model predicted lines for each cluster, which are <em>also</em> adjusted in the same way. In <a href="#fig-ppool">Figure&nbsp;9</a>, the blue lines show a simple linear model fitted to the data from each school (no pooling), and the orange lines show our predictions from the model with random intercepts and slopes for each school (partial pooling).</p>
+<p>Another way of thinking about this is by looking at the model predicted lines for each cluster, which are <em>also</em> adjusted in the same way. In <a href="#fig-ppool" class="quarto-xref">Figure&nbsp;9</a>, the blue lines show a simple linear model fitted to the data from each school (no pooling), and the orange lines show our predictions from the model with random intercepts and slopes for each school (partial pooling).</p>
 <p>Note two useful features:</p>
 <ol type="1">
 <li>For “Hypothetical School X”, which has far fewer datapoints, the multilevel model line is ‘shrunk’ back towards the average school line. This is good because we intuitively don’t want to give as much weight to that school as to the others.</li>
@@ -653,10 +722,14 @@ optional: joint distribution of intercept and slopes
 </ol>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-ppool" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="02_lmm_files/figure-html/fig-ppool-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;9: A set of 6 schools. The blue lines show simple regression models fitted to each schools’ data separately (no pooling). The orange lines show the predictions from the multilevel model in which both intercepts and slopes of motiv vary by school (partial pooling)</figcaption>
+<div id="fig-ppool" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ppool-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_lmm_files/figure-html/fig-ppool-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ppool-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: A set of 6 schools. The blue lines show simple regression models fitted to each schools’ data separately (no pooling). The orange lines show the predictions from the multilevel model in which both intercepts and slopes of motiv vary by school (partial pooling)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -719,10 +792,14 @@ optional: how does it work?
 <p>We’re going to use the <code>lme4</code> package, and specifically the functions <code>lmer()</code> and <code>glmer()</code>. “(g)lmer” here stands for “(generalised) linear mixed effects regression”, and the two functions are designed to be logical extensions of <code>lm()</code> and <code>glm()</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-lmercode" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/lmercode.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;10: Syntax of the lmer() function from the lme4 package. For now, focus on the formula section, and how this extends from the lm() function.</figcaption>
+<div id="fig-lmercode" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lmercode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/lmercode.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lmercode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Syntax of the lmer() function from the lme4 package. For now, focus on the formula section, and how this extends from the lm() function.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -780,13 +857,17 @@ motiv -0.825</code></pre>
 <p>So from our ouput we can build up a picture in our heads - we know from the fixed effects that in the average school, children with zero motivation have an estimated grade of 29, and for every 1 more motivated a child is, their grades are estimated to increase by 4.48.</p>
 <p>The random effects part tells us that we would expect schools to vary in their intercepts with a standard deviation of 12.6, and in their slopes with a standard deviation of 2.1.</p>
 <p>If we recall our rough heuristic about normal distributions - that 95% of the distribution falls within 2 standard deviations, then we can start to build up a picture - we would expect most schools to have intercepts about 25 either side of the fixed intercept, and we would expect most schools to have slopes that are about 4 either side of the fixed slope (so most slopes will be between 0.5 and 8.5 - i.e.&nbsp;most will be positive).</p>
-<p>So what we’re getting back to is something a bit like <a href="#fig-rslope">Figure&nbsp;5</a> that we saw earlier - the model provides a description of the population of schools that we have sampled from. To illustrate this more, we could imagine simulating (from our model) 1000 new schools, and plotting their lines, and we would get something like <a href="#fig-sim">Figure&nbsp;11</a>.</p>
+<p>So what we’re getting back to is something a bit like <a href="#fig-rslope" class="quarto-xref">Figure&nbsp;5</a> that we saw earlier - the model provides a description of the population of schools that we have sampled from. To illustrate this more, we could imagine simulating (from our model) 1000 new schools, and plotting their lines, and we would get something like <a href="#fig-sim" class="quarto-xref">Figure&nbsp;11</a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-sim" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="02_lmm_files/figure-html/fig-sim-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;11: Model estimated fixed effects, with 1000 simulated hypothetical school lines</figcaption>
+<div id="fig-sim" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sim-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_lmm_files/figure-html/fig-sim-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sim-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: Model estimated fixed effects, with 1000 simulated hypothetical school lines
+</figcaption>
 </figure>
 </div>
 </div>
@@ -807,7 +888,7 @@ Mapping summary output to parts of the equation
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/lmeroutput.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="images/lmeroutput.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
@@ -870,13 +951,17 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} + \gamma_{11} \cdot \text{Funding}_i\\
 </div>
 </div>
 </div>
-<p>Our additions to the fixed effects part here simply add in a couple of fixed terms to our model (the <code>funding</code> coefficient and the <code>motiv:funding</code> interaction coefficient). This means that in terms of our model structure, it is simply moving from the single line we had in <a href="#fig-rslopes2">Figure&nbsp;7</a>, to having two lines (one for “private” schools and one for “state” schools) as in <a href="#fig-crosslev1">Figure&nbsp;12</a>. The random effects are, as before, the variance in deviations of individual schools around these fixed estimates.</p>
+<p>Our additions to the fixed effects part here simply add in a couple of fixed terms to our model (the <code>funding</code> coefficient and the <code>motiv:funding</code> interaction coefficient). This means that in terms of our model structure, it is simply moving from the single line we had in <a href="#fig-rslopes2" class="quarto-xref">Figure&nbsp;7</a>, to having two lines (one for “private” schools and one for “state” schools) as in <a href="#fig-crosslev1" class="quarto-xref">Figure&nbsp;12</a>. The random effects are, as before, the variance in deviations of individual schools around these fixed estimates.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-crosslev1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="02_lmm_files/figure-html/fig-crosslev1-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;12: visual explanation of a model with a cross-level interaction. Blue line is private-funded schools, purple line is state-funded schools</figcaption>
+<div id="fig-crosslev1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-crosslev1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_lmm_files/figure-html/fig-crosslev1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-crosslev1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: visual explanation of a model with a cross-level interaction. Blue line is private-funded schools, purple line is state-funded schools
+</figcaption>
 </figure>
 </div>
 </div>
@@ -904,7 +989,7 @@ motiv:fundingstate   2.8485     1.0591   2.689</code></pre>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(smod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       (Intercept)              motiv       fundingstate motiv:fundingstate 
-         40.314271           2.629403         -17.253134           2.848511 </code></pre>
+         40.314262           2.629406         -17.253102           2.848504 </code></pre>
 </div>
 </div>
 </div>
@@ -915,7 +1000,7 @@ motiv:fundingstate   2.8485     1.0591   2.689</code></pre>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">VarCorr</span>(smod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> Groups   Name        Std.Dev. Corr  
- schoolid (Intercept) 10.2531        
+ schoolid (Intercept) 10.2530        
           motiv        1.6108  -0.481
  Residual             11.7911        </code></pre>
 </div>
@@ -948,7 +1033,7 @@ Beeslack Community High School          9.658259   -0.14963519
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02_lmm_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="02_lmm_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -1000,16 +1085,16 @@ fixef() + ranef() = coef()
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   motiv funding      fit       se    lower    upper
-1    0.4 private 41.36603 4.376160 32.77731 49.95475
-2    3.0 private 48.20248 3.072408 42.17253 54.23244
-3    5.0 private 53.46129 2.975888 47.62077 59.30181
-4    7.0 private 58.72010 3.776268 51.30874 66.13146
-5    9.0 private 63.97890 5.064835 54.03858 73.91922
-6    0.4   state 25.25230 3.187004 18.99744 31.50717
-7    3.0   state 39.49488 2.314485 34.95244 44.03732
-8    5.0   state 50.45071 2.257980 46.01916 54.88225
-9    7.0   state 61.40654 2.797545 55.91603 66.89704
-10   9.0   state 72.36236 3.679698 65.14053 79.58419</code></pre>
+1    0.4 private 41.36602 4.376137 32.77735 49.95470
+2    3.0 private 48.20248 3.072389 42.17256 54.23240
+3    5.0 private 53.46129 2.975875 47.62079 59.30179
+4    7.0 private 58.72010 3.776260 51.30876 66.13145
+5    9.0 private 63.97891 5.064830 54.03860 73.91922
+6    0.4   state 25.25232 3.186986 18.99750 31.50715
+7    3.0   state 39.49489 2.314470 34.95248 44.03730
+8    5.0   state 50.45071 2.257971 46.01918 54.88224
+9    7.0   state 61.40653 2.797539 55.91604 66.89702
+10   9.0   state 72.36235 3.679694 65.14053 79.58417</code></pre>
 </div>
 </div>
 <p>We can then use this to plot:</p>
@@ -1022,7 +1107,7 @@ fixef() + ranef() = coef()
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02_lmm_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="02_lmm_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -1042,7 +1127,7 @@ fixef() + ranef() = coef()
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02_lmm_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="02_lmm_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -1057,14 +1142,18 @@ fixef() + ranef() = coef()
 <p>With single level regression models fitted with <code>lm()</code>, our estimated coefficients could actually be obtained using some matrix algebra. Fitting multilevel models is a bit more complicated, and so we have to instead rely on an iterative procedure known as “maximum likelihood estimation” (“ML” or “MLE”).</p>
 <p>We actually saw this previously when fitting logistic regressions. The process is iterative in that it involves testing the fit of a set of candidate parameters (i.e.&nbsp;giving some initial values for our coefficients) and working out what direction we need to change them in order to get a better fit. We then change them accordingly, evalute the fit, change them, evaluate fit, … and so on until we reach a point where we don’t think we can get any better.</p>
 <p>In maximum likelihood estimation, the “fit” of the model is assessed through the <em>likelihood</em> (the probability of seeing our data, given some hypothesis, see <a href="lvp.html" target="_blank">here</a> for an explanation).</p>
-<p>If we were estimating just one single parameter (e.g.&nbsp;a mean), then we can imagine the process of maximum likelihood estimation in a one-dimensional world - simply finding the top of the curve (<a href="#fig-mle">Figure&nbsp;13</a>, LH panel).</p>
-<p>However, our typical models estimate a whole bunch of parameters, and with lots of parameters being estimated and all interacting to influence the likelihood, our nice curved line becomes a complex surface (<a href="#fig-mle">Figure&nbsp;13</a> RH panel shows it in 3D). What MLE does is try to find the maximum (the top of the mountain), but avoid local maxima (false summits) and impossible values (e.g., variances <span class="math inline">\(\leq 0\)</span>), without getting stuck (in plateaus).</p>
+<p>If we were estimating just one single parameter (e.g.&nbsp;a mean), then we can imagine the process of maximum likelihood estimation in a one-dimensional world - simply finding the top of the curve (<a href="#fig-mle" class="quarto-xref">Figure&nbsp;13</a>, LH panel).</p>
+<p>However, our typical models estimate a whole bunch of parameters, and with lots of parameters being estimated and all interacting to influence the likelihood, our nice curved line becomes a complex surface (<a href="#fig-mle" class="quarto-xref">Figure&nbsp;13</a> RH panel shows it in 3D). What MLE does is try to find the maximum (the top of the mountain), but avoid local maxima (false summits) and impossible values (e.g., variances <span class="math inline">\(\leq 0\)</span>), without getting stuck (in plateaus).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-mle" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/mle.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;13: maximum likelihood estimation in one dimension (LEFT), and a 3D visual of a multi-dimensional likelihood surface (RIGHT)</figcaption>
+<div id="fig-mle" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/mle.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13: maximum likelihood estimation in one dimension (LEFT), and a 3D visual of a multi-dimensional likelihood surface (RIGHT)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -1176,18 +1265,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1219,11 +1297,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1233,8 +1350,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1246,7 +1372,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1290,6 +1539,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1315,6 +1565,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1380,12 +1656,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</div>
+    <div class="nav-footer-center">
+<p>© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

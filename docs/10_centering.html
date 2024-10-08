@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LMM/MLM - 10: Centering</title>
+<title>10: Centering – LMM/MLM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -79,7 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -88,8 +94,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script>
@@ -111,8 +119,35 @@ if(f.classList.contains('jk-circle-right')) {
 <link href="site_libs/panelset-0.3.0/panelset.css" rel="stylesheet">
 <script src="site_libs/panelset-0.3.0/panelset.js"></script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -122,12 +157,12 @@ if(f.classList.contains('jk-circle-right')) {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10_centering.html">10: Centering</a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10_centering.html">10: Centering</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -137,7 +172,7 @@ if(f.classList.contains('jk-circle-right')) {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">LMM/MLM</a> 
@@ -218,9 +253,9 @@ if(f.classList.contains('jk-circle-right')) {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Additional Docs</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -248,7 +283,7 @@ if(f.classList.contains('jk-circle-right')) {
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -283,7 +318,9 @@ if(f.classList.contains('jk-circle-right')) {
   </div>
   
 
+
 </header>
+
 
 <div class="lo">
 <p>This reading:</p>
@@ -308,7 +345,7 @@ if(f.classList.contains('jk-circle-right')) {
 <li>If we re-center a predictor on some new value (such as the mean), then all this does is change what “zero” means in our variable. This means that if we re-center a predictor in our linear model, the only thing that changes is our intercept. This is because the intercept is “when all predictors are zero”. And we are changing what “zero” represents!</li>
 <li>When we scale a predictor, this will change the slope. Why? Because it changes what “moving 1” represents. So if we standardise a variable, it changes both the intercept and the slope. However, note that the significance of the slope remains <em>exactly the same</em>, we are only changing the <em>units</em> that we are using to expressing that slope.</li>
 </ul>
-<p>The example below shows a model of heart rates (<code>HR</code>) predicted by hours slept (<code>hrs_sleep</code>). In <a href="#fig-scalexlm">Figure&nbsp;1</a> you can see our original model (top left), and then various transformations applied to our predictor. Note how these transformations don’t affect the model itself - the regression line (and the uncertainty in the line) is the same in each plot. We can see that re-centering changes what the intercept represents:</p>
+<p>The example below shows a model of heart rates (<code>HR</code>) predicted by hours slept (<code>hrs_sleep</code>). In <a href="#fig-scalexlm" class="quarto-xref">Figure&nbsp;1</a> you can see our original model (top left), and then various transformations applied to our predictor. Note how these transformations don’t affect the model itself - the regression line (and the uncertainty in the line) is the same in each plot. We can see that re-centering changes what the intercept represents:</p>
 <ul>
 <li>In the top left plot, “0” represents zero hours slept, so the intercept (big blue dot) is the estimated heart rate for someone who didn’t sleep at all.</li>
 <li>Similarly, in the top right plot, “0” now represents the mean hours slept, so the intercept is the heart rate for someone who slept an average amount, and in the bottom right plot, “0” now represents 8 hours of sleep (the recommended amount).</li>
@@ -316,17 +353,21 @@ if(f.classList.contains('jk-circle-right')) {
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-scalexlm" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="10_centering_files/figure-html/fig-scalexlm-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Centering and scaling predictors in linear regression models. Intercepts and their interpretation change when re-centered, and slope coefficients and their interpretation change when scaling, but the overall model stays the same.</figcaption>
+<div id="fig-scalexlm" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scalexlm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="10_centering_files/figure-html/fig-scalexlm-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scalexlm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Centering and scaling predictors in linear regression models. Intercepts and their interpretation change when re-centered, and slope coefficients and their interpretation change when scaling, but the overall model stays the same.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>The thing to note is that the lines themselves are all the same, because the models are all exactly the same. We can prove this to ourselves by comparing the 4 models:</p>
 <div class="cell" data-layout-align="center">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>hrdat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://uoepsy.github.io/data/usmr_hrsleep.csv"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -372,13 +413,17 @@ Centering when we have interactions
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>When we have an interactions in a model such as <code>lm(y~x+z+x:z)</code>, the individual coefficients for <code>x</code> and <code>z</code> are specifically the associations “when the other variable included in the interaction is zero”. Because re-centering a variable changes the meaning of “zero”, this means that these two coefficients will change.</p>
-<p>For instance, a model of heart rates (<code>HR</code>) that includes an interaction between <code>hrs_sleep</code> and whether someone smokes, our coefficient for <code>smoke</code> estimates the difference in HR between smokers vs non-smokers who get zero hours of sleep (red to blue point in the left-hand plot of <a href="#fig-intcent">Figure&nbsp;2</a>). If we mean-center the <code>hrs_sleep</code> variable in our model, then it becomes the estimated difference in HR between smokers vs non-smokers who get the average hours of sleep (red to blue point in the right-hand plot of <a href="#fig-intcent">Figure&nbsp;2</a>).</p>
+<p>For instance, a model of heart rates (<code>HR</code>) that includes an interaction between <code>hrs_sleep</code> and whether someone smokes, our coefficient for <code>smoke</code> estimates the difference in HR between smokers vs non-smokers who get zero hours of sleep (red to blue point in the left-hand plot of <a href="#fig-intcent" class="quarto-xref">Figure&nbsp;2</a>). If we mean-center the <code>hrs_sleep</code> variable in our model, then it becomes the estimated difference in HR between smokers vs non-smokers who get the average hours of sleep (red to blue point in the right-hand plot of <a href="#fig-intcent" class="quarto-xref">Figure&nbsp;2</a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-intcent" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="10_centering_files/figure-html/fig-intcent-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: mean-centering a variable that is involved in an interaction will change the point at which the marginal effect of other variable is estimated at</figcaption>
+<div id="fig-intcent" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-intcent-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="10_centering_files/figure-html/fig-intcent-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-intcent-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: mean-centering a variable that is involved in an interaction will change the point at which the marginal effect of other variable is estimated at
+</figcaption>
 </figure>
 </div>
 </div>
@@ -395,14 +440,18 @@ Centering when we have interactions
 <p>In multilevel models, things can be a little bit different.</p>
 <div class="columns">
 <div class="column" style="width:65%;">
-<p>For one thing, there can be practical benefits to centering and/or scaling predictors with respect to actually <em>fitting</em> these models. Because multilevel models involve estimating group-level variability in intercepts and slopes, if our intercept is very far away from our data (e.g., if all our data is from ages 60 to 80, and we are estimating variability at age 0), then slight changes in a slope can have huge influences on estimated intercepts, resulting in models that don’t converge. We can see from the longitudinal example (<a href="05_long.html#modelling-change-over-time" target="_blank">Chapter 5</a>), with the idea represented in <a href="#fig-centconv">Figure&nbsp;3</a> - using raw <code>age</code> values the intercepts and slopes are highly correlated and the model won’t converge, but when we recenter the <code>age</code> variable on 60 and the intercept variation would become the variability in peoples’ cognition <em>at the start of the study period</em>, and the random intercepts are not so determined by the random slopes.</p>
+<p>For one thing, there can be practical benefits to centering and/or scaling predictors with respect to actually <em>fitting</em> these models. Because multilevel models involve estimating group-level variability in intercepts and slopes, if our intercept is very far away from our data (e.g., if all our data is from ages 60 to 80, and we are estimating variability at age 0), then slight changes in a slope can have huge influences on estimated intercepts, resulting in models that don’t converge. We can see from the longitudinal example (<a href="05_long.html#modelling-change-over-time" target="_blank">Chapter 5</a>), with the idea represented in <a href="#fig-centconv" class="quarto-xref">Figure&nbsp;3</a> - using raw <code>age</code> values the intercepts and slopes are highly correlated and the model won’t converge, but when we recenter the <code>age</code> variable on 60 and the intercept variation would become the variability in peoples’ cognition <em>at the start of the study period</em>, and the random intercepts are not so determined by the random slopes.</p>
 </div><div class="column" style="width:35%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-centconv" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="10_centering_files/figure-html/fig-centconv-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: lines indicate predicted values from the model with random intercepts and random slopes of age. Due to how age is coded, the ‘intercept’ is estimated back at age 0</figcaption>
+<div id="fig-centconv" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-centconv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="10_centering_files/figure-html/fig-centconv-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-centconv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: lines indicate predicted values from the model with random intercepts and random slopes of age. Due to how age is coded, the ‘intercept’ is estimated back at age 0
+</figcaption>
 </figure>
 </div>
 </div>
@@ -435,7 +484,7 @@ Centering when we have interactions
 </div>
 <p>In initial exploratory plots, we can see that there is plenty of variation in childrens’ grades - we have children scoring 3-4, all the way up to scoring almost 9. Note also, however, that the class’s average grades also vary substantially. For instance, classes 8,9,10 and 11 all have a very high average grade.</p>
 <div class="cell" data-layout-align="center">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bfdat, <span class="fu">aes</span>(<span class="at">x=</span>grade,<span class="at">y=</span>self_concept))<span class="sc">+</span></span>
@@ -449,14 +498,14 @@ Centering when we have interactions
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_centering_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_centering_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>When we plot the individual childrens’ score of ‘self-concept’ against grades, the picture becomes a bit clearer once we separate by the classes, where we can see that <em>within each class</em> there is a fairly positive trend.</p>
 <div class="cell" data-layout-align="center">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bfdat,<span class="fu">aes</span>(<span class="at">x=</span>grade,<span class="at">y=</span>self_concept))<span class="sc">+</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>,<span class="at">alpha=</span>.<span class="dv">4</span>) <span class="sc">+</span></span>
@@ -468,14 +517,14 @@ Centering when we have interactions
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_centering_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_centering_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>By contrast, the relationship between children’s self-concept scores and the <em>average grade of their class</em> shows a different pattern:</p>
 <div class="cell" data-layout-align="center">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>bfdat <span class="ot">&lt;-</span> </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  bfdat <span class="sc">|&gt;</span> </span>
@@ -490,7 +539,7 @@ Centering when we have interactions
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_centering_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_centering_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -546,7 +595,7 @@ grade         2.9327     0.3462   8.471</code></pre>
 <p>Note that the actual grade for each child can still be made from our two new columns, calculated as the <code>avg_grade + grade_dev</code>.</p>
 <p>So let’s plot the association between each of these new variables and the self-concept scores:</p>
 <div class="cell" data-layout-align="center">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bfdat, <span class="fu">aes</span>(<span class="at">x=</span>grade_avg, <span class="at">y=</span>self_concept))<span class="sc">+</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
@@ -559,7 +608,7 @@ grade         2.9327     0.3462   8.471</code></pre>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="10_centering_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="10_centering_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -650,7 +699,6 @@ In the context of our educational study of grades and self-concept in school chi
 <p><strong>typical random slopes model</strong></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-
 <div id="zxfkbbhudq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#zxfkbbhudq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1100,28 +1148,32 @@ In the context of our educational study of grades and self-concept in school chi
   height: 0px !important;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="term">term</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="est">est</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="SE">SE</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="t">t</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="term" class="gt_row gt_left">(Intercept)</td>
-<td headers="est" class="gt_row gt_right">-17.57</td>
-<td headers="SE" class="gt_row gt_right">1.86</td>
-<td headers="t" class="gt_row gt_right">-9.46</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">grade</td>
-<td headers="est" class="gt_row gt_right">2.93</td>
-<td headers="SE" class="gt_row gt_right">0.35</td>
-<td headers="t" class="gt_row gt_right">8.47</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">term</th>
+<th id="est" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">est</th>
+<th id="SE" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">SE</th>
+<th id="t" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">t</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">(Intercept)</td>
+<td class="gt_row gt_right" headers="est">-17.57</td>
+<td class="gt_row gt_right" headers="SE">1.86</td>
+<td class="gt_row gt_right" headers="t">-9.46</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="term">grade</td>
+<td class="gt_row gt_right" headers="est">2.93</td>
+<td class="gt_row gt_right" headers="SE">0.35</td>
+<td class="gt_row gt_right" headers="t">8.47</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
 </div>
@@ -1129,7 +1181,6 @@ In the context of our educational study of grades and self-concept in school chi
 <p><strong>within-between model</strong></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-
 <div id="mlromhosww" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#mlromhosww table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1579,32 +1630,38 @@ In the context of our educational study of grades and self-concept in school chi
   height: 0px !important;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="term">term</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="est">est</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="SE">SE</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="t">t</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="term" class="gt_row gt_left">(Intercept)</td>
-<td headers="est" class="gt_row gt_right">3.46</td>
-<td headers="SE" class="gt_row gt_right">1.83</td>
-<td headers="t" class="gt_row gt_right">1.89</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">grade_dev</td>
-<td headers="est" class="gt_row gt_right">3.11</td>
-<td headers="SE" class="gt_row gt_right">0.35</td>
-<td headers="t" class="gt_row gt_right">8.97</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">grade_avg</td>
-<td headers="est" class="gt_row gt_right">-0.69</td>
-<td headers="SE" class="gt_row gt_right">0.30</td>
-<td headers="t" class="gt_row gt_right">-2.33</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">term</th>
+<th id="est" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">est</th>
+<th id="SE" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">SE</th>
+<th id="t" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">t</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">(Intercept)</td>
+<td class="gt_row gt_right" headers="est">3.46</td>
+<td class="gt_row gt_right" headers="SE">1.83</td>
+<td class="gt_row gt_right" headers="t">1.89</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="term">grade_dev</td>
+<td class="gt_row gt_right" headers="est">3.11</td>
+<td class="gt_row gt_right" headers="SE">0.35</td>
+<td class="gt_row gt_right" headers="t">8.97</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">grade_avg</td>
+<td class="gt_row gt_right" headers="est">-0.69</td>
+<td class="gt_row gt_right" headers="SE">0.30</td>
+<td class="gt_row gt_right" headers="t">-2.33</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
 </div>
@@ -1706,7 +1763,6 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 <p><strong>Within-between model</strong></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-
 <div id="lkbkbjaewz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#lkbkbjaewz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -2156,32 +2212,38 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
   height: 0px !important;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="term">term</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="est">est</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="SE">SE</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="t">t</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="term" class="gt_row gt_left">(Intercept)</td>
-<td headers="est" class="gt_row gt_right">3.46</td>
-<td headers="SE" class="gt_row gt_right">1.83</td>
-<td headers="t" class="gt_row gt_right">1.89</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">grade_dev</td>
-<td headers="est" class="gt_row gt_right">3.11</td>
-<td headers="SE" class="gt_row gt_right">0.35</td>
-<td headers="t" class="gt_row gt_right">8.97</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">grade_avg</td>
-<td headers="est" class="gt_row gt_right">-0.69</td>
-<td headers="SE" class="gt_row gt_right">0.30</td>
-<td headers="t" class="gt_row gt_right">-2.33</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">term</th>
+<th id="est" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">est</th>
+<th id="SE" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">SE</th>
+<th id="t" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">t</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">(Intercept)</td>
+<td class="gt_row gt_right" headers="est">3.46</td>
+<td class="gt_row gt_right" headers="SE">1.83</td>
+<td class="gt_row gt_right" headers="t">1.89</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="term">grade_dev</td>
+<td class="gt_row gt_right" headers="est">3.11</td>
+<td class="gt_row gt_right" headers="SE">0.35</td>
+<td class="gt_row gt_right" headers="t">8.97</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">grade_avg</td>
+<td class="gt_row gt_right" headers="est">-0.69</td>
+<td class="gt_row gt_right" headers="SE">0.30</td>
+<td class="gt_row gt_right" headers="t">-2.33</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
 </div>
@@ -2189,7 +2251,6 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 <p><strong>Mundlak model</strong></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-
 <div id="waogcswfzx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#waogcswfzx table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -2639,32 +2700,38 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
   height: 0px !important;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="term">term</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="est">est</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="SE">SE</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="t">t</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="term" class="gt_row gt_left">(Intercept)</td>
-<td headers="est" class="gt_row gt_right">3.28</td>
-<td headers="SE" class="gt_row gt_right">2.21</td>
-<td headers="t" class="gt_row gt_right">1.48</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">grade</td>
-<td headers="est" class="gt_row gt_right">3.10</td>
-<td headers="SE" class="gt_row gt_right">0.34</td>
-<td headers="t" class="gt_row gt_right">9.12</td></tr>
-    <tr><td headers="term" class="gt_row gt_left">grade_avg</td>
-<td headers="est" class="gt_row gt_right">-3.67</td>
-<td headers="SE" class="gt_row gt_right">0.34</td>
-<td headers="t" class="gt_row gt_right">-10.91</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">term</th>
+<th id="est" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">est</th>
+<th id="SE" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">SE</th>
+<th id="t" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">t</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">(Intercept)</td>
+<td class="gt_row gt_right" headers="est">3.28</td>
+<td class="gt_row gt_right" headers="SE">2.21</td>
+<td class="gt_row gt_right" headers="t">1.48</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="term">grade</td>
+<td class="gt_row gt_right" headers="est">3.10</td>
+<td class="gt_row gt_right" headers="SE">0.34</td>
+<td class="gt_row gt_right" headers="t">9.12</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="term">grade_avg</td>
+<td class="gt_row gt_right" headers="est">-3.67</td>
+<td class="gt_row gt_right" headers="SE">0.34</td>
+<td class="gt_row gt_right" headers="t">-10.91</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
 </div>
@@ -2705,7 +2772,7 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 2 i     j          5.78  5.14 y-3.67      </code></pre>
 </div>
 </div>
-<p>We can think of this visually. Take a given child from a given class, and think about what would happen if their whole class average grade increased by 1. In <a href="#fig-mlak">Figure&nbsp;4</a>, the red line is “class 1” in our data, and the blue line is a counterfactual world of “class 1 if its average grade increased by 1”. The large red dot represents the expected self-concept for “child 1”.</p>
+<p>We can think of this visually. Take a given child from a given class, and think about what would happen if their whole class average grade increased by 1. In <a href="#fig-mlak" class="quarto-xref">Figure&nbsp;4</a>, the red line is “class 1” in our data, and the blue line is a counterfactual world of “class 1 if its average grade increased by 1”. The large red dot represents the expected self-concept for “child 1”.</p>
 <p>In the within-between model, we’re estimating the self-concept difference for a child between the red (actual) and blue (counterfactual class with a higher average), but where the child stays the same amount “above average” in this counterfactual class. In the Mundlak model, we’re estimating the self-concept difference when a child stays at the same grade but is in a different context (is placed in a class where the average is 1 higher).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
@@ -2721,10 +2788,14 @@ b_{1i} &amp;= \gamma_{10} + \zeta_{1i} \\
 -0.5562254 -0.5562254 -0.5562254 </code></pre>
 </div>
 <div class="cell-output-display">
-<div id="fig-mlak" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="10_centering_files/figure-html/fig-mlak-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;4: These plots show an actual class (red) and the counterfactual scenario (blue) where the class average is 1 higher. The large dots show comparisons between a given child in these scenarios - the left-hand plot shows the child’s relative standing in the group staying the same (the within-between model estimates this), and the right-hand plot shows the child’s raw value staying the same (this is what the Mundlak model estimates)</figcaption>
+<div id="fig-mlak" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mlak-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="10_centering_files/figure-html/fig-mlak-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlak-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: These plots show an actual class (red) and the counterfactual scenario (blue) where the class average is 1 higher. The large dots show comparisons between a given child in these scenarios - the left-hand plot shows the child’s relative standing in the group staying the same (the within-between model estimates this), and the right-hand plot shows the child’s raw value staying the same (this is what the Mundlak model estimates)
+</figcaption>
 </figure>
 </div>
 </div>
@@ -2776,18 +2847,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -2819,11 +2879,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2833,8 +2932,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2846,7 +2954,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2890,6 +3121,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2915,6 +3147,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -2980,12 +3238,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</div>
+    <div class="nav-footer-center">
+<p>© Copyright 2019-2024 <a href="https://www.ed.ac.uk/">The University of Edinburgh</a>. Site licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> license.</p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 
