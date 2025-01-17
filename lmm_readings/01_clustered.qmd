@@ -471,7 +471,7 @@ Often, while the specific clusters are not of interest, we may have research que
 
 In "univariate" statistics there is just one source of variation we are looking at explaining, which is the observation level. In psychology, our observations are often individual people, and we have variation because people are different from one another. Our studies are looking to explain this variation.  
 
-In "multivariate" statistics, there are more sources of variation. For the "children in schools" example: individual children are different from another, and schools are also different from one another. We also have multiple sources of variation from questionnaire scales (e.g. 9 survey questions about anxiety), because both there is variation in scores due to both a) people varying from one another and b) the 9 questions tending to illicit different responses from one another. 
+In "multivariate" statistics, there are more sources of variation. For the "children in schools" example: individual children are different from another, and schools are also different from one another. We also have multiple sources of variation from questionnaire scales (e.g. 9 survey questions about anxiety), because both there is variation in scores due to both a) people varying from one another and b) the 9 questions tending to elicit different responses from one another. 
 
 :::
 ::: {.callout-caution collapse="true"}
