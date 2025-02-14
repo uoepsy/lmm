@@ -109,7 +109,7 @@ $$
 \begin{align}
 \text{For Employee }j\text{ from Department }i& \\
 \text{Level 1 (Employee):}& \\
-\text{Stress}_{ij} &= b_{0i} + b_{1i} \cdot \text{Payscale}_{ij} + \epsilon_{ij} \\
+\text{JobSat}_{ij} &= b_{0i} + b_{1i} \cdot \text{Payscale}_{ij} + \epsilon_{ij} \\
 \text{Level 2 (Department):}& \\
 b_{0i} &= \gamma_{00} + \zeta_{0i} + \gamma_{01} \cdot \text{NSSrating}_i\\
 b_{1i} &= \gamma_{10} + \zeta_{1i} \\

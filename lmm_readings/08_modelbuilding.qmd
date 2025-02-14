@@ -580,12 +580,12 @@ rex2 = re[,3][g]
 lp = (0 + re0) + (2 + rex1) * x1 + (1 + rex2) * x2 + -1*x1*x2 
 y = rnorm(length(g), mean = lp, sd = 2)
 df = data.frame(x1,x2,x3,g = factor(g), y)
-write_csv(df,"../docs/lmmpcademo.csv")
+write_csv(df,"../../data/lmmpcademo.csv")
 ```
 
 Here our full model is singular:
 ```{r}
-df <- read_csv("https://uoepsy.github.io/lmm/lmmpcademo.csv")
+df <- read_csv("https://uoepsy.github.io/data/lmmpcademo.csv")
 ```
 ```{r}
 #| message: true
@@ -626,7 +626,7 @@ Using buildmer and setting the direction to "order", we can give it the fully ma
 It stops when adding in terms results in non-convergence:  
 
 ```{r}
-df <- read_csv("https://uoepsy.github.io/lmm/lmmpcademo.csv")
+df <- read_csv("https://uoepsy.github.io/data/lmmpcademo.csv")
 
 library(buildmer)
 bmod1 <- buildmer(y~x1*x2*x3+(1+x1*x2*x3|g), 

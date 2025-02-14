@@ -765,7 +765,7 @@ optional: PCA on the random effect variance-covariance matrix
 <p>In the <strong>lme4</strong> package the <code>rePCA()</code> function can do this when we give it an <code>lmer()</code> model.</p>
 <p>Here our full model is singular:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://uoepsy.github.io/lmm/lmmpcademo.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://uoepsy.github.io/data/lmmpcademo.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fullmod <span class="ot">&lt;-</span> <span class="fu">lmer</span>(y<span class="sc">~</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">+</span>(<span class="dv">1</span><span class="sc">+</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">|</span>g), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -835,7 +835,7 @@ optional: data-driven approaches
 <p>Using buildmer and setting the direction to “order”, we can give it the fully maximal model, and request that it assess the inclusion of each term in order of their contribution to a certain criterion (in this case, a likelihood ratio test).<br>
 It stops when adding in terms results in non-convergence:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://uoepsy.github.io/lmm/lmmpcademo.csv"</span>)</span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://uoepsy.github.io/data/lmmpcademo.csv"</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(buildmer)</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>bmod1 <span class="ot">&lt;-</span> <span class="fu">buildmer</span>(y<span class="sc">~</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">+</span>(<span class="dv">1</span><span class="sc">+</span>x1<span class="sc">*</span>x2<span class="sc">*</span>x3<span class="sc">|</span>g), </span>
