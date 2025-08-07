@@ -134,7 +134,7 @@ mod_8 <- lm(HR ~ I(hrs_sleep-8), data = hrdat)
 anova(mod_orig, mod_mc, mod_z, mod_8)
 ```
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### Centering when we have interactions
 
 When we have an interactions in a model such as `lm(y~x+z+x:z)`, the individual coefficients for `x` and `z` are specifically the associations "when the other variable included in the interaction is zero". Because re-centering a variable changes the meaning of "zero", this means that these two coefficients will change.  

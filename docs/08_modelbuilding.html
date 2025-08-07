@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,10 +69,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a5d965a358ea99cd4782dddb22e697e1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -391,7 +391,7 @@ If the grouping structures are <strong>not</strong> nested, we can specify them 
 <h2 class="anchored" data-anchor-id="non-convergence">Non-Convergence</h2>
 <p>Oftentimes, models with more complex random effect structures will not converge because there are so many parameters, and not enough variability in the data, meaning that there are more places for the model estimation to go wrong. Remember that we fit these models with maximum likelihood estimation (MLE), a process that involves taking a guess at the model parameters that result in the greatest probability of the observed data, and step-by-step improving those guesses until we think we’re at the most likely set of parameters - until the model ‘converges’. Sometimes, however, MLE can sometimes get stuck, resulting in ‘non-convergence’.</p>
 <p>There are many possible reasons for non-convergence, and it does <em>not necessarily</em> mean the fit is incorrect. However it is <strong>is cause for concern</strong>, and should be addressed before using the model, else you may end up reporting inferences which do not hold. There are lots of different things which we can try which <em>might</em> help our model to converge. A select few are detailed below:</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -468,7 +468,7 @@ Figure&nbsp;2: In simple random effect structures we can often easily see issues
 </div>
 </div>
 <p>What do we do in these cases? Simplify, simplify, simplify!</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -501,7 +501,7 @@ Warning messages:<br> 1: In checkConv(attr(opt, “derivs”), opt$par, ctrl = c
 <p>There is no <em>right</em> way to simplify random effect structures - it’s about what kind of simplifications we are willing to make (which is a subjective decision). Key to the process of simplifying your random effects is to <strong>think about how the data are generated</strong>, and to <strong>keep in mind your research question</strong>. Asking yourself things such as “do we have good reason to assume subjects might vary over time, or to assume that they will have different starting points (i.e., different intercepts)?” can help you in reasoning through the problem.</p>
 <p>Examining the variance components of a non-converging model can also help to point towards problematic terms. Be on the look out for random effects with little variance, or with near perfect correlation. When variance estimates are very low for a specific random effect term, this indicates that the model is not estimating this parameter to differ much between the levels of your grouping variable. It might, given the study design, be perfectly acceptable to remove this or simply include it as a fixed effect.</p>
 <p>Below are various considerations to keep in mind, along with some practical strategies</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -520,7 +520,7 @@ If a fixed effect <code>c</code> that is measured within groups is not of infere
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -536,7 +536,7 @@ If a fixed effect <code>c</code> that is measured within groups is not of infere
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -633,7 +633,7 @@ Figure&nbsp;4: Group specific lines when intercepts and slopes are perfectly pos
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -728,7 +728,7 @@ optional: attempted visual explanation
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="08_modelbuilding_files/figure-html/unnamed-chunk-9-1.png" class="quarto-figure quarto-figure-center figure-img" style="width:80.0%" height="200"></p>
+<p><img src="08_modelbuilding_files/figure-html/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center figure-img" style="width:80.0%" height="200"></p>
 </figure>
 </div>
 </div>
@@ -738,7 +738,7 @@ optional: attempted visual explanation
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="08_modelbuilding_files/figure-html/unnamed-chunk-10-1.png" class="quarto-figure quarto-figure-center figure-img" style="width:80.0%" height="200"></p>
+<p><img src="08_modelbuilding_files/figure-html/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center figure-img" style="width:80.0%" height="200"></p>
 </figure>
 </div>
 </div>
@@ -971,8 +971,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1083,7 +1081,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

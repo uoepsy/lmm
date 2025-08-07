@@ -79,7 +79,7 @@ Oftentimes, models with more complex random effect structures will not converge 
 
 There are many possible reasons for non-convergence, and it does *not necessarily* mean the fit is incorrect. However it is **is cause for concern**, and should be addressed before using the model, else you may end up reporting inferences which do not hold. There are lots of different things which we can try which *might* help our model to converge. A select few are detailed below:  
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### Things we can try
 
 :::imp
@@ -149,7 +149,7 @@ knitr::include_graphics("images/varcorrsingular.png")
 What do we do in these cases? Simplify, simplify, simplify!
 
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### Scales can matter!
 
 <!-- Suppose that people tend to be between 140cm and 190cm tall and (for some reason) we decide to measure their height in kilometers. In these units, people tend to be between 0.00140km and 0.00190km tall. If we calculate the variance of height-in-km, we're going to get a very small number.  -->
@@ -181,7 +181,7 @@ When variance estimates are very low for a specific random effect term, this ind
 Below are various considerations to keep in mind, along with some practical strategies
 
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### Reasons to Include Random Slopes
 
 _random slopes of predictors of interest_  
@@ -192,14 +192,14 @@ If a fixed effect `c` that is measured within groups is not of inferential inter
 
 :::
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### 'More Complex' Random Effect Terms
 
 Complex terms like interactions (e.g. `(1 + x1 * x2 | group)` are often causes of non-convergence or overfitting as they require more data to estimate group-level variability, and the interaction terms is often highly correlated with the individual effects. Prior to removing one of the terms completely, this can be simplified to `(1 + x1 + x2 | group)`.  
 
 :::
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### Random Effect Correlations
 
 The 'random effects' part of multilevel models includes not just variances of group-level effects, but also the correlations between different terms. The part of the output of the `VarCorr()` function that comes under "Corr" is a correlation matrix (i.e., a square symmetric matrix with the same columns as rows, and 1s on the diagonal, see @fig-varcorr).  
@@ -374,7 +374,7 @@ We can choose (if we so wish) to __not__ estimate the correlations between rando
 
 :::
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### Categorical Random Effects on the RHS
 
 When we have a categorical random effect (i.e. where the `x` in `(1 + x | g)` is a categorical variable), then model estimation can often get tricky, because "the effect of x" for a categorical variable with $k$ levels is identified via $k-1$ parameters, meaning we have a lot of variances and covariances to estimate when we include `x|g`.  

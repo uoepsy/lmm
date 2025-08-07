@@ -526,7 +526,7 @@ knitr::include_graphics("images/endogeneity/Slide4.PNG")
 ```
 
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### other models
 
 This is an assumption that we do _not_ have to make with our 'no pooling' model of `lm(y ~ cluster + x)`, because by putting the cluster in as another predictor we include the covariance between it and our predictor of interest (@fig-conflmm4). 

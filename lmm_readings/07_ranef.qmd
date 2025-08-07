@@ -218,7 +218,7 @@ p1 / p2 & plot_layout(heights=c(1,3))
 
 ```
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### a shortcut
 
 In __lme4__, there is a shortcut for writing nested random effects that uses the `/` to specify `higher/lower` level of nesting.  
@@ -233,7 +233,7 @@ This shortcut has a bit of a disadvantage in that it means all the same random s
 :::
 
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### uniqueness of labels
 
 If labels of children are unique to each school, e.g. the child variable has values like "school1_child1", "school2_child2" etc., then 
@@ -472,7 +472,7 @@ mnest <- lmer(stress ~ 1 + day * CBD +
 
 Note that we can have different random slopes for departments vs those for participants. Our model above includes all random slopes that are feasible given the study design.  
 
-::: {.callout-tip collapse="true"}
+::: {.callout-note collapse="true"}
 #### explanations of each random slope
 
 - <small>participants can vary in their baseline stress levels.</small>

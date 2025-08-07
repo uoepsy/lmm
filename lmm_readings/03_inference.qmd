@@ -96,7 +96,7 @@ smod3 <- lmer(grade ~ motiv * funding + (1 + motiv | schoolid),
               data = schoolmot)
 ```
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### df approximations (Satterthwaite)
 
 Two methods have been suggested as approximations for the denominator degrees of freedom for multilevel models. The maths behind these are pretty intense, so we're going to focus on how to implement them in R, and emphasise some of their respective benefits/drawbacks.  
@@ -157,7 +157,7 @@ __Reporting__
 :::
 
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### df approximations (Kenward Rogers)  
 
 The Kenward Rogers (KR) approximation involves a correcting the standard errors for small samples, and then approximating the degrees of freedom similarly to Satterthwaite. Because the standard errors are adjusted in KR, $t$-statistics will be slightly different too. 
@@ -215,7 +215,7 @@ __Reporting__
 :::
 
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### likelihood based methods 
 
 Remember that multilevel models are typically fitted using maximum likelihood estimation - i.e. a process that iteratively tries to find the set of estimates that result in the greatest probability of observing the data that we have observed (@fig-mlee).  
@@ -282,7 +282,7 @@ __Reporting__
 
 :::
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### parametric bootstrap
 
 There are also various "bootstrapping" methods which it is worth looking into. You may already be familiar with the term. Recall that _sampling distribution_ of a statistic is "what we would expect if we did the experiment over and over again, taking a new sample each time" (i.e. it's the distribution of what we get "in the long-run"). Bootstrapping is a means of mimicking the act of repeated sampling from a population, by repeatedly *re*sampling. What this achieves is that we are essentially able to _create_ a sampling distribution (or a finite approximation of one!). This meant that calculating a p-value becomes an issue of summarising data (e.g. calculate the proportion of our simulated null distribution that is more extreme than our observed statistic).  

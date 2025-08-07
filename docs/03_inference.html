@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,10 +69,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a5d965a358ea99cd4782dddb22e697e1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -378,7 +378,7 @@ Figure&nbsp;1: The standard error is the standard deviation of the ‘sampling d
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>smod3 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(grade <span class="sc">~</span> motiv <span class="sc">*</span> funding <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> motiv <span class="sc">|</span> schoolid), </span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> schoolmot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -456,9 +456,7 @@ The association between childrens’ motivation level and their school grades wa
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">SATmodcomp</span>(<span class="at">largeModel =</span> smod3, <span class="at">smallModel =</span> smod3_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>large : grade ~ motiv * funding + (1 + motiv | schoolid)
-small (restriction matrix) : 
-        
- 0 0 0 1
+small : grade ~ motiv + funding + (1 + motiv | schoolid)
      statistic    ndf    ddf p.value  
 [1,]    7.2332 1.0000 26.541 0.01221 *
 ---
@@ -474,7 +472,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -551,7 +549,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -598,9 +596,9 @@ Figure&nbsp;2: likelihood is the probability of observing the data, given some m
 Models:
 smod3_res: grade ~ motiv + funding + (1 + motiv | schoolid)
 smod3: grade ~ motiv * funding + (1 + motiv | schoolid)
-          npar    AIC    BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)   
-smod3_res    7 7114.1 7147.7 -3550.0   7100.1                        
-smod3        8 7109.2 7147.7 -3546.6   7093.2 6.8417  1   0.008905 **
+          npar    AIC    BIC  logLik -2*log(L)  Chisq Df Pr(&gt;Chisq)   
+smod3_res    7 7114.1 7147.7 -3550.0    7100.1                        
+smod3        8 7109.2 7147.7 -3546.6    7093.2 6.8417  1   0.008905 **
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
@@ -637,7 +635,7 @@ motiv:fundingstate   0.7521936  4.896438</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -675,7 +673,6 @@ parametric bootstrap
 <pre><code>Bootstrap test; time: 48.19 sec; samples: 1000; extremes: 12;
 Requested samples: 1000 Used samples: 999 Extremes: 12
 large : grade ~ motiv * funding + (1 + motiv | schoolid)
-grade ~ motiv + funding + (1 + motiv | schoolid)
          stat df  p.value   
 LRT    6.8417  1 0.008905 **
 PBtest 6.8417    0.013000 * 
@@ -866,8 +863,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -978,7 +973,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

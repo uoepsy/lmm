@@ -30,7 +30,7 @@ This reading:
 - Fitting multilevel models in R
 - Model estimation and convergence
 
-::: {.callout-tip collapse="true"}
+::: {.callout-note collapse="true"}
 #### different names for the same thing
 
 The methods we're going to start to look at are known by lots of different names (see @fig-wordcloud). The core idea is that **model parameters vary at more than one level.**. 
@@ -720,7 +720,7 @@ tdf |>
 ```
 
 
-::: {.callout-tip collapse="true"}
+::: {.callout-note collapse="true"}
 #### A (not very good) analogy
 
 The no-pooling approach (i.e. something like `lm(grade~motiv*schoolid)`, or fitting a simple `lm()` separately to each school) is like the libertarian ideology (valuing autonomy and personal freedom). Each school gets the freedom to define its own line without interference from others.  
@@ -859,7 +859,7 @@ ggplot(schoolmot, aes(x=motiv,y=grade))+
 
 
 
-::: {.callout-tip collapse="true"}
+::: {.callout-note collapse="true"}
 #### Mapping summary output to parts of the equation
 
 ```{r}

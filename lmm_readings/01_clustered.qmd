@@ -140,7 +140,7 @@ knitr::include_graphics("images/sum4.png")
 ```
 
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 ### Refresher: Standard Error   
 
 Taking **samples** from a **population** involves an element of _randomness_. The mean height of 10 randomly chosen Scottish people will not be exactly equal to the mean height of the entire Scottish population. Take another sample of 10, and we get _another_ mean height (@fig-se).  
@@ -348,7 +348,7 @@ p3
 ```
 
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### the impact of non-independence on inferences
 
 The reason that violations of our assumption of independence is problematic is that it means we are placing more confidence in our estimates than we should.  
@@ -580,7 +580,7 @@ dd
 :::
 ::::
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 #### moving between wide and long data  
 
 One of the more confusing things to get to grips with is the idea of reshaping a dataframe.  
