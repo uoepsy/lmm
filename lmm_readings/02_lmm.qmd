@@ -79,7 +79,7 @@ wordcloud(words = mlmname$word, freq = mlmname$freq, random.order=FALSE,
 
 # Fixed effects
 
-In the simple linear regression model was written as $\color{red}{y} = \color{blue}{b_0 + b_1x_1 \ + \ ... \ + \ b_px_p} \color{black}{\ + \ \varepsilon}$, the estimated coefficients $\color{blue}{b_0}$, $\color{blue}{b_1}$ etc., are estimated as **fixed** values - i.e. we estimate just one number for $b_0$, and one number for $b_1$, for $b_2$ and so on, and that's it.  
+In the simple linear regression model, which was written as $\color{red}{y} = \color{blue}{b_0 + b_1x_1 \ + \ ... \ + \ b_px_p} \color{black}{\ + \ \varepsilon}$, the estimated coefficients $\color{blue}{b_0}$, $\color{blue}{b_1}$ etc., are **fixed** values - i.e. we estimate just one number for $b_0$, and one number for $b_1$, for $b_2$ and so on, and that's it.  
 
 In the example where we model school children's grades as a function of their motivation score, when we fit a simple regression model of `lm(grade ~ motiv)`, the estimated parameters are two values that define a line - an intercept and a slope (as in @fig-schoolplot1).  
  
