@@ -73,7 +73,7 @@ summary(mod1)
 ::: {.callout-note collapse="true"}
 #### lmm_lifesatscot.csv - <br><span class="tag">\#cross-sectional</span>
 
-These data come from 112 people across 12 different Scottish dwellings (cities and towns). Information is captured on their ages and a measure of life satisfaction. The researchers are interested in if there is an association between age and life-satisfaction. 
+These data come from 112 people across 12 different Scottish dwellings (cities and towns). Information is captured on their ages and a measure of life satisfaction. The researchers are interested in **if there is an association between age and life-satisfaction**. 
 
 Data are available at [https://uoepsy.github.io/data/lmm_lifesatscot.csv](https://uoepsy.github.io/data/lmm_lifesatscot.csv){target="_blank"}.
 
@@ -114,7 +114,7 @@ A questionnaire was sent to all UK civil service departments, and the lmm_jsup.c
 
 The questionnaire included items asking about how much the respondent believe in the department and how it engages with the community, what it produces, how it operates and how treats its people. A composite measure of 'workplace-pride' was constructed for each employee. Employees in the civil service are categorised into 3 different roles: A, B and C. The roles tend to increase in responsibility, with role C being more managerial, and role A having less responsibility. We also have data on the length of time each employee has been in the department (sometimes new employees come straight in at role C, but many of them start in role A and work up over time). 
 
-We're interested in whether the different roles are associated with differences in workplace-pride.  
+We're interested in **whether the different roles are associated with differences in workplace-pride**.  
 
 Data are available at [https://uoepsy.github.io/data/lmm_jsup.csv](https://uoepsy.github.io/data/lmm_jsup.csv){target="_blank"}.
 
@@ -244,7 +244,7 @@ mod <- lmer(R_AGE ~ 1 + hrs_week + (1 + hrs_week | toy_type), df)
 ::: {.callout-note collapse="true"}
 #### LAAwellbeing.csv - mental wellbeing across Scotland<br><span class="tag">\#cross-sectional</span>
 
-Researchers want to study the **relationship between time spent outdoors and mental wellbeing**, across all of Scotland. They contact all the Local Authority Areas (LAAs) and ask them to collect data for them, with participants completing the Warwick-Edinburgh Mental Wellbeing Scale (WEMWBS), a self-report measure of mental health and well-being, and being asked to estimate the average number of hours they spend outdoors each week. Twenty of the Local Authority Areas provided data. 
+Researchers want to study the **association between time spent outdoors and mental wellbeing**, across all of Scotland. They contact all the Local Authority Areas (LAAs) and ask them to collect data for them, with participants completing the Warwick-Edinburgh Mental Wellbeing Scale (WEMWBS), a self-report measure of mental health and well-being, and being asked to estimate the average number of hours they spend outdoors each week. Twenty of the Local Authority Areas provided data. 
 
 Data are available at [https://uoepsy.github.io/data/LAAwellbeing.csv](https://uoepsy.github.io/data/LAAwellbeing.csv)
 
@@ -538,7 +538,7 @@ summary(mod1)
 df<-read_csv("https://uoepsy.github.io/data/msmr_nssjobsat.csv")
 ```
 
-Let's suppose we are studying employee job satisfaction at the university, and we want to estimate the association between pay-scale and job satisfaction, controlling for the NSS rating of departments.   
+Let's suppose we are studying employee job satisfaction at the university, and we want to estimate the **association between pay-scale and job satisfaction, controlling for the NSS rating of departments**.   
 We have `r nrow(df)` employees from `r n_distinct(df$dept)` different departments, and we got them to fill in a job satisfaction questionnaire, and got information on what their payscale was. We have also taken information from the national student survey on the level of student satisfaction for each department.  
 
 Each datapoint here represents an individual employee, and these employees are grouped into departments.  
@@ -746,7 +746,7 @@ mmod <- lmer(ACE ~ 1 + ageC * condition +
                (1 + ageC | sitename:ppt), 
              data = df)
 
-# probably simplify to 
+# probably end up simplifying to 
 mod <- lmer(ACE ~ 1 + ageC * condition + 
               ( 1 + ageC | sitename) +
                (1 + ageC | sitename:ppt), 
@@ -1752,8 +1752,42 @@ tibble(
 :::
 `r solbegin(show=params$SHOW_SOLS, toggle=params$TOGGLE)`
 ```{r}
-# TODO ANALYSIS
+load(url("https://uoepsy.github.io/data/Az.rda"))
+
+Az <- Az |> mutate(
+  Time1 = Time-1,
+  poly1 = poly(Time1,2,raw=T)[,1],
+  poly2 = poly(Time1,2,raw=T)[,2]
+)
+
 ```
+
+```{r}
+#| eval: false
+# probably won't converge!
+m1 = lmer(Performance ~ (poly1 + poly2) * Task +
+            (1 + (poly1 + poly2) * Task | Subject),
+          data=Az, control=lmerControl(optimizer = "bobyqa"))
+```
+
+straightforward simplification might lead us to: 
+```{r}
+#| eval: false
+m2 = lmer(Performance ~ (poly1 + poly2) * Task +
+            (1 + poly1 + Task | Subject),
+          data=Az, control=lmerControl(optimizer = "bobyqa"))
+```
+
+
+also a good candidate for categorical predictors on the RHS:  
+```{r}
+#| eval: false
+m3 = lmer(Performance ~ (poly1 + poly2) * Task +
+            (1 + poly1 | Subject) +
+            (1 + poly1 + poly2 | Subject:Task),
+          data=Az, control=lmerControl(optimizer = "bobyqa"))
+```
+
 `r solend()`
 
 
@@ -1832,7 +1866,27 @@ tibble(
 :::
 `r solbegin(show=params$SHOW_SOLS, toggle=params$TOGGLE)`
 ```{r}
-# TODO ANALYSIS
+memtap <- read_csv("https://uoepsy.github.io/data/memorytap.csv")
+
+mod <- glmer(correct ~ slength * condition + 
+        (1 + condition | ppt), 
+      data = memtap, family=binomial)
+
+# we all hate odds ratios, but here you go: 
+exp(fixef(mod))
+
+
+# not taught anywhere, but if you want to estimate the quantity you're actually interested in, such as the avg change in probability between conditions:   
+library(marginaleffects)
+avg_comparisons(mod, variables = "condition", newdata = datagrid(slength=mean))
+# really this is just this, but with a delta method for the Z: 
+newdata = tibble(
+  condition = unique(memtap$condition),
+  slength = mean(memtap$slength)
+)
+predict(mod, newdata = newdata, re.form = NA, type = "response") |>
+  print() |>
+  diff()
 ```
 `r solend()`
 
@@ -1881,9 +1935,44 @@ data.frame(
 
 :::
 `r solbegin(show=params$SHOW_SOLS, toggle=params$TOGGLE)`
+question here is vague, so lots of researcher degrees of freedom in how to interpret. this is what Dan did:  
+
+changes over the training period:  
 ```{r}
-# TODO ANALYSIS
+#| eval: false
+load(url("https://uoepsy.github.io/msmr/data/nwl.RData"))
+
+m.base <- glmer(cbind(NumCorrect, NumError) ~ block + (1 + block | ID), 
+                data = filter(nwl, block < 8, !is.na(lesion_location)),
+                family=binomial)
+
+m.loc0 <- glmer(cbind(NumCorrect, NumError) ~ block + lesion_location + (1 + block | ID), 
+                data=filter(nwl, block < 8, !is.na(lesion_location)),
+                family=binomial)
+
+m.loc1 <- glmer(cbind(NumCorrect, NumError) ~ block * lesion_location + (1 + block | ID), 
+                data=filter(nwl, block < 8, !is.na(lesion_location)),
+                family=binomial)
+
+
+anova(m.base, m.loc0, m.loc1, test="Chisq")
 ```
+
+for the testing period:  
+```{r}
+#| eval: false
+nwl_test <- filter(nwl, block > 7, !is.na(lesion_location)) |>
+    mutate(
+        Phase = factor(Phase), 
+        Phase = fct_relevel(Phase, "Immediate")
+    )
+
+m.recall.loc <- glmer(cbind(NumCorrect, NumError) ~ Phase * lesion_location + (1 | ID), 
+                      nwl_test, family="binomial")
+
+summary(m.recall.loc)
+```
+
 `r solend()`
 
 
@@ -1922,7 +2011,29 @@ tibble(
 :::
 `r solbegin(show=params$SHOW_SOLS, toggle=params$TOGGLE)`
 ```{r}
-# TODO ANALYSIS
+#| eval: false
+load(url("https://uoepsy.github.io/data/testenhancedlearning.RData"))
+
+# maximal model doesn't converge
+mod1 <- glmer(Correct ~ Delay*Group +
+             (1 + Delay | Subject_ID) +
+             (1 + Delay * Group | Test_word),
+             family=binomial, data=tel)
+
+mod2 <- glmer(Correct ~ Delay*Group +
+             (1 + Delay | Subject_ID) +
+             (1 + Delay + Group | Test_word),
+             family=binomial, data=tel)
+
+mod3 <- glmer(Correct ~ Delay*Group +
+             (1 + Delay | Subject_ID) +
+             (1 + Delay | Test_word),
+             family=binomial, data=tel)
+
+mod4 <- glmer(Correct ~ Delay*Group +
+             (1 + Delay | Subject_ID) +
+             (1 | Test_word),
+             family=binomial, data=tel)
 ```
 `r solend()`
 
@@ -1973,7 +2084,23 @@ tibble(
 :::
 `r solbegin(show=params$SHOW_SOLS, toggle=params$TOGGLE)`
 ```{r}
-# TODO ANALYSIS
+#| eval: false
+trolley <- read_csv("https://uoepsy.github.io/data/msmr_trolley.csv")
+
+# maximal - doesn't converge
+mod1 <- glmer(lever ~ frame * lives + 
+      (1 + frame * lives | PID),  
+      data = trolley, family = binomial)
+
+# doesn't converge
+mod2 <- glmer(lever ~ frame * lives + 
+      (1 + frame + lives | PID),  
+      data = trolley, family = binomial)
+
+# We have a choice here - do we remove frame|PID or lives|PID? One practical point is that each participant has only 4 observations for each frame type, but they have 6 observations for each lives type, which might make it easier to fit.
+mod3 <- glmer(lever ~ frame * lives + 
+      (1 + lives | PID),  
+      data = trolley, family = binomial)
 ```
 `r solend()`
 
